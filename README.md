@@ -1,191 +1,191 @@
-# 🔪 SRAP - REALIDADES CRUDAS
+# 🔪 SRAP - UNFILTERED REALITIES
 
-**"Tu corazon quiere cambiar el mundo, tu cuerpo pide descanso, y tu cabeza sabe que manana toca pagar el alquiler."**
-
----
-
-SRAP es una plataforma de autoevaluacion existencial gamificada. Combina psicologia brutal, filosofia cruda y mecanicas de juego RPG para crear un sistema de crecimiento personal sin autoengano.
-
-Potenciada por **Google Gemini AI**, **Supabase** y **React**, SRAP no te da palmaditas en la espalda. Te muestra el mapa de tu campo de batalla interno y te obliga a elegir que centro vas a sacrificar hoy.
+**"Your heart wants to change the world, your body asks for rest, and your head knows that tomorrow it's time to pay the rent."**
 
 ---
 
-## STACK TECNOLOGICO
+SRAP is a gamified existential self-assessment platform. It combines brutal psychology, raw philosophy, and RPG game mechanics to create a personal growth system without self-deception.
+
+Powered by **Google Gemini AI**, **Supabase**, and **React**, SRAP doesn't pat you on the back. It shows you the map of your internal battlefield and forces you to choose which center you are going to sacrifice today.
+
+---
+
+## TECH STACK
 
 **Frontend:**
 - React 19 + TypeScript
-- TailwindCSS (diseño oscuro, brutal, responsive)
-- Vite (build ultrarapido)
+- TailwindCSS (dark, brutal, responsive design)
+- Vite (ultra-fast build)
 
 **Backend:**
 - Supabase (Auth, Database, Edge Functions)
-- PostgreSQL con RLS (Row Level Security)
+- PostgreSQL with RLS (Row Level Security)
 - Supabase Edge Functions (Deno runtime)
 
 **AI:**
-- Google Gemini 2.0 Flash (analisis cinico en <2s)
-- API key protegida en backend
+- Google Gemini 2.0 Flash (cynical analysis in <2s)
+- API key protected in the backend
 
-**Gamificacion:**
-- Sistema de XP y niveles (1-10)
-- Achievements desbloqueables
-- Racha diaria (streak tracking)
-- Dashboard de progreso en tiempo real
+**Gamification:**
+- XP and levels system (1-10)
+- Unlockable achievements
+- Daily streak (streak tracking)
+- Real-time progress dashboard
 
 ---
 
-## INSTALACION Y CONFIGURACION
+## INSTALLATION AND CONFIGURATION
 
-### 1. Clonar Repositorio
+### 1. Clone Repository
 ```bash
-git clone https://github.com/tu-usuario/srap-realidades-crudas.git
-cd srap-realidades-crudas
+git clone https://github.com/your-user/srap-unfiltered-realities.git
+cd srap-unfiltered-realities
 ```
 
-### 2. Instalar Dependencias
+### 2. Install Dependencies
 ```bash
 npm install
 ```
 
-### 3. Configurar Variables de Entorno
-Crea un archivo `.env` en la raiz del proyecto:
+### 3. Configure Environment Variables
+Create a `.env` file in the project root:
 
 ```bash
-VITE_SUPABASE_URL=https://tu-proyecto.supabase.co
-VITE_SUPABASE_ANON_KEY=tu_anon_key_aqui
+VITE_SUPABASE_URL=https://your-project.supabase.co
+VITE_SUPABASE_ANON_KEY=your_anon_key_here
 ```
 
-La `GEMINI_API_KEY` debe configurarse en los **Supabase Edge Function Secrets**, no en `.env`.
+The `GEMINI_API_KEY` must be configured in the **Supabase Edge Function Secrets**, not in `.env`.
 
-### 4. Setup Supabase
+### 4. Supabase Setup
 
-#### A. Crear Proyecto Supabase
-1. Ve a [supabase.com](https://supabase.com)
-2. Crea un nuevo proyecto
-3. Copia `Project URL` y `anon/public key` a tu `.env`
+#### A. Create Supabase Project
+1. Go to [supabase.com](https://supabase.com)
+2. Create a new project
+3. Copy `Project URL` and `anon/public key` to your `.env`
 
-#### B. Ejecutar Migracion de Base de Datos
-Ejecuta el SQL en el SQL Editor de Supabase:
+#### B. Run Database Migration
+Execute the SQL in the Supabase SQL Editor:
 ```sql
--- Ver contenido completo en el archivo de migracion
--- (disponible en el proyecto como supabase/migrations/...)
+-- See full content in the migration file
+-- (available in the project as supabase/migrations/...)
 ```
 
-O usa la CLI de Supabase:
+Or use the Supabase CLI:
 ```bash
 supabase db push
 ```
 
 #### C. Deploy Edge Function
-La Edge Function `srap-analyze` ya esta creada. Para deployarla:
+The Edge Function `srap-analysis` is already created. To deploy it:
 ```bash
-# (Esto se hace automaticamente via MCP tools en desarrollo)
+# (This is done automatically via MCP tools in development)
 ```
 
-#### D. Configurar Gemini API Key
-1. Obten tu API key de [Google AI Studio](https://makersuite.google.com/app/apikey)
-2. Configurala como secret en Supabase:
+#### D. Configure Gemini API Key
+1. Get your API key from [Google AI Studio](https://makersuite.google.com/app/apikey)
+2. Configure it as a secret in Supabase:
 ```bash
-supabase secrets set GEMINI_API_KEY=tu_key_aqui
+supabase secrets set GEMINI_API_KEY=your_key_here
 ```
 
-### 5. Ejecutar en Desarrollo
+### 5. Run in Development
 ```bash
-npm run dev
+# npm run dev
 ```
 
-La app estara disponible en `http://localhost:3000`
+The app will be available at `http://localhost:3000`
 
-### 6. Build para Produccion
+### 6. Build for Production
 ```bash
 npm run build
-npm run preview  # Preview del build
+npm run preview  # Build preview
 ```
 
 ---
 
-## ARQUITECTURA
+## ARCHITECTURE
 
-Ver `ARCHITECTURE.md` para blueprint tecnico completo.
+See `ARCHITECTURE.md` for the full technical blueprint.
 
-**Flujo Simplificado:**
+**Simplified Flow:**
 ```
-Usuario completa examen
+User completes exam
   ↓
-Frontend envia request a Edge Function
+Frontend sends request to Edge Function
   ↓
-Edge Function llama Gemini API (key segura)
+Edge Function calls Gemini API (secure key)
   ↓
-AI analiza con prompt brutal
+AI analyzes with brutal prompt
   ↓
-Respuesta se guarda en Supabase
+Response is saved in Supabase
   ↓
-XP, niveles y achievements se actualizan
+XP, levels, and achievements are updated
   ↓
-Dashboard se refresca con nuevo progreso
+Dashboard refreshes with new progress
 ```
 
 ---
 
-## FILOSOFIA SRAP
+## SRAP PHILOSOPHY
 
-### Los 3 Centros
+### The 3 Centers
 
-1. **CABEZA** (Mente/Control)
-   - Promete: Control total
-   - Exige: Aceptar el caos y actuar igual
+1. **HEAD** (Mind/Control)
+   - Promises: Total control
+   - Demands: Accept chaos and act anyway
 
-2. **CORAZON** (Emocion/Significado)
-   - Promete: Proposito y sentido
-   - Exige: Tolerar el vacio y construir sentido
+2. **HEART** (Emotion/Meaning)
+   - Promises: Purpose and sense
+   - Demands: Tolerate emptiness and build sense
 
-3. **CUERPO** (Fisico/Placer)
-   - Promete: Placer constante
-   - Exige: Soportar dolor y moverte igual
+3. **BODY** (Physical/Pleasure)
+   - Promises: Constant pleasure
+   - Demands: Endure pain and move anyway
 
-### El Principio del Sacrificio
+### The Principle of Sacrifice
 
-No existe "equilibrio perfecto". Cada dia debes elegir conscientemente que centro sacrificar para que los otros dos sobrevivan. SRAP te obliga a admitir esa eleccion sin autoengano.
+There is no "perfect balance". Every day you must consciously choose which center to sacrifice so that the other two survive. SRAP forces you to admit that choice without self-deception.
 
-### Gamificacion Existencial
+### Existential Gamification
 
-- **XP Base:** 50 por evaluacion
-- **Streak Bonus:** +10 XP por dia consecutivo
-- **Niveles:** 1 a 10 (de "Novato Perdido" a "Decodificador Supremo")
-- **Achievements:** Desde "Primera Sangre" hasta "Maestro de la Realidad"
+- **Base XP:** 50 per assessment
+- **Streak Bonus:** +10 XP per consecutive day
+- **Levels:** 1 to 10 (from "Lost Novice" to "Supreme Decoder")
+- **Achievements:** From "First Blood" to "Master of Reality"
 
-El progreso es medible. La realidad es cuantificable. El autoengano, imposible.
+Progress is measurable. Reality is quantifiable. Self-deception, impossible.
 
 ---
 
-## CARACTERISTICAS
+## FEATURES
 
-- Evaluaciones diarias de los 3 centros
-- Analisis AI brutal y directo
-- Sistema de progreso gamificado
-- Historial completo de evaluaciones
-- Dashboard de estadisticas
-- Racha diaria con bonificaciones
-- Achievements desbloqueables
-- Micro-interacciones y feedback visual
+- Daily assessments of the 3 centers
+- Brutal and direct AI analysis
+- Gamified progress system
+- Full assessment history
+- Statistics dashboard
+- Daily streak with bonuses
+- Unlockable achievements
+- Micro-interactions and visual feedback
 - Responsive design (mobile-first)
-- Modo oscuro por defecto (realidad no es brillante)
+- Default dark mode (reality is not bright)
 
 ---
 
-## SEGURIDAD
+## SECURITY
 
-- **Row Level Security (RLS)** en todas las tablas
-- API key de Gemini nunca expuesta en frontend
-- Autenticacion via Supabase Auth
-- Validacion de datos en frontend y backend
-- CORS configurado correctamente en Edge Functions
+- **Row Level Security (RLS)** in all tables
+- Gemini API key never exposed in the frontend
+- Authentication via Supabase Auth
+- Data validation in frontend and backend
+- CORS correctly configured in Edge Functions
 
 ---
 
 ## DEPLOYMENT
 
-### Vercel (Recomendado para Frontend)
+### Vercel (Recommended for Frontend)
 ```bash
 npm run build
 vercel --prod
@@ -198,49 +198,49 @@ netlify deploy --prod --dir=dist
 ```
 
 ### Supabase Edge Functions
-Ya deployadas automaticamente via MCP tools.
+Already deployed automatically via MCP tools.
 
 ---
 
-## CONTRIBUIR
+## CONTRIBUTING
 
-Este proyecto nace de la metodologia **SRAP Chalamandra Magistral**. Si quieres contribuir:
+This project is born from the **SRAP Chalamandra Master methodology**. If you want to contribute:
 
-1. Fork el repositorio
-2. Crea una branch con tu feature
-3. Asegurate de que el build pasa
-4. Envia PR con descripcion brutal de cambios
+1. Fork the repository
+2. Create a branch with your feature
+3. Make sure the build passes
+4. Submit a PR with a brutal description of changes
 
-Principios de contribucion:
-- Codigo limpio y modular
-- Sin autoengano tecnico
-- Sin features innecesarias
-- Realidad > Ilusion
-
----
-
-## LICENCIA
-
-MIT License. Usa, modifica, destruye. La realidad no tiene copyright.
+Contribution principles:
+- Clean and modular code
+- No technical self-deception
+- No unnecessary features
+- Reality > Illusion
 
 ---
 
-## CONTACTO Y CREDITOS
+## LICENSE
 
-**Creado por:** Equipo SRAP Senior (Decodificadora Chalamandra Magistral)
+MIT License. Use, modify, destroy. Reality has no copyright.
 
-**Tecnologias:**
+---
+
+## CONTACT AND CREDITS
+
+**Created by:** Senior SRAP Team (Master Chalamandra Decoder)
+
+**Technologies:**
 - React Team
 - Supabase Team
 - Google Gemini Team
 - Tailwind Labs
 
-**Filosofia:**
-- Gurdjieff (Los 3 Centros)
-- Nietzsche (Realidades crudas)
-- Estoicismo (Aceptacion activa)
-- RPG Mechanics (Gamificacion medible)
+**Philosophy:**
+- Gurdjieff (The 3 Centers)
+- Nietzsche (Raw realities)
+- Estoicismo (Active acceptance)
+- RPG Mechanics (Measurable gamification)
 
 ---
 
-**RECUERDA:** Este no es un app de "vibra alta". Es un simulador de triaje para el alma. Si buscas consuelo, ve a otro lado. Si buscas verdad medible, bienvenido a SRAP.
+**REMEMBER:** This is not a "high vibe" app. It is a triage simulator for the soul. If you are looking for comfort, go somewhere else. If you seek measurable truth, welcome to SRAP.

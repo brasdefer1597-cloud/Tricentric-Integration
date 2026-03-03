@@ -26,7 +26,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, icon = '🎯', ch
             onClick={onClose}
             className="bg-red-700 hover:bg-red-800 text-white font-bold py-2 px-6 rounded-lg transition-all"
           >
-            ENTENDIDO
+            UNDERSTOOD
           </button>
         </div>
       </div>

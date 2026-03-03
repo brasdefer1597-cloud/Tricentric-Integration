@@ -63,16 +63,16 @@ export function shouldUnlockAchievement(
 
 export function getLevelTitle(level: number): string {
   const titles = [
-    'Novato Perdido',           // 1
-    'Aprendiz del Dolor',       // 2
-    'Guerrero en Formación',    // 3
-    'Veterano Cicatrizado',     // 4
-    'Sobreviviente Duro',       // 5
-    'Maestro de Sacrificios',   // 6
-    'Vidente de Realidades',    // 7
-    'Comandante del Abismo',    // 8
-    'Leyenda Brutal',           // 9
-    'Decodificador Supremo',    // 10
+    'Lost Novice',           // 1
+    'Apprentice of Pain',       // 2
+    'Warrior in Training',    // 3
+    'Scarred Veteran',     // 4
+    'Hardened Survivor',       // 5
+    'Master of Sacrifices',   // 6
+    'Reality Seer',    // 7
+    'Abyss Commander',    // 8
+    'Brutal Legend',           // 9
+    'Supreme Decoder',    // 10
   ];
 
   return titles[level - 1] || titles[0];

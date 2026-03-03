@@ -1,28 +1,28 @@
-# ARQUITECTURA SRAP - BLUEPRINT TECNICO
+# SRAP ARCHITECTURE - TECHNICAL BLUEPRINT
 
-## VISION GENERAL
+## OVERVIEW
 
-SRAP es una plataforma de autoevaluacion existencial gamificada que combina psicologia brutal, filosofia cruda y mecanicas de juego para crear un sistema de crecimiento personal sin autoengano.
+SRAP is a gamified existential self-assessment platform that combines brutal psychology, raw philosophy, and game mechanics to create a personal growth system without self-deception.
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
 │                         FRONTEND (React)                        │
 ├─────────────────────────────────────────────────────────────────┤
 │  Components:                                                    │
-│  ├─ SectionHeader        (UI: Branding)                        │
-│  ├─ GamificationDashboard (UI: Stats, Levels, XP)             │
-│  ├─ SectionTruths        (Content: Filosofia SRAP)            │
-│  ├─ SectionExam          (Logic: Core Evaluation Flow)         │
-│  └─ SectionBreathing     (UI: Micro-interaccion)              │
+│  ├─ HeaderSection          (UI: Branding)                       │
+│  ├─ GamificationDashboard  (UI: Stats, Levels, XP)              │
+│  ├─ TruthsSection          (Content: SRAP Philosophy)           │
+│  ├─ ExamSection            (Logic: Core Evaluation Flow)        │
+│  └─ BreathingSection       (UI: Micro-interaction)              │
 │                                                                 │
 │  Hooks:                                                         │
-│  ├─ useProfile           (Data: User state)                    │
-│  ├─ useGamification      (Logic: XP, Levels, Achievements)    │
-│  └─ useAnalysis          (API: Gemini AI communication)        │
+│  ├─ useProfile             (Data: User state)                   │
+│  ├─ useGamification        (Logic: XP, Levels, Achievements)     │
+│  └─ useAnalysis            (API: Gemini AI communication)       │
 │                                                                 │
 │  Lib:                                                           │
-│  ├─ supabase.ts          (Client initialization)               │
-│  └─ gamification.ts      (XP calculations, level logic)        │
+│  ├─ supabase.ts            (Client initialization)              │
+│  └─ gamification.ts        (XP calculations, level logic)       │
 └─────────────────────────────────────────────────────────────────┘
                               ↓
 ┌─────────────────────────────────────────────────────────────────┐
@@ -38,7 +38,7 @@ SRAP es una plataforma de autoevaluacion existencial gamificada que combina psic
 │  └─ user_achievements   (User progress tracking)               │
 │                                                                 │
 │  Edge Functions:                                                │
-│  └─ srap-analyze        (Gemini AI proxy - API key secured)    │
+│  └─ srap-analysis       (Gemini AI proxy - API key secured)    │
 └─────────────────────────────────────────────────────────────────┘
                               ↓
 ┌─────────────────────────────────────────────────────────────────┐
@@ -51,24 +51,24 @@ SRAP es una plataforma de autoevaluacion existencial gamificada que combina psic
 
 ---
 
-## FLUJO DE DATOS CRITICO
+## CRITICAL DATA FLOW
 
-### 1. USUARIO COMPLETA EXAMEN
+### 1. USER COMPLETES EXAM
 
 ```
-User Input (SectionExam)
+User Input (ExamSection)
    ↓
 [bleeding, sacrifice, oxygen, synthesis]
    ↓
 useAnalysis.analyze()
    ↓
-Edge Function: srap-analyze
+Edge Function: srap-analysis
    ↓
-Gemini API (prompt engineering brutal)
+Gemini API (brutal prompt engineering)
    ↓
 AI Response → Modal Display
    ↓
-User clicks GUARDAR
+User clicks SAVE
    ↓
 Supabase:
   ├─ Insert evaluation record
@@ -78,7 +78,7 @@ Supabase:
 refreshProfile() → Update UI
 ```
 
-### 2. GAMIFICACION ENGINE
+### 2. GAMIFICATION ENGINE
 
 ```
 Profile Data:
@@ -88,31 +88,31 @@ Profile Data:
   └─ total_evaluations: 15
 
 Calculations (gamification.ts):
-  ├─ calculateLevel(xp) → Determina nivel actual
-  ├─ getXPForNextLevel(level) → XP requeridos
-  └─ shouldUnlockAchievement() → Logica de logros
+  ├─ calculateLevel(xp) → Determines current level
+  ├─ getXPForNextLevel(level) → Required XP
+  └─ shouldUnlockAchievement() → Achievement logic
 
 Display:
-  └─ GamificationDashboard → Visualizacion completa
+  └─ GamificationDashboard → Full visualization
 ```
 
 ---
 
-## ESTRUCTURA DE DIRECTORIOS
+## DIRECTORY STRUCTURE
 
 ```
 /
 ├── components/
 │   ├── ui/
-│   │   ├── Modal.tsx           # Componente reutilizable de dialog
-│   │   ├── LoadingSpinner.tsx  # Estado de carga unificado
-│   │   ├── ProgressBar.tsx     # Barra de progreso gamificada
-│   │   └── LevelBadge.tsx      # Badge de nivel con animacion
-│   ├── SectionHeader.tsx       # Header con branding SRAP
-│   ├── SectionTruths.tsx       # Filosofia de los 3 centros
-│   ├── SectionExam.tsx         # Core: Formulario de evaluacion
-│   ├── SectionBreathing.tsx    # Micro-interaccion: Oxigeno
-│   └── GamificationDashboard.tsx # Dashboard de stats
+│   │   ├── Modal.tsx           # Reusable dialog component
+│   │   ├── LoadingSpinner.tsx  # Unified loading state
+│   │   ├── ProgressBar.tsx     # Gamified progress bar
+│   │   └── LevelBadge.tsx      # Level badge with animation
+│   ├── HeaderSection.tsx       # Header with SRAP branding
+│   ├── TruthsSection.tsx       # 3 centers philosophy
+│   ├── ExamSection.tsx         # Core: Evaluation form
+│   ├── BreathingSection.tsx    # Micro-interaction: Oxygen
+│   └── GamificationDashboard.tsx # Stats dashboard
 │
 ├── hooks/
 │   ├── useProfile.ts           # Fetch & manage user profile
@@ -129,7 +129,7 @@ Display:
 │
 ├── supabase/
 │   └── functions/
-│       └── srap-analyze/
+│       └── srap-analysis/
 │           └── index.ts        # Edge Function: Gemini API proxy
 │
 ├── App.tsx                     # Main app component
@@ -142,100 +142,100 @@ Display:
 
 ---
 
-## PATRONES DE DISEÑO IMPLEMENTADOS
+## IMPLEMENTED DESIGN PATTERNS
 
-### 1. SEPARACION DE CONCERNS (SoC)
-- **UI Components**: Solo rendering, delegando logica a hooks
-- **Hooks**: Encapsulan estado y side effects
-- **Lib**: Utilidades puras, sin side effects
+### 1. SEPARATION OF CONCERNS (SoC)
+- **UI Components**: Rendering only, delegating logic to hooks
+- **Hooks**: Encapsulate state and side effects
+- **Lib**: Pure utilities, no side effects
 
 ### 2. SINGLE SOURCE OF TRUTH
-- `supabase.auth` → Estado de autenticacion
-- `user_profiles` → Estado de gamificacion
-- `evaluations` → Historial inmutable
+- `supabase.auth` → Authentication state
+- `user_profiles` → Gamification state
+- `evaluations` → Immutable history
 
 ### 3. COMPOSITION OVER INHERITANCE
-- Componentes UI atomicos reutilizables
-- Props explicitas, no props drilling
-- Custom hooks para logica compartida
+- Reusable atomic UI components
+- Explicit props, no props drilling
+- Custom hooks for shared logic
 
 ### 4. PROGRESSIVE ENHANCEMENT
-- App funciona sin auth (modo lectura)
-- Gamificacion aparece solo si logged in
-- Fallbacks en errores de API
+- App works without auth (read-only mode)
+- Gamification appears only if logged in
+- Fallbacks on API errors
 
 ---
 
-## SEGURIDAD
+## SECURITY
 
 ### RLS (Row Level Security)
-Todas las tablas tienen RLS habilitado con politicas restrictivas:
-- **SELECT**: Solo datos propios (`auth.uid() = user_id`)
-- **INSERT**: Solo crear registros propios
-- **UPDATE**: Solo modificar datos propios
-- **DELETE**: Bloqueado (data integrity)
+All tables have RLS enabled with restrictive policies:
+- **SELECT**: Own data only (`auth.uid() = user_id`)
+- **INSERT**: Create own records only
+- **UPDATE**: Modify own data only
+- **DELETE**: Blocked (data integrity)
 
 ### API Key Protection
-- Gemini API key **nunca** expuesta en frontend
-- Gestionada via Edge Function en servidor
-- Usuario autenticado via JWT en requests
+- Gemini API key **never** exposed on frontend
+- Managed via Edge Function on server
+- User authenticated via JWT in requests
 
 ### Data Validation
-- TypeScript types estrictos
+- Strict TypeScript types
 - Database constraints (CHECK, UNIQUE, FK)
-- Input validation en frontend y backend
+- Input validation on frontend and backend
 
 ---
 
-## GAMIFICACION: MECANICAS
+## GAMIFICATION: MECHANICS
 
-### Sistema de XP
+### XP System
 ```typescript
-Base XP: 50 por evaluacion
-Bonus Streak: +10 XP por dia consecutivo
+Base XP: 50 per assessment
+Streak Bonus: +10 XP per consecutive day
 Achievement Bonus: Variable (50-1000 XP)
 
-Curva de Niveles:
-Nivel 1: 0 XP
-Nivel 2: 100 XP
-Nivel 3: 250 XP
-Nivel 4: 500 XP
-Nivel 5: 850 XP
-Nivel 6: 1300 XP
-Nivel 7: 1900 XP
-Nivel 8: 2700 XP
-Nivel 9: 3750 XP
-Nivel 10: 5000 XP (MAX)
+Level Curve:
+Level 1: 0 XP
+Level 2: 100 XP
+Level 3: 250 XP
+Level 4: 500 XP
+Level 5: 850 XP
+Level 6: 1300 XP
+Level 7: 1900 XP
+Level 8: 2700 XP
+Level 9: 3750 XP
+Level 10: 5000 XP (MAX)
 ```
 
-### Achievements Disponibles
-1. **Primera Sangre** (100 XP): Completar primer examen
-2. **Guerrero Semanal** (200 XP): 7 dias de racha
-3. **Superviviente Mensual** (500 XP): 30 dias de racha
-4. **Veterano SRAP** (300 XP): Alcanzar nivel 5
-5. **Maestro de la Realidad** (1000 XP): Alcanzar nivel 10
-6. **Decada de Decisiones** (250 XP): 10 evaluaciones totales
-7. **Honestidad Brutal** (150 XP): Sintesis validada por IA
+### Available Achievements
+1. **First Blood** (100 XP): Complete first exam
+2. **Weekly Warrior** (200 XP): 7-day streak
+3. **Monthly Survivor** (500 XP): 30-day streak
+4. **SRAP Veteran** (300 XP): Reach level 5
+5. **Master of Reality** (1000 XP): Reach level 10
+6. **Decade of Decisions** (250 XP): 10 total assessments
+7. **Brutal Honesty** (150 XP): Synthesis validated by AI
 
-### Loops de Engagement
-- **Daily Streak**: Incentiva uso diario
-- **Progress Bars**: Feedback visual de avance
-- **Achievement Unlocks**: Micro-recompensas
-- **Level Titles**: Status social (ej: "Decodificador Supremo")
+### Engagement Loops
+- **Daily Streak**: Encourages daily use
+- **Progress Bars**: Visual progress feedback
+- **Achievement Unlocks**: Micro-rewards
+- **Level Titles**: Social status (e.g., "Supreme Decoder")
 
 ---
 
-## MICRO-INTERACCIONES
+## MICRO-INTERACTIONS
 
-### Feedback Visual
-- **Breathing Animation**: Indica vida, presencia
-- **Pulse Effect**: Botones criticos (ACEPTAR REALIDAD)
-- **Shimmer**: Progress bars en movimiento
-- **Scale In**: Modals con entrada suave
-- **Fade In**: Transiciones de secciones
+### Visual Feedback
+- **Breathing Animation**: Indicates life, presence
+- **Pulse Effect**: Critical buttons (ACCEPT REALITY)
+- **Shimmer**: Moving progress bars
+- **Scale In**: Modals with smooth entry
+- **Fade In**: Section transitions
 
-### Feedback Haptico (Conceptual)
-- Click en centro (bleeding/sacrifice) → Subtle vibration
+### Haptic Feedback (Conceptual)
+- Click on center (bleeding/sacrifice) → Subtle vibration
 - Achievement unlock → Sharp pulse
 - Level up → Extended celebration
 
@@ -243,7 +243,7 @@ Nivel 10: 5000 XP (MAX)
 
 ## DEPLOYMENT CHECKLIST
 
-### Variables de Entorno Requeridas
+### Required Environment Variables
 ```bash
 # Frontend (.env)
 VITE_SUPABASE_URL=https://xxxxx.supabase.co
@@ -253,42 +253,41 @@ VITE_SUPABASE_ANON_KEY=eyJhbGc...
 GEMINI_API_KEY=AIzaSy...
 ```
 
-### Pasos de Deploy
-1. Configurar proyecto Supabase
-2. Ejecutar migracion `create_srap_core_schema`
-3. Deploy Edge Function `srap-analyze`
-4. Configurar Gemini API key en secrets
+### Deployment Steps
+1. Configure Supabase project
+2. Run migration `create_srap_core_schema`
+3. Deploy Edge Function `srap-analysis`
+4. Configure Gemini API key in secrets
 5. Build frontend: `npm run build`
-6. Deploy a Vercel/Netlify
+6. Deploy to Vercel/Netlify
 
 ### Health Checks
-- [ ] Database migrations aplicadas
+- [ ] Database migrations applied
 - [ ] Edge Function deployed
-- [ ] API keys configuradas
-- [ ] Build exitoso
-- [ ] Auth funcionando
-- [ ] RLS policies activas
+- [ ] API keys configured
+- [ ] Successful build
+- [ ] Auth working
+- [ ] RLS policies active
 
 ---
 
-## FUTURAS MEJORAS (ROADMAP)
+## FUTURE IMPROVEMENTS (ROADMAP)
 
-### Fase 2: Social
-- Compartir evaluaciones anonimas
-- Comparar estadisticas con otros usuarios
-- Tabla de clasificacion (leaderboard)
+### Phase 2: Social
+- Share anonymous assessments
+- Compare stats with other users
+- Leaderboard
 
-### Fase 3: Analytics
-- Dashboard de tendencias (¿que centro sangra mas?)
-- Graficos de progreso temporal
-- Predicciones de IA sobre patrones
+### Phase 3: Analytics
+- Trends dashboard (which center bleeds most?)
+- Temporal progress charts
+- AI predictions about patterns
 
-### Fase 4: Expansion
-- Exportar historial a PDF
-- Integracion con calendario
-- Recordatorios inteligentes
+### Phase 4: Expansion
+- Export history to PDF
+- Calendar integration
+- Intelligent reminders
 
 ---
 
-**CONCLUS
-ION**: Esta arquitectura prioriza **seguridad**, **escalabilidad** y **engagement**. Cada decision tecnica refuerza la filosofia SRAP: realidades crudas, sin autoengano, con progreso medible.
+**CONCLUSION**: This architecture prioritizes **security**, **scalability**, and **engagement**. Every technical decision reinforces the SRAP philosophy: raw realities, no self-deception, with measurable progress.

@@ -1,74 +1,74 @@
 /*
-  # SRAP Core Schema - Sistema de Gamificacion Existencial
+  # SRAP Core Schema - Existential Gamification System
 
-  ## 1. Tablas Principales
+  ## 1. Main Tables
   
   ### `user_profiles`
-  Perfil extendido del usuario con metricas de gamificacion.
+  Extended user profile with gamification metrics.
   - `id` (uuid, PK, ref: auth.users)
-  - `display_name` (text) - Nombre para mostrar
-  - `total_evaluations` (int) - Contador de examenes completados
-  - `current_level` (int) - Nivel actual del usuario (1-10)
-  - `experience_points` (int) - XP acumulados
-  - `streak_days` (int) - Dias consecutivos de evaluacion
-  - `last_evaluation_date` (date) - Ultima vez que completo examen
+  - `display_name` (text) - Display name
+  - `total_evaluations` (int) - Completed exam counter
+  - `current_level` (int) - Current user level (1-10)
+  - `experience_points` (int) - Accumulated XP
+  - `streak_days` (int) - Consecutive evaluation days
+  - `last_evaluation_date` (date) - Last time exam was completed
   - `created_at` (timestamptz)
   - `updated_at` (timestamptz)
 
   ### `evaluations`
-  Registro historico de cada examen SRAP completado.
+  Historical record of each completed SRAP exam.
   - `id` (uuid, PK)
   - `user_id` (uuid, FK -> user_profiles)
-  - `bleeding_center` (text) - cabeza | corazon | cuerpo
-  - `sacrifice_center` (text) - cabeza | corazon | cuerpo
-  - `oxygen_actions` (text[]) - Array de acciones elegidas
-  - `synthesis_text` (text) - Sintesis escrita por usuario
-  - `ai_analysis` (text) - Respuesta de SRAP-AI
-  - `ai_synthesis_feedback` (text, nullable) - Analisis de sintesis
-  - `xp_earned` (int) - XP ganados en esta evaluacion
+  - `bleeding_center` (text) - head | heart | body
+  - `sacrifice_center` (text) - head | heart | body
+  - `oxygen_actions` (text[]) - Array of chosen actions
+  - `synthesis_text` (text) - User-written synthesis
+  - `ai_analysis` (text) - SRAP-AI response
+  - `ai_synthesis_feedback` (text, nullable) - Synthesis analysis
+  - `xp_earned` (int) - XP earned in this evaluation
   - `completed_at` (timestamptz)
 
   ### `achievements`
-  Sistema de logros desbloqueables.
+  Unlockable achievements system.
   - `id` (uuid, PK)
-  - `key` (text, unique) - Identificador del logro (ej: "first_evaluation")
-  - `title` (text) - Titulo del logro
-  - `description` (text) - Descripcion
-  - `icon` (text) - Emoji o icono
-  - `xp_reward` (int) - XP que otorga
+  - `key` (text, unique) - Achievement identifier (e.g., "first_evaluation")
+  - `title` (text) - Achievement title
+  - `description` (text) - Description
+  - `icon` (text) - Emoji or icon
+  - `xp_reward` (int) - XP granted
   - `created_at` (timestamptz)
 
   ### `user_achievements`
-  Logros desbloqueados por usuario.
+  Achievements unlocked by user.
   - `id` (uuid, PK)
   - `user_id` (uuid, FK -> user_profiles)
   - `achievement_id` (uuid, FK -> achievements)
   - `unlocked_at` (timestamptz)
 
-  ## 2. Seguridad
-  - RLS habilitado en todas las tablas
-  - Usuarios solo pueden ver/editar sus propios datos
-  - Achievements son publicos (read-only para usuarios)
+  ## 2. Security
+  - RLS enabled on all tables
+  - Users can only see/edit their own data
+  - Achievements are public (read-only for users)
 
-  ## 3. Indices
-  - Indice en user_id para queries rapidas
-  - Indice en completed_at para analisis temporal
-  - Indice compuesto en user_achievements para prevenir duplicados
+  ## 3. Indexes
+  - Index on user_id for fast queries
+  - Index on completed_at for temporal analysis
+  - Composite index on user_achievements to prevent duplicates
 
-  ## 4. Gamificacion
-  - Niveles del 1 al 10 (cada nivel requiere mas XP)
-  - XP base por evaluacion: 50
-  - Bonus por streak: +10 XP por dia
-  - Achievements otorgan XP adicional
+  ## 4. Gamification
+  - Levels from 1 to 10 (each level requires more XP)
+  - Base XP per evaluation: 50
+  - Streak bonus: +10 XP per day
+  - Achievements grant additional XP
 */
 
--- Habilitar UUID si no esta habilitado
+-- Enable UUID if not enabled
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
--- Tabla de perfiles de usuario
+-- User profiles table
 CREATE TABLE IF NOT EXISTS user_profiles (
   id uuid PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
-  display_name text DEFAULT 'Guerrero SRAP',
+  display_name text DEFAULT 'SRAP Warrior',
   total_evaluations int DEFAULT 0,
   current_level int DEFAULT 1,
   experience_points int DEFAULT 0,
@@ -96,12 +96,12 @@ CREATE POLICY "Users can insert own profile"
   TO authenticated
   WITH CHECK (auth.uid() = id);
 
--- Tabla de evaluaciones
+-- Evaluations table
 CREATE TABLE IF NOT EXISTS evaluations (
   id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
   user_id uuid REFERENCES user_profiles(id) ON DELETE CASCADE NOT NULL,
-  bleeding_center text NOT NULL CHECK (bleeding_center IN ('cabeza', 'corazon', 'cuerpo')),
-  sacrifice_center text NOT NULL CHECK (sacrifice_center IN ('cabeza', 'corazon', 'cuerpo')),
+  bleeding_center text NOT NULL CHECK (bleeding_center IN ('head', 'heart', 'body')),
+  sacrifice_center text NOT NULL CHECK (sacrifice_center IN ('head', 'heart', 'body')),
   oxygen_actions text[] DEFAULT '{}',
   synthesis_text text DEFAULT '',
   ai_analysis text DEFAULT '',
@@ -125,7 +125,7 @@ CREATE POLICY "Users can insert own evaluations"
 CREATE INDEX IF NOT EXISTS idx_evaluations_user_id ON evaluations(user_id);
 CREATE INDEX IF NOT EXISTS idx_evaluations_completed_at ON evaluations(completed_at DESC);
 
--- Tabla de achievements
+-- Achievements table
 CREATE TABLE IF NOT EXISTS achievements (
   id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
   key text UNIQUE NOT NULL,
@@ -143,7 +143,7 @@ CREATE POLICY "Anyone can view achievements"
   TO authenticated
   USING (true);
 
--- Tabla de achievements desbloqueados
+-- Unlocked achievements table
 CREATE TABLE IF NOT EXISTS user_achievements (
   id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
   user_id uuid REFERENCES user_profiles(id) ON DELETE CASCADE NOT NULL,
@@ -166,18 +166,18 @@ CREATE POLICY "Users can insert own achievements"
 
 CREATE INDEX IF NOT EXISTS idx_user_achievements_user_id ON user_achievements(user_id);
 
--- Insertar achievements iniciales
+-- Insert initial achievements
 INSERT INTO achievements (key, title, description, icon, xp_reward) VALUES
-  ('first_blood', 'Primera Sangre', 'Completaste tu primer examen SRAP. Bienvenido al campo de batalla.', '🩸', 100),
-  ('week_warrior', 'Guerrero Semanal', 'Mantuviste una racha de 7 dias consecutivos.', '⚔️', 200),
-  ('month_survivor', 'Superviviente Mensual', '30 dias enfrentando la realidad cruda.', '💀', 500),
-  ('level_5', 'Veterano SRAP', 'Alcanzaste el nivel 5. Ya no hay vuelta atras.', '🎖️', 300),
-  ('level_10', 'Maestro de la Realidad', 'Nivel 10. Has visto el abismo y el abismo te ha visto.', '👁️', 1000),
-  ('ten_evaluations', 'Decada de Decisiones', 'Completaste 10 evaluaciones. Conoces tus sacrificios.', '📊', 250),
-  ('honest_synthesis', 'Honestidad Brutal', 'Tu sintesis fue validada por SRAP-AI como genuina.', '✍️', 150)
+  ('first_blood', 'First Blood', 'You completed your first SRAP exam. Welcome to the battlefield.', '🩸', 100),
+  ('week_warrior', 'Weekly Warrior', 'Maintained a 7-day consecutive streak.', '⚔️', 200),
+  ('month_survivor', 'Monthly Survivor', '30 days facing the raw reality.', '💀', 500),
+  ('level_5', 'SRAP Veteran', 'Reached level 5. No turning back now.', '🎖️', 300),
+  ('level_10', 'Master of Reality', 'Level 10. You have seen the abyss and the abyss has seen you.', '👁️', 1000),
+  ('ten_evaluations', 'Decade of Decisions', 'Completed 10 evaluations. You know your sacrifices.', '📊', 250),
+  ('honest_synthesis', 'Brutal Honesty', 'Your synthesis was validated by SRAP-AI as genuine.', '✍️', 150)
 ON CONFLICT (key) DO NOTHING;
 
--- Funcion para actualizar updated_at automaticamente
+-- Function to automatically update updated_at column
 CREATE OR REPLACE FUNCTION update_updated_at_column()
 RETURNS TRIGGER AS $$
 BEGIN
