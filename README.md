@@ -244,3 +244,46 @@ MIT License. Use, modify, destroy. Reality has no copyright.
 ---
 
 **REMEMBER:** This is not a "high vibe" app. It is a triage simulator for the soul. If you are looking for comfort, go somewhere else. If you seek measurable truth, welcome to SRAP.
+
+
+## PROJECT STRUCTURE (OPTIMIZED)
+
+```bash
+src/
+  pages/
+    HomePage.tsx
+  components/
+    sections/
+    features/
+      exam/
+      gamification/
+      tricentric/
+    ui/
+  hooks/
+  lib/
+  styles/
+  types/
+```
+
+## VERCEL NOTES
+
+- `vercel.json` is included for Vite-compatible output (`dist`).
+- Configure `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` in Vercel Project Settings → Environment Variables.
+- Build command: `npm run build`.
+- (Optional but recommended) define `VITE_SITE_URL` in Vercel for canonical/social absolute URLs.
+
+
+## UX + SEO IMPLEMENTATION
+
+- Accessibility and UX:
+  - Skip-link to main content.
+  - Keyboard-visible focus states.
+  - Reduced-motion support (`prefers-reduced-motion`).
+  - Accessible modal behavior (`role=dialog`, ESC key, overlay close).
+  - `aria-live` loading states.
+- SEO:
+  - Dynamic SEO tags in app runtime (`title`, `description`, OpenGraph, Twitter, canonical).
+  - Static SEO baseline in `index.html`.
+  - `robots.txt`, `sitemap.xml`, `site.webmanifest`.
+  - Share image at `public/og-image.svg`.
+

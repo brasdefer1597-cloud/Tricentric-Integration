@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import Modal from './ui/Modal';
-import LoadingSpinner from './ui/LoadingSpinner';
-import { useAnalysis } from '../hooks/useAnalysis';
-import { supabase } from '../lib/supabase';
-import { calculateXPGained, shouldUnlockAchievement } from '../lib/gamification';
-import type { CenterType } from '../types';
+import Modal from '@/components/ui/Modal';
+import LoadingSpinner from '@/components/ui/LoadingSpinner';
+import { useAnalysis } from '@/hooks/useAnalysis';
+import { supabase } from '@/lib/supabase';
+import { calculateXPGained, shouldUnlockAchievement } from '@/lib/gamification';
+import type { CenterType } from '@/types';
 
 interface ExamSectionProps {
   onEvaluationComplete?: () => void;
@@ -118,7 +118,10 @@ const ExamSection: React.FC<ExamSectionProps> = ({ onEvaluationComplete }) => {
         if (shouldUnlockAchievement(key, { totalEvaluations: newTotalEvals, currentLevel: 1, streakDays: newStreak })) {
           const { data: achievement } = await supabase.from('achievements').select('id').eq('key', key).maybeSingle();
           if (achievement) {
-            await supabase.from('user_achievements').insert({ user_id: user.id, achievement_id: achievement.id }).then(() => {}).catch(() => {});
+            await supabase.from('user_achievements').insert({
+              user_id: user.id,
+              achievement_id: achievement.id,
+            });
           }
         }
       }

@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
-import { supabase } from '../lib/supabase';
-import { calculateLevel, getXPForNextLevel } from '../lib/gamification';
-import type { UserProfile, UserAchievement } from '../types';
-import type { GamificationState } from '../types';
+import { supabase } from '@/lib/supabase';
+import { calculateLevel, getXPForNextLevel } from '@/lib/gamification';
+import type { UserProfile, UserAchievement } from '@/types';
+import type { GamificationState } from '@/types';
 
 export function useGamification(profile: UserProfile | null) {
   const [state, setState] = useState<GamificationState>({
