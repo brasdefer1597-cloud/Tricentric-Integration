@@ -32,7 +32,14 @@ const ProgressBar: React.FC<ProgressBarProps> = ({
           </span>
         </div>
       )}
-      <div className="w-full h-3 bg-gray-800 rounded-full overflow-hidden border border-gray-700">
+      <div
+        className="w-full h-3 bg-gray-800 rounded-full overflow-hidden border border-gray-700"
+        role="progressbar"
+        aria-valuenow={current}
+        aria-valuemin={0}
+        aria-valuemax={max}
+        aria-label={label}
+      >
         <div
           className={`h-full ${colorClasses[color]} transition-all duration-500 ease-out relative`}
           style={{ width: `${percentage}%` }}

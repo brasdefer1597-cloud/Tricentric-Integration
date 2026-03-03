@@ -195,14 +195,16 @@ const ExamSection: React.FC<ExamSectionProps> = ({ onEvaluationComplete }) => {
                   { id: 'heart' as CenterType, label: 'Heart', icon: '💔', ringColor: 'ring-red-400', bgColor: 'bg-red-900' },
                   { id: 'body' as CenterType, label: 'Body', icon: '🦶', ringColor: 'ring-green-400', bgColor: 'bg-green-900' },
                 ].map(item => (
-                  <div
+                  <button
                     key={item.id}
+                    type="button"
                     onClick={() => setBleeding(item.id)}
-                    className={`flex items-center space-x-3 p-3 ${item.bgColor} bg-opacity-20 rounded-lg cursor-pointer transition-all duration-200 ring-2 ${bleeding === item.id ? item.ringColor : 'ring-transparent'}`}
+                    aria-pressed={bleeding === item.id}
+                    className={`flex items-center space-x-3 p-3 ${item.bgColor} bg-opacity-20 rounded-lg cursor-pointer transition-all duration-200 ring-2 focus:outline-none focus:ring-offset-2 focus:ring-offset-gray-900 ${bleeding === item.id ? item.ringColor : 'ring-transparent hover:bg-opacity-30'}`}
                   >
-                    <span className="text-xl">{item.icon}</span>
+                    <span className="text-xl" aria-hidden="true">{item.icon}</span>
                     <span className="font-bold text-gray-300">{item.label}</span>
-                  </div>
+                  </button>
                 ))}
               </div>
                 </div>
