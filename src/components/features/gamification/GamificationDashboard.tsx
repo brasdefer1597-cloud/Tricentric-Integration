@@ -1,8 +1,8 @@
 import React from 'react';
-import LevelBadge from './ui/LevelBadge';
-import ProgressBar from './ui/ProgressBar';
-import { getLevelTitle } from '../lib/gamification';
-import type { GamificationState } from '../types';
+import LevelBadge from '@/components/ui/LevelBadge';
+import ProgressBar from '@/components/ui/ProgressBar';
+import { getLevelTitle } from '@/lib/gamification';
+import type { GamificationState } from '@/types';
 
 interface GamificationDashboardProps {
   state: GamificationState;

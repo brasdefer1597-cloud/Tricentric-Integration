@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { supabase } from '../lib/supabase';
-import type { CenterType } from '../types';
+import { supabase } from '@/lib/supabase';
+import type { CenterType } from '@/types';
 
 interface AnalysisRequest {
   type: 'misery' | 'synthesis';
