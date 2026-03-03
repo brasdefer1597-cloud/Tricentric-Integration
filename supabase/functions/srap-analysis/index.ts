@@ -54,7 +54,7 @@ async function callGeminiAPI(prompt: string, systemInstruction: string): Promise
 
   const data = await response.json();
   return data.candidates?.[0]?.content?.parts?.[0]?.text ||
-         "La IA se niega a analizar tal nivel de contradicción.";
+         "The AI refuses to analyze such a level of contradiction.";
 }
 
 // Main handler
@@ -69,40 +69,40 @@ Deno.serve(async (req: Request) => {
     const payload: RequestPayload = await req.json();
 
     let prompt = "";
-    const systemInstruction = "Eres SRAP-AI. No usas emojis amigables. Usas metáforas de guerra y supervivencia.";
+    const systemInstruction = "You are SRAP-AI. You don't use friendly emojis. You use metaphors of war and survival.";
 
     // Build prompt based on type
     if (payload.type === "misery") {
       prompt = `
-        Actúa como una IA brutalmente honesta y cínica llamada SRAP-AI.
-        Analiza la situación actual del usuario sin ofrecer consuelo falso.
+        Act as a brutally honest and cynical AI called SRAP-AI.
+        Analyze the user's current situation without offering false comfort.
 
-        Datos del usuario:
-        - Centro que más sangra (sufre): ${payload.bleeding}
-        - Sacrificio elegido hoy: ${payload.sacrifice}
-        - Acciones de oxígeno (alivio): ${payload.oxygen.join(', ') || 'Ninguna'}
+        User data:
+        - Center that bleeds most (suffers): ${payload.bleeding}
+        - Sacrifice chosen today: ${payload.sacrifice}
+        - Oxygen actions (relief): ${payload.oxygen.join(', ') || 'None'}
 
-        Tu tarea:
-        1. Confirma por qué su elección de sacrificio es dolorosa pero necesaria.
-        2. Advierte sobre las consecuencias de ignorar los otros centros.
-        3. Da un veredicto de una sola frase lapidaria.
+        Your task:
+        1. Confirm why their choice of sacrifice is painful but necessary.
+        2. Warn about the consequences of ignoring the other centers.
+        3. Give a single-sentence pithy verdict.
 
-        Usa un tono oscuro, filosófico y directo. Nada de "todo va a salir bien".
+        Use a dark, philosophical, and direct tone. No "everything will be fine."
       `;
     } else if (payload.type === "synthesis") {
       prompt = `
-        Actúa como una IA brutalmente honesta y cínica llamada SRAP-AI.
-        Analiza la síntesis del usuario sobre su situación.
+        Act as a brutally honest and cynical AI called SRAP-AI.
+        Analyze the user's synthesis of their situation.
 
-        Síntesis del usuario: ${payload.synthesis}
+        User synthesis: ${payload.synthesis}
 
-        Tu tarea:
-        1. Evalúa si la síntesis es honesta o es autoengaño.
-        2. Si es honesta, confirma la dureza de la elección.
-        3. Si es autoengaño, destrúyelo con lógica fría.
-        4. Termina con una pregunta cortante que le obligue a reflexionar.
+        Your task:
+        1. Evaluate if the synthesis is honest or self-deception.
+        2. If honest, confirm the toughness of the choice.
+        3. If self-deception, destroy it with cold logic.
+        4. End with a sharp question that forces them to reflect.
 
-        Usa un tono oscuro y directo. Sé implacable pero útil.
+        Use a dark and direct tone. Be relentless but useful.
       `;
     } else {
       throw new Error("Invalid request type");
@@ -129,7 +129,7 @@ Deno.serve(async (req: Request) => {
     return new Response(
       JSON.stringify({
         error: error instanceof Error ? error.message : "Unknown error",
-        analysis: "Error de conexión. Incluso la IA te ha abandonado hoy."
+        analysis: "Connection error. Even the AI has abandoned you today."
       }),
       {
         status: 500,

@@ -30,12 +30,12 @@ const GamificationDashboard: React.FC<GamificationDashboardProps> = ({ state }) 
         <div className="flex gap-6">
           <div className="text-center">
             <div className="text-3xl font-black text-red-400">{totalEvaluations}</div>
-            <div className="text-xs text-gray-400 uppercase">Evaluaciones</div>
+            <div className="text-xs text-gray-400 uppercase">Evaluations</div>
           </div>
 
           <div className="text-center">
             <div className="text-3xl font-black text-yellow-400">{streak}</div>
-            <div className="text-xs text-gray-400 uppercase">Racha (días)</div>
+            <div className="text-xs text-gray-400 uppercase">Streak (days)</div>
           </div>
         </div>
       </div>
@@ -44,14 +44,14 @@ const GamificationDashboard: React.FC<GamificationDashboardProps> = ({ state }) 
         <ProgressBar
           current={xp}
           max={nextLevelXP}
-          label="Progreso al siguiente nivel"
+          label="Progress to next level"
           color="yellow"
         />
       </div>
 
       {recentAchievements.length > 0 && (
         <div className="mt-6 border-t border-gray-700 pt-4">
-          <h4 className="text-sm font-bold text-gray-400 mb-3">LOGROS RECIENTES</h4>
+          <h4 className="text-sm font-bold text-gray-400 mb-3">RECENT ACHIEVEMENTS</h4>
           <div className="flex gap-3">
             {recentAchievements.map((ua) => (
               <div

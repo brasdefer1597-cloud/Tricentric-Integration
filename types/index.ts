@@ -1,6 +1,6 @@
 // Core types for SRAP application
 
-export type CenterType = 'cabeza' | 'corazon' | 'cuerpo';
+export type CenterType = 'head' | 'heart' | 'body';
 
 export interface UserProfile {
   id: string;
