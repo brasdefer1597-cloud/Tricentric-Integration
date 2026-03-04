@@ -135,10 +135,11 @@ export default function TricentricIntegration({ kofiUrl }: Props) {
           >
             <div className="text-center mb-4">
               <div className="text-5xl mb-2">{center.icon}</div>
-              <h3 className={`font-bold text-xl ${center.titleClasses}`}>{center.name}</h3>
+              <h3 id={`title-${center.name.toLowerCase()}`} className={`font-bold text-xl ${center.titleClasses}`}>{center.name}</h3>
               <p className="text-xs text-gray-500 uppercase">{center.desc}</p>
             </div>
             <textarea
+              aria-labelledby={`title-${center.name.toLowerCase()}`}
               className={`w-full h-32 p-3 rounded-lg bg-black bg-opacity-40 text-white border outline-none resize-none ${center.textareaClasses}`}
               placeholder={`What does your ${center.name.toLowerCase()} think / feel / sense?...`}
             />
@@ -169,8 +170,9 @@ export default function TricentricIntegration({ kofiUrl }: Props) {
       </div>
 
       <div className="bg-gradient-to-r from-blue-900 via-red-900 to-green-900 rounded-2xl p-8 text-center border border-yellow-600">
-        <h3 className="text-2xl font-bold mb-4 text-white">🔄 Integrative Synthesis</h3>
+        <h3 id="integrative-synthesis-title" className="text-2xl font-bold mb-4 text-white">🔄 Integrative Synthesis</h3>
         <textarea
+          aria-labelledby="integrative-synthesis-title"
           className="w-full h-24 bg-black bg-opacity-50 border border-yellow-500 rounded-lg p-4 text-white focus:outline-none mb-6 resize-none"
           placeholder="Integrate the three voices here..."
         />
