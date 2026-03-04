@@ -213,12 +213,13 @@ const ExamSection: React.FC<ExamSectionProps> = ({ onEvaluationComplete }) => {
                 </div>
 
                 <div className="bg-gray-800 rounded-xl p-6">
-                    <h3 className="text-xl font-bold text-red-400 mb-4">2. CONSCIOUS SACRIFICE</h3>
+                    <h3 id="sacrifice-title" className="text-xl font-bold text-red-400 mb-4">2. CONSCIOUS SACRIFICE</h3>
                     <p className="text-gray-300 mb-4">Which center has to give in TODAY so the other two survive?</p>
                     
               <select
                 value={sacrifice}
                 onChange={e => setSacrifice(e.target.value as CenterType)}
+                aria-labelledby="sacrifice-title"
                 className="w-full bg-black bg-opacity-50 text-white p-3 rounded-lg border border-red-600 focus:ring-2 focus:ring-red-400 focus:border-red-400 transition-all"
               >
                 <option value="">Choose today's sacrifice...</option>
@@ -249,11 +250,12 @@ const ExamSection: React.FC<ExamSectionProps> = ({ onEvaluationComplete }) => {
             </div>
 
             <div className="mt-8 p-6 bg-red-900 bg-opacity-20 border border-red-700 rounded-xl">
-                <h3 className="text-xl font-bold text-yellow-400 mb-4">💎 RAW INTEGRATION</h3>
+                <h3 id="integration-title" className="text-xl font-bold text-yellow-400 mb-4">💎 RAW INTEGRATION</h3>
                 <textarea 
                     id="synthesis-text"
                     value={synthesis}
                     onChange={e => setSynthesis(e.target.value)}
+                    aria-labelledby="integration-title"
                     placeholder='Write your realistic synthesis. Example: "Today the body bleeds most. I will sacrifice mental control (head) to give 10 minutes of rest to the body. The heart will wait until tomorrow."'
                     className="w-full h-32 bg-black bg-opacity-50 border border-yellow-600 rounded-lg p-4 text-white focus:outline-none resize-none focus:ring-2 focus:ring-yellow-400 transition-all"
                 ></textarea>

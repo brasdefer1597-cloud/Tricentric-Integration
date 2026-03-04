@@ -1,7 +1,7 @@
-## 2025-05-14 - Interactive Selection Accessibility
-**Learning:** Custom selection cards implemented with \`div\` tags are not keyboard accessible and lack clear state communication for screen readers. Using semantic \`button\` tags with \`aria-pressed\` provides native focus support and clear accessibility state.
-**Action:** Always use \`button\` or \`input\` for interactive selection elements and ensure they have appropriate ARIA attributes for state.
+## 2026-03-04 - [Missing CSS Animations]
+**Learning:** Components often use custom animation classes (like `animate-shimmer` or `animate-fadeIn`) that are not part of the default Tailwind set. If these aren't defined in the global CSS, the UI feels static and "broken" despite the code referencing them.
+**Action:** Always check `global.css` for @keyframes when seeing `animate-` classes in the components, especially in AI-generated or migrated projects.
 
-## 2025-05-14 - ProgressBar ARIA Roles
-**Learning:** Progress bars need explicit ARIA roles and value attributes (\`role="progressbar"\`, \`aria-valuenow\`, etc.) to be correctly interpreted by assistive technologies.
-**Action:** Include ARIA progress attributes in all custom progress bar components.
+## 2026-03-04 - [Form Accessibility via Headings]
+**Learning:** In complex, multi-section forms, linking inputs to their section headings using `aria-labelledby` is a cleaner and more contextual way to provide labels than using the `label` tag when a heading already exists.
+**Action:** Use `aria-labelledby` pointing to existing `h2`/`h3` IDs for form elements in dense layouts.
