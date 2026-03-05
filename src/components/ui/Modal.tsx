@@ -48,6 +48,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, icon = '🎯', ch
         <div className="text-center">
           <button
             onClick={onClose}
+            aria-label="Close and acknowledge message"
             className="bg-red-700 hover:bg-red-800 text-white font-bold py-2 px-6 rounded-lg transition-all"
           >
             UNDERSTOOD

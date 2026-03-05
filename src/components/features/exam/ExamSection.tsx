@@ -214,9 +214,10 @@ const ExamSection: React.FC<ExamSectionProps> = ({ onEvaluationComplete }) => {
 
                 <div className="bg-gray-800 rounded-xl p-6">
                     <h3 className="text-xl font-bold text-red-400 mb-4">2. CONSCIOUS SACRIFICE</h3>
-                    <p className="text-gray-300 mb-4">Which center has to give in TODAY so the other two survive?</p>
+                    <label htmlFor="sacrifice-select" className="block text-gray-300 mb-4">Which center has to give in TODAY so the other two survive?</label>
                     
               <select
+                id="sacrifice-select"
                 value={sacrifice}
                 onChange={e => setSacrifice(e.target.value as CenterType)}
                 className="w-full bg-black bg-opacity-50 text-white p-3 rounded-lg border border-red-600 focus:ring-2 focus:ring-red-400 focus:border-red-400 transition-all"
@@ -228,13 +229,13 @@ const ExamSection: React.FC<ExamSectionProps> = ({ onEvaluationComplete }) => {
               </select>
                 </div>
 
-                <div className="bg-gray-800 rounded-xl p-6">
-                    <h3 className="text-xl font-bold text-red-400 mb-4">3. SURVIVAL OXYGEN</h3>
+                <fieldset className="bg-gray-800 rounded-xl p-6">
+                    <legend className="text-xl font-bold text-red-400 mb-4">3. SURVIVAL OXYGEN</legend>
                     <p className="text-gray-300 mb-4">What minimal action can give oxygen to the most drowned center?</p>
                     
                     <div className="space-y-3">
                       {OXYGEN_OPTIONS.map(opt => (
-                        <label key={opt} className={`flex items-center space-x-3 p-3 rounded-lg cursor-pointer transition-colors ${oxygen.includes(opt) ? 'bg-red-900 bg-opacity-40 border border-red-600' : 'bg-gray-700'}`}>
+                        <label key={opt} className={`flex items-center space-x-3 p-3 rounded-lg cursor-pointer transition-colors focus-within:ring-2 focus-within:ring-red-400 ${oxygen.includes(opt) ? 'bg-red-900 bg-opacity-40 border border-red-600' : 'bg-gray-700'}`}>
                             <input
                               type="checkbox"
                               checked={oxygen.includes(opt)}
@@ -245,11 +246,12 @@ const ExamSection: React.FC<ExamSectionProps> = ({ onEvaluationComplete }) => {
                         </label>
                       ))}
                     </div>
-                </div>
+                </fieldset>
             </div>
 
             <div className="mt-8 p-6 bg-red-900 bg-opacity-20 border border-red-700 rounded-xl">
                 <h3 className="text-xl font-bold text-yellow-400 mb-4">💎 RAW INTEGRATION</h3>
+                <label htmlFor="synthesis-text" className="sr-only">Raw Integration Synthesis</label>
                 <textarea 
                     id="synthesis-text"
                     value={synthesis}
