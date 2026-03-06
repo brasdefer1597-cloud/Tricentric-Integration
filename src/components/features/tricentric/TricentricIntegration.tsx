@@ -134,11 +134,16 @@ export default function TricentricIntegration({ kofiUrl }: Props) {
             className={`centro-card rounded-2xl p-6 border-2 border-transparent transition-all ${center.cardClasses}`}
           >
             <div className="text-center mb-4">
-              <div className="text-5xl mb-2">{center.icon}</div>
-              <h3 className={`font-bold text-xl ${center.titleClasses}`}>{center.name}</h3>
+              <div className="text-5xl mb-2" aria-hidden="true">
+                {center.icon}
+              </div>
+              <h3 id={`title-${center.name.toLowerCase()}`} className={`font-bold text-xl ${center.titleClasses}`}>
+                {center.name}
+              </h3>
               <p className="text-xs text-gray-500 uppercase">{center.desc}</p>
             </div>
             <textarea
+              aria-labelledby={`title-${center.name.toLowerCase()}`}
               className={`w-full h-32 p-3 rounded-lg bg-black bg-opacity-40 text-white border outline-none resize-none ${center.textareaClasses}`}
               placeholder={`What does your ${center.name.toLowerCase()} think / feel / sense?...`}
             />
@@ -155,7 +160,7 @@ export default function TricentricIntegration({ kofiUrl }: Props) {
         >
           <span className="text-4xl">🌊</span>
         </div>
-        <div className="mb-6 text-gray-300">
+        <div className="mb-6 text-gray-300" role="status" aria-live="polite">
           {breathingPhase === 'inhale' && 'Inhale deeply (4s)'}
           {breathingPhase === 'hold' && 'Hold breath (4s)'}
           {breathingPhase === 'exhale' && 'Exhale slowly (4s)'}
@@ -169,8 +174,11 @@ export default function TricentricIntegration({ kofiUrl }: Props) {
       </div>
 
       <div className="bg-gradient-to-r from-blue-900 via-red-900 to-green-900 rounded-2xl p-8 text-center border border-yellow-600">
-        <h3 className="text-2xl font-bold mb-4 text-white">🔄 Integrative Synthesis</h3>
+        <label htmlFor="integrative-synthesis" className="block text-2xl font-bold mb-4 text-white">
+          🔄 Integrative Synthesis
+        </label>
         <textarea
+          id="integrative-synthesis"
           className="w-full h-24 bg-black bg-opacity-50 border border-yellow-500 rounded-lg p-4 text-white focus:outline-none mb-6 resize-none"
           placeholder="Integrate the three voices here..."
         />
