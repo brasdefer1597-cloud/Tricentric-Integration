@@ -120,7 +120,7 @@ export default function TricentricIntegration({ kofiUrl }: Props) {
   return (
     <div className="tricentric-integration p-6 max-w-6xl mx-auto bg-gray-900 rounded-2xl border border-purple-900 my-12">
       <h2 className="text-3xl font-bold text-center mb-6 text-white bg-gradient-to-r from-blue-400 via-red-400 to-green-400 bg-clip-text text-transparent">
-        🎯 Tricentric Integration
+        <span aria-hidden="true">🎯</span> Tricentric Integration
       </h2>
 
       <p className="text-center text-gray-400 mb-8 italic">
@@ -134,11 +134,16 @@ export default function TricentricIntegration({ kofiUrl }: Props) {
             className={`centro-card rounded-2xl p-6 border-2 border-transparent transition-all ${center.cardClasses}`}
           >
             <div className="text-center mb-4">
-              <div className="text-5xl mb-2">{center.icon}</div>
-              <h3 className={`font-bold text-xl ${center.titleClasses}`}>{center.name}</h3>
+              <div className="text-5xl mb-2" aria-hidden="true">
+                {center.icon}
+              </div>
+              <h3 id={`center-title-${center.name}`} className={`font-bold text-xl ${center.titleClasses}`}>
+                {center.name}
+              </h3>
               <p className="text-xs text-gray-500 uppercase">{center.desc}</p>
             </div>
             <textarea
+              aria-labelledby={`center-title-${center.name}`}
               className={`w-full h-32 p-3 rounded-lg bg-black bg-opacity-40 text-white border outline-none resize-none ${center.textareaClasses}`}
               placeholder={`What does your ${center.name.toLowerCase()} think / feel / sense?...`}
             />
@@ -147,15 +152,19 @@ export default function TricentricIntegration({ kofiUrl }: Props) {
       </div>
 
       <div className="bg-gray-800 rounded-2xl p-8 mb-8 text-center border border-gray-700">
-        <h3 className="text-xl font-bold text-yellow-400 mb-4">🌬️ Conscious Breathing Practice</h3>
+        <h3 className="text-xl font-bold text-yellow-400 mb-4">
+          <span aria-hidden="true">🌬️</span> Conscious Breathing Practice
+        </h3>
         <div
           className={`breathing-circle w-32 h-32 bg-gradient-to-br from-blue-400 to-green-400 rounded-full mx-auto mb-6 flex items-center justify-center transition-transform duration-[4000ms] ease-in-out ${
             breathingPhase === 'inhale' ? 'scale-100' : breathingPhase === 'hold' ? 'scale-125' : 'scale-110'
           }`}
         >
-          <span className="text-4xl">🌊</span>
+          <span className="text-4xl" aria-hidden="true">
+            🌊
+          </span>
         </div>
-        <div className="mb-6 text-gray-300">
+        <div className="mb-6 text-gray-300" role="status" aria-live="polite">
           {breathingPhase === 'inhale' && 'Inhale deeply (4s)'}
           {breathingPhase === 'hold' && 'Hold breath (4s)'}
           {breathingPhase === 'exhale' && 'Exhale slowly (4s)'}
@@ -169,14 +178,18 @@ export default function TricentricIntegration({ kofiUrl }: Props) {
       </div>
 
       <div className="bg-gradient-to-r from-blue-900 via-red-900 to-green-900 rounded-2xl p-8 text-center border border-yellow-600">
-        <h3 className="text-2xl font-bold mb-4 text-white">🔄 Integrative Synthesis</h3>
+        <h3 id="synthesis-title" className="text-2xl font-bold mb-4 text-white">
+          <span aria-hidden="true">🔄</span> Integrative Synthesis
+        </h3>
         <textarea
+          aria-labelledby="synthesis-title"
           className="w-full h-24 bg-black bg-opacity-50 border border-yellow-500 rounded-lg p-4 text-white focus:outline-none mb-6 resize-none"
           placeholder="Integrate the three voices here..."
         />
         <button
           onClick={finalizePractice}
           disabled={loading}
+          aria-label="Claim digital version on Ko-fi (opens in new tab)"
           className="bg-red-600 hover:bg-red-700 text-white font-black py-4 px-10 rounded-xl transition-all transform hover:scale-105 shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {loading ? 'SAVING...' : 'CLAIM DIGITAL VERSION ON KOFI'}
