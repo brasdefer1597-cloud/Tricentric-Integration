@@ -55,6 +55,17 @@ body {
   background: radial-gradient(circle, rgba(248, 113, 113, 0.4) 0%, rgba(248, 113, 113, 0) 70%);
 }
 
+@keyframes breathe-crudo {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.5;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 1;
+  }
+}
+
 
 html {
   scroll-behavior: smooth;
