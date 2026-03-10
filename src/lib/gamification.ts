@@ -1,4 +1,5 @@
 // Gamification engine - XP calculations and level progression
+// CENTRALIZED SRAP LOGIC - Chalamandra Magistral Edition
 
 export const LEVEL_CONFIG = {
   MAX_LEVEL: 10,
@@ -18,6 +19,16 @@ export const LEVEL_CONFIG = {
   ]
 };
 
+export const ACHIEVEMENT_KEYS = [
+  'first_blood',
+  'week_warrior',
+  'month_survivor',
+  'level_5',
+  'level_10',
+  'ten_evaluations',
+  'honest_synthesis'
+];
+
 export function calculateLevel(xp: number): number {
   for (let i = LEVEL_CONFIG.XP_CURVE.length - 1; i >= 0; i--) {
     if (xp >= LEVEL_CONFIG.XP_CURVE[i]) {
@@ -36,7 +47,7 @@ export function getXPForNextLevel(currentLevel: number): number {
 
 export function calculateXPGained(streakDays: number, hasHonestSynthesis: boolean = false): number {
   let xp = LEVEL_CONFIG.BASE_XP_PER_EVALUATION;
-  xp += streakDays * LEVEL_CONFIG.STREAK_BONUS_PER_DAY;
+  xp += Math.min(streakDays, 30) * LEVEL_CONFIG.STREAK_BONUS_PER_DAY; // Cap streak bonus
   if (hasHonestSynthesis) xp += 50;
   return xp;
 }
@@ -50,7 +61,7 @@ export function shouldUnlockAchievement(
   }
 ): boolean {
   const conditions: Record<string, boolean> = {
-    'first_blood': userStats.totalEvaluations === 1,
+    'first_blood': userStats.totalEvaluations >= 1,
     'week_warrior': userStats.streakDays >= 7,
     'month_survivor': userStats.streakDays >= 30,
     'level_5': userStats.currentLevel >= 5,
@@ -63,16 +74,16 @@ export function shouldUnlockAchievement(
 
 export function getLevelTitle(level: number): string {
   const titles = [
-    'Lost Novice',           // 1
-    'Apprentice of Pain',       // 2
-    'Warrior in Training',    // 3
-    'Scarred Veteran',     // 4
-    'Hardened Survivor',       // 5
-    'Master of Sacrifices',   // 6
-    'Reality Seer',    // 7
-    'Abyss Commander',    // 8
-    'Brutal Legend',           // 9
-    'Supreme Decoder',    // 10
+    'Salamandra Perdida',      // 1
+    'Novicia del Dolor',       // 2
+    'Malandra en Práctica',    // 3
+    'Guerrera Fresa',          // 4
+    'Decodificadora Chola',    // 5
+    'Maestra de Sombras',      // 6
+    'Sobreviviente Magistral', // 7
+    'Comandante Salamandra',   // 8
+    'Leyenda de Realidad',     // 9
+    'Chalamandra Magistral',   // 10
   ];
 
   return titles[level - 1] || titles[0];

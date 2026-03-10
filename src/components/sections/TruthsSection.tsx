@@ -2,53 +2,55 @@ import React from 'react';
 
 const TruthsSection: React.FC = () => {
   return (
-    <section className="py-12 px-6 max-w-6xl mx-auto">
-      <div className="hard-truth rounded-2xl p-8 mb-12">
-        <h2 className="text-3xl font-bold text-red-400 mb-6">🔪 UNFILTERED TRUTHS</h2>
+    <section className="py-20 px-6 max-w-6xl mx-auto">
+      <div className="flex items-center gap-4 mb-12">
+        <h2 className="text-4xl font-black text-white uppercase tracking-tighter">
+            Las 3 Verdades <span className="text-red-600">Crudas</span>
+        </h2>
+        <div className="h-px flex-1 bg-gradient-to-r from-red-600 to-transparent"></div>
+      </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="reality-card body-card rounded-xl p-6">
-            <div className="text-center mb-4">
-              <div className="text-4xl mb-2">🦶</div>
-              <h3 className="text-xl font-bold text-green-400">THE BODY ALWAYS WINS</h3>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        {[
+          {
+            title: 'CABEZA (El Tirano)',
+            desc: 'Tu mente quiere control total, planes perfectos y evitar el caos. Pero el control es una ilusión que te drena el oxígeno.',
+            icon: '🧠',
+            accent: 'border-blue-500/50',
+            bg: 'bg-blue-900/10'
+          },
+          {
+            title: 'CORAZÓN (El Mártir)',
+            desc: 'Tus emociones quieren salvar al mundo, ser amadas y cumplir sueños. Pero el martirio sin estrategia es suicidio lento.',
+            icon: '💔',
+            accent: 'border-red-500/50',
+            bg: 'bg-red-900/10'
+          },
+          {
+            title: 'CUERPO (El Esclavo)',
+            desc: 'Tu biología solo quiere sobrevivir, descansar y reproducirse. Ignorar sus quejas es la forma más rápida de colapso.',
+            icon: '🦶',
+            accent: 'border-green-500/50',
+            bg: 'bg-green-900/10'
+          }
+        ].map((truth, i) => (
+          <div
+            key={i}
+            className={`group relative p-8 rounded-[32px] border ${truth.accent} ${truth.bg} backdrop-blur-sm transition-all hover:scale-105 hover:shadow-2xl shadow-black/50`}
+          >
+            <div className="text-5xl mb-6 group-hover:scale-110 transition-transform duration-500 animate-pulse">
+                {truth.icon}
             </div>
-            <p className="text-gray-300 text-sm leading-relaxed">
-              You can ignore it for years with coffee, stress, and fake smiles. But one day it collapses. And the
-              medical bill will never be poetic.
+            <h3 className="text-xl font-black text-white mb-4 uppercase tracking-wider">{truth.title}</h3>
+            <p className="text-gray-400 leading-relaxed font-medium">
+              {truth.desc}
             </p>
-            <div className="mt-4 p-3 bg-green-900 bg-opacity-20 rounded-lg">
-              <p className="text-green-300 text-xs italic">
-                "Cancer doesn't ask 'what do you care about?' before appearing"
-              </p>
+
+            <div className="absolute top-4 right-4 opacity-10 font-black text-4xl select-none">
+                0{i+1}
             </div>
           </div>
-
-          <div className="reality-card heart-card rounded-xl p-6">
-            <div className="text-center mb-4">
-              <div className="text-4xl mb-2">💔</div>
-              <h3 className="text-xl font-bold text-red-400">THE HEART IS A POOR STRATEGIST</h3>
-            </div>
-            <p className="text-gray-300 text-sm leading-relaxed mb-2">
-              Following "your passion" without a plan is a recipe for ending up:
-            </p>
-            <ul className="list-disc list-inside text-gray-300 text-sm space-y-1">
-              <li>In debt</li>
-              <li>Exploited by those who did plan</li>
-              <li>Selling "high vibe" courses</li>
-            </ul>
-          </div>
-
-          <div className="reality-card head-card rounded-xl p-6">
-            <div className="text-center mb-4">
-              <div className="text-4xl mb-2">🧊</div>
-              <h3 className="text-xl font-bold text-blue-400">HEAD WITHOUT HEART CREATES MONSTERS</h3>
-            </div>
-            <p className="text-gray-300 text-sm leading-relaxed">
-              CEOs optimizing layoffs. Politicians calculating collateral damage. You deciding "it's logical" while
-              killing something inside you.
-            </p>
-          </div>
-        </div>
+        ))}
       </div>
     </section>
   );
