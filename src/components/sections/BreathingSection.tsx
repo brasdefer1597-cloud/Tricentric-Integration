@@ -56,7 +56,7 @@ const BreathingSection: React.FC = () => {
           <div
             className={`relative w-32 h-32 rounded-full mx-auto mb-8 flex items-center justify-center transition-all duration-[2000ms] ease-in-out border-4 ${
               activeOxygen
-                ? 'scale-125 border-red-500 shadow-[0_0_50px_rgba(220,38,38,0.3)]'
+                ? (phase === 'Inhale' ? 'scale-125' : 'scale-100') + ' border-red-500 shadow-[0_0_50px_rgba(220,38,38,0.3)]'
                 : 'border-gray-800'
             }`}
             role="status"

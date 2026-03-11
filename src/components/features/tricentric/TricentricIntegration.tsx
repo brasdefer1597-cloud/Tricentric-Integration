@@ -67,7 +67,7 @@ export default function TricentricIntegration({ kofiUrl }: Props) {
           if (prev === 'hold') return 'exhale';
           return 'inhale';
         });
-      }, 4000);
+      }, 2000);
       setIntervalId(id);
       return;
     }
@@ -160,9 +160,9 @@ export default function TricentricIntegration({ kofiUrl }: Props) {
           <span className="text-4xl">🌊</span>
         </div>
         <div className="mb-6 text-gray-300" role="status" aria-live="polite">
-          {breathingPhase === 'inhale' && 'Inhale deeply (4s)'}
-          {breathingPhase === 'hold' && 'Hold breath (4s)'}
-          {breathingPhase === 'exhale' && 'Exhale slowly (4s)'}
+          {breathingPhase === 'inhale' && 'Inhale deeply (2s)'}
+          {breathingPhase === 'hold' && 'Hold breath (2s)'}
+          {breathingPhase === 'exhale' && 'Exhale slowly (2s)'}
         </div>
         <button
           onClick={toggleBreathing}
