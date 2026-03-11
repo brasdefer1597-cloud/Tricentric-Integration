@@ -9,3 +9,7 @@
 ## 2025-05-15 - SRAP Methodology & Chalamandra Branding Integration
 **Learning:** Integrating a specific persona (Chalamandra Magistral) and methodology (SRAP) requires decoupling narrative logic (gamification levels, XP) from UI components to maintain modularity while ensuring the "Sensory Atmosphere" is consistently reflected in both code structure and interactive feedback loops.
 **Action:** Created `src/lib/gamification.ts` for narrative-driven level logic and `src/hooks/useEvaluation.ts` for stateful persistence, while documenting the vision in `SRAP_FUNNEL.md`.
+
+## 2025-05-16 - Accessible Dynamic Interfaces
+**Learning:** For dynamic components like breathing timers, using `role="status"` and `aria-live="polite"` ensures state changes are announced without interrupting the user. Providing clear external link disclosures in `aria-label` prevents unexpected navigation surprises.
+**Action:** Implement ARIA live regions for all timed UI elements and include '(opens in new tab)' in labels for external links.

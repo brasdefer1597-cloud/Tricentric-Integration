@@ -8,26 +8,29 @@ interface Props {
 
 const CENTERS = [
   {
+    id: 'head',
     name: 'HEAD',
     icon: '🧠',
     desc: 'Thought • Logic • Analysis',
-    cardClasses: 'hover:border-blue-500',
+    cardClasses: 'hover:border-blue-500 focus-within:border-blue-500',
     titleClasses: 'text-blue-400',
     textareaClasses: 'border-blue-900 focus:border-blue-500',
   },
   {
+    id: 'heart',
     name: 'HEART',
     icon: '💖',
     desc: 'Emotion • Intuition • Values',
-    cardClasses: 'hover:border-red-500',
+    cardClasses: 'hover:border-red-500 focus-within:border-red-500',
     titleClasses: 'text-red-400',
     textareaClasses: 'border-red-900 focus:border-red-500',
   },
   {
+    id: 'body',
     name: 'BODY',
     icon: '🦶',
     desc: 'Sensation • Instinct • Somatic Wisdom',
-    cardClasses: 'hover:border-green-500',
+    cardClasses: 'hover:border-green-500 focus-within:border-green-500',
     titleClasses: 'text-green-400',
     textareaClasses: 'border-green-900 focus:border-green-500',
   },
@@ -135,10 +138,11 @@ export default function TricentricIntegration({ kofiUrl }: Props) {
           >
             <div className="text-center mb-4">
               <div className="text-5xl mb-2">{center.icon}</div>
-              <h3 className={`font-bold text-xl ${center.titleClasses}`}>{center.name}</h3>
+              <h3 id={`title-${center.id}`} className={`font-bold text-xl ${center.titleClasses}`}>{center.name}</h3>
               <p className="text-xs text-gray-500 uppercase">{center.desc}</p>
             </div>
             <textarea
+              aria-labelledby={`title-${center.id}`}
               className={`w-full h-32 p-3 rounded-lg bg-black bg-opacity-40 text-white border outline-none resize-none ${center.textareaClasses}`}
               placeholder={`What does your ${center.name.toLowerCase()} think / feel / sense?...`}
             />
@@ -155,7 +159,7 @@ export default function TricentricIntegration({ kofiUrl }: Props) {
         >
           <span className="text-4xl">🌊</span>
         </div>
-        <div className="mb-6 text-gray-300">
+        <div className="mb-6 text-gray-300" role="status" aria-live="polite">
           {breathingPhase === 'inhale' && 'Inhale deeply (4s)'}
           {breathingPhase === 'hold' && 'Hold breath (4s)'}
           {breathingPhase === 'exhale' && 'Exhale slowly (4s)'}
@@ -169,14 +173,16 @@ export default function TricentricIntegration({ kofiUrl }: Props) {
       </div>
 
       <div className="bg-gradient-to-r from-blue-900 via-red-900 to-green-900 rounded-2xl p-8 text-center border border-yellow-600">
-        <h3 className="text-2xl font-bold mb-4 text-white">🔄 Integrative Synthesis</h3>
+        <h3 id="synthesis-title" className="text-2xl font-bold mb-4 text-white">🔄 Integrative Synthesis</h3>
         <textarea
+          aria-labelledby="synthesis-title"
           className="w-full h-24 bg-black bg-opacity-50 border border-yellow-500 rounded-lg p-4 text-white focus:outline-none mb-6 resize-none"
           placeholder="Integrate the three voices here..."
         />
         <button
           onClick={finalizePractice}
           disabled={loading}
+          aria-label="Claim digital version on Ko-fi (opens in new tab)"
           className="bg-red-600 hover:bg-red-700 text-white font-black py-4 px-10 rounded-xl transition-all transform hover:scale-105 shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {loading ? 'SAVING...' : 'CLAIM DIGITAL VERSION ON KOFI'}
