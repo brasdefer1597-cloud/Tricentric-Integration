@@ -39,7 +39,7 @@ const CENTERS = [
 export default function TricentricIntegration({ kofiUrl }: Props) {
   const [userId, setUserId] = useState<string>();
   const [loading, setLoading] = useState(false);
-  const [breathingPhase, setBreathingPhase] = useState<'inhale' | 'hold' | 'exhale'>('inhale');
+  const [breathingPhase, setBreathingPhase] = useState<'inhale' | 'exhale'>('inhale');
   const [intervalId, setIntervalId] = useState<ReturnType<typeof setInterval> | null>(null);
 
   useEffect(() => {
@@ -62,24 +62,22 @@ export default function TricentricIntegration({ kofiUrl }: Props) {
   const toggleBreathing = () => {
     if (!intervalId) {
       const id = setInterval(() => {
-        setBreathingPhase((prev) => {
-          if (prev === 'inhale') return 'hold';
-          if (prev === 'hold') return 'exhale';
-          return 'inhale';
-        });
+        setBreathingPhase((prev) => (prev === 'inhale' ? 'exhale' : 'inhale'));
       }, 2000);
       setIntervalId(id);
       return;
     }
 
-    clearInterval(intervalId);
+    if (intervalId) {
+      clearInterval(intervalId);
+    }
     setIntervalId(null);
     setBreathingPhase('inhale');
   };
 
   const finalizePractice = async () => {
     if (!userId) {
-      alert('Please log in to save your progress.');
+      alert('Por favor, inicia sesión para guardar tu progreso.');
       return;
     }
 
@@ -110,11 +108,11 @@ export default function TricentricIntegration({ kofiUrl }: Props) {
 
       await refreshProfile();
 
-      alert('Practice finalized and progress saved! Redirecting to Kofi for the digital version.');
+      alert('¡Práctica finalizada y progreso guardado! Redirigiendo a Kofi para la versión digital.');
       window.open(kofiUrl, '_blank');
     } catch (err) {
       console.error(err);
-      alert('Error saving progress. But the reality is still there.');
+      alert('Error al guardar el progreso. Pero la realidad sigue ahí.');
     } finally {
       setLoading(false);
     }
@@ -123,11 +121,11 @@ export default function TricentricIntegration({ kofiUrl }: Props) {
   return (
     <div className="tricentric-integration p-6 max-w-6xl mx-auto bg-gray-900 rounded-2xl border border-purple-900 my-12">
       <h2 className="text-3xl font-bold text-center mb-6 text-white bg-gradient-to-r from-blue-400 via-red-400 to-green-400 bg-clip-text text-transparent">
-        🎯 Tricentric Integration
+        🎯 Integración Tricéntrica
       </h2>
 
       <p className="text-center text-gray-400 mb-8 italic">
-        "Wisdom is not about suppressing voices, but about directing the internal choir."
+        "La sabiduría no se trata de suprimir voces, sino de dirigir el coro interno."
       </p>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
@@ -144,48 +142,47 @@ export default function TricentricIntegration({ kofiUrl }: Props) {
             <textarea
               aria-labelledby={`title-${center.id}`}
               className={`w-full h-32 p-3 rounded-lg bg-black bg-opacity-40 text-white border outline-none resize-none ${center.textareaClasses}`}
-              placeholder={`What does your ${center.name.toLowerCase()} think / feel / sense?...`}
+              placeholder={`¿Qué piensa / siente / percibe tu ${center.name.toLowerCase()}?...`}
             />
           </div>
         ))}
       </div>
 
       <div className="bg-gray-800 rounded-2xl p-8 mb-8 text-center border border-gray-700">
-        <h3 className="text-xl font-bold text-yellow-400 mb-4">🌬️ Conscious Breathing Practice</h3>
+        <h3 className="text-xl font-bold text-yellow-400 mb-4">🌬️ Práctica de Respiración Consciente</h3>
         <div
-          className={`breathing-circle w-32 h-32 bg-gradient-to-br from-blue-400 to-green-400 rounded-full mx-auto mb-6 flex items-center justify-center transition-transform duration-[4000ms] ease-in-out ${
-            breathingPhase === 'inhale' ? 'scale-100' : breathingPhase === 'hold' ? 'scale-125' : 'scale-110'
+          className={`w-32 h-32 bg-gradient-to-br from-blue-400 to-green-400 rounded-full mx-auto mb-6 flex items-center justify-center transition-all duration-[2000ms] ease-in-out ${
+            intervalId ? (breathingPhase === 'inhale' ? 'scale-125' : 'scale-100') : 'opacity-50'
           }`}
         >
-          <span className="text-4xl">🌊</span>
+          <span className="text-4xl" aria-hidden="true">🌊</span>
         </div>
-        <div className="mb-6 text-gray-300" role="status" aria-live="polite">
-          {breathingPhase === 'inhale' && 'Inhale deeply (2s)'}
-          {breathingPhase === 'hold' && 'Hold breath (2s)'}
-          {breathingPhase === 'exhale' && 'Exhale slowly (2s)'}
+        <div className="mb-6 text-gray-300 min-h-[1.5rem]" role="status" aria-live="polite">
+          {!intervalId && 'Presiona el botón para comenzar'}
+          {intervalId && (breathingPhase === 'inhale' ? '↑ Inhalando profundamente (2s)' : '↓ Exhalando lentamente (2s)')}
         </div>
         <button
           onClick={toggleBreathing}
           className="bg-yellow-500 hover:bg-yellow-600 text-black font-bold py-3 px-8 rounded-lg transition-all mb-4"
         >
-          {intervalId ? 'Stop Practice' : 'Start Practice'}
+          {intervalId ? 'Detener Práctica' : 'Iniciar Práctica'}
         </button>
       </div>
 
       <div className="bg-gradient-to-r from-blue-900 via-red-900 to-green-900 rounded-2xl p-8 text-center border border-yellow-600">
-        <h3 id="synthesis-title" className="text-2xl font-bold mb-4 text-white">🔄 Integrative Synthesis</h3>
+        <h3 id="synthesis-title" className="text-2xl font-bold mb-4 text-white">🔄 Síntesis Integradora</h3>
         <textarea
           aria-labelledby="synthesis-title"
           className="w-full h-24 bg-black bg-opacity-50 border border-yellow-500 rounded-lg p-4 text-white focus:outline-none mb-6 resize-none"
-          placeholder="Integrate the three voices here..."
+          placeholder="Integra las tres voces aquí..."
         />
         <button
           onClick={finalizePractice}
           disabled={loading}
-          aria-label="Claim digital version on Ko-fi (opens in new tab)"
+          aria-label="Reclamar versión digital en Ko-fi (se abre en una nueva pestaña)"
           className="bg-red-600 hover:bg-red-700 text-white font-black py-4 px-10 rounded-xl transition-all transform hover:scale-105 shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          {loading ? 'SAVING...' : 'CLAIM DIGITAL VERSION ON KOFI'}
+          {loading ? 'GUARDANDO...' : 'RECLAMAR VERSIÓN DIGITAL EN KOFI'}
         </button>
       </div>
     </div>
