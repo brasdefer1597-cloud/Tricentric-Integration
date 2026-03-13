@@ -149,7 +149,7 @@ const ExamSection: React.FC<ExamSectionProps> = ({ onEvaluationComplete }) => {
                     type="button"
                     onClick={() => setBleeding(item.id)}
                     aria-pressed={bleeding === item.id}
-                    className={`flex flex-col items-center justify-center p-6 ${item.bgColor} rounded-xl cursor-pointer transition-all duration-300 ring-2 focus:outline-none focus:ring-offset-4 focus:ring-offset-black ${bleeding === item.id ? item.ringColor + ' scale-105 shadow-lg shadow-black/50' : 'ring-transparent opacity-60 hover:opacity-100 hover:scale-[1.02]'}`}
+                    className={`flex flex-col items-center justify-center p-6 ${item.bgColor} rounded-xl cursor-pointer transition-all duration-300 ring-2 focus:outline-none focus-visible:ring-yellow-400 focus-visible:ring-offset-4 focus-visible:ring-offset-black ${bleeding === item.id ? item.ringColor + ' scale-105 shadow-lg shadow-black/50' : 'ring-transparent opacity-60 hover:opacity-100 hover:scale-[1.02]'}`}
                   >
                     <span className="text-3xl mb-3" aria-hidden="true">{item.icon}</span>
                     <span className="font-black text-gray-200 uppercase tracking-wider">{item.label}</span>
@@ -172,7 +172,13 @@ const ExamSection: React.FC<ExamSectionProps> = ({ onEvaluationComplete }) => {
                 id="sacrifice-select"
                 value={sacrifice}
                 onChange={e => setSacrifice(e.target.value as CenterType)}
-                className="w-full bg-black/50 text-white p-4 rounded-xl border border-red-900 focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all appearance-none cursor-pointer font-bold"
+                className="w-full bg-black/50 text-white p-4 pr-12 rounded-xl border border-red-900 focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all appearance-none cursor-pointer font-bold"
+                style={{
+                  backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23dc2626'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E")`,
+                  backgroundRepeat: 'no-repeat',
+                  backgroundPosition: 'right 1rem center',
+                  backgroundSize: '1.5em'
+                }}
               >
                 <option value="">Choose today's sacrifice...</option>
                 <option value="head">Head: Accept chaos, stop controlling</option>
@@ -193,7 +199,7 @@ const ExamSection: React.FC<ExamSectionProps> = ({ onEvaluationComplete }) => {
                 {OXYGEN_OPTIONS.map(opt => (
                   <label
                     key={opt}
-                    className={`flex items-center space-x-4 p-4 rounded-xl cursor-pointer transition-all border ${oxygen.includes(opt) ? 'bg-red-950/30 border-red-500 shadow-inner' : 'bg-gray-900/50 border-gray-700 hover:border-gray-600'}`}
+                    className={`flex items-center space-x-4 p-4 rounded-xl cursor-pointer transition-all border focus-within:ring-2 focus-within:ring-yellow-500 ${oxygen.includes(opt) ? 'bg-red-950/30 border-red-500 shadow-inner' : 'bg-gray-900/50 border-gray-700 hover:border-gray-600'}`}
                   >
                     <div className="relative flex items-center">
                       <input

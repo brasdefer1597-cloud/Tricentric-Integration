@@ -13,3 +13,7 @@
 ## 2025-05-16 - Accessible Dynamic Interfaces
 **Learning:** For dynamic components like breathing timers, using `role="status"` and `aria-live="polite"` ensures state changes are announced without interrupting the user. Providing clear external link disclosures in `aria-label` prevents unexpected navigation surprises.
 **Action:** Implement ARIA live regions for all timed UI elements and include '(opens in new tab)' in labels for external links.
+
+## 2025-05-20 - Select Affordance and Focus Contrast
+**Learning:** Using `appearance-none` on `select` elements removes the browser's default dropdown arrow, which can confuse users if a custom indicator isn't provided. Additionally, standard focus rings might have insufficient contrast on dark, saturated backgrounds (like the 'Chalamandra' theme), requiring high-contrast ring colors (e.g., yellow-400) to be truly accessible.
+**Action:** When using `appearance-none`, always provide a custom SVG background arrow. Use high-contrast focus rings (e.g., `focus-visible:ring-yellow-400`) on dark themed interactive elements.
