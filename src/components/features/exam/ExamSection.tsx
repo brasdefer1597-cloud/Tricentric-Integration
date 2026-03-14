@@ -172,7 +172,7 @@ const ExamSection: React.FC<ExamSectionProps> = ({ onEvaluationComplete }) => {
                 id="sacrifice-select"
                 value={sacrifice}
                 onChange={e => setSacrifice(e.target.value as CenterType)}
-                className="w-full bg-black/50 text-white p-4 rounded-xl border border-red-900 focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all appearance-none cursor-pointer font-bold"
+                className="w-full bg-black/50 text-white p-4 pr-12 rounded-xl border border-red-900 focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all appearance-none cursor-pointer font-bold bg-[url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 fill=%22none%22 viewBox=%220 0 24 24%22 stroke=%22%23dc2626%22 stroke-width=%222%22%3E%3Cpath stroke-linecap=%22round%22 stroke-linejoin=%22round%22 d=%22M19 9l-7 7-7-7%22 /%3E%3C/svg%3E')] bg-[length:1.5em_1.5em] bg-[right_1rem_center] bg-no-repeat"
               >
                 <option value="">Choose today's sacrifice...</option>
                 <option value="head">Head: Accept chaos, stop controlling</option>
@@ -189,11 +189,12 @@ const ExamSection: React.FC<ExamSectionProps> = ({ onEvaluationComplete }) => {
               </h3>
               <p className="text-gray-400 mb-6 text-sm">What minimal action can give oxygen to the most drowned center?</p>
 
-              <div className="space-y-3" role="group" aria-label="Oxygen actions">
+              <fieldset className="space-y-3">
+                <legend className="sr-only">Survival Oxygen Actions</legend>
                 {OXYGEN_OPTIONS.map(opt => (
                   <label
                     key={opt}
-                    className={`flex items-center space-x-4 p-4 rounded-xl cursor-pointer transition-all border ${oxygen.includes(opt) ? 'bg-red-950/30 border-red-500 shadow-inner' : 'bg-gray-900/50 border-gray-700 hover:border-gray-600'}`}
+                    className={`flex items-center space-x-4 p-4 rounded-xl cursor-pointer transition-all border focus-within:ring-2 focus-within:ring-yellow-400 ${oxygen.includes(opt) ? 'bg-red-950/30 border-red-500 shadow-inner' : 'bg-gray-900/50 border-gray-700 hover:border-gray-600'}`}
                   >
                     <div className="relative flex items-center">
                       <input
@@ -209,7 +210,7 @@ const ExamSection: React.FC<ExamSectionProps> = ({ onEvaluationComplete }) => {
                     <span className={`text-sm font-bold ${oxygen.includes(opt) ? 'text-white' : 'text-gray-400'}`}>{opt}</span>
                   </label>
                 ))}
-              </div>
+              </fieldset>
             </div>
 
             {/* Integration */}
@@ -239,21 +240,21 @@ const ExamSection: React.FC<ExamSectionProps> = ({ onEvaluationComplete }) => {
                     disabled={loading || !bleeding || !sacrifice}
                     className="flex items-center justify-center gap-2 bg-red-600 hover:bg-red-700 text-white font-black py-4 px-6 rounded-xl transition-all shadow-lg shadow-red-900/20 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed uppercase tracking-tighter"
                   >
-                    💀 DECODE WOUND
+                    <span aria-hidden="true">💀</span> DECODE WOUND
                   </button>
                   <button
                     onClick={handleAnalyzeSynthesis}
                     disabled={loading || !synthesis.trim()}
                     className="flex items-center justify-center gap-2 bg-yellow-500 hover:bg-yellow-600 text-black font-black py-4 px-6 rounded-xl transition-all shadow-lg shadow-yellow-900/20 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed uppercase tracking-tighter"
                   >
-                    🔬 ANALYZE TRUTH
+                    <span aria-hidden="true">🔬</span> ANALYZE TRUTH
                   </button>
                   <button
                     onClick={handleSaveEvaluation}
                     disabled={loading || !bleeding || !sacrifice || !synthesis.trim()}
                     className="flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 text-white font-black py-4 px-6 rounded-xl transition-all shadow-lg shadow-green-900/20 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed uppercase tracking-tighter"
                   >
-                    💾 SEAL REALITY
+                    <span aria-hidden="true">💾</span> SEAL REALITY
                   </button>
                 </div>
             </div>
