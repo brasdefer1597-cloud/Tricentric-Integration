@@ -13,3 +13,7 @@
 ## 2025-05-16 - Accessible Dynamic Interfaces
 **Learning:** For dynamic components like breathing timers, using `role="status"` and `aria-live="polite"` ensures state changes are announced without interrupting the user. Providing clear external link disclosures in `aria-label` prevents unexpected navigation surprises.
 **Action:** Implement ARIA live regions for all timed UI elements and include '(opens in new tab)' in labels for external links.
+
+## 2025-05-17 - Precision in aria-hidden
+**Learning:** When using `role="img"` with a descriptive `aria-label` on a container, applying `aria-hidden="true"` to the entire internal tree can accidentally hide primary status information (like level numbers) from screen readers if not handled carefully. It is safer to hide only purely decorative labels (like "LVL") while keeping the core data accessible or relying solely on the parent's `aria-label`.
+**Action:** Only use `aria-hidden="true"` on purely decorative elements and verify that core data remains accessible to assistive technologies.
