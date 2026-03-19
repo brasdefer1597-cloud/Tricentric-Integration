@@ -149,7 +149,7 @@ const ExamSection: React.FC<ExamSectionProps> = ({ onEvaluationComplete }) => {
                     type="button"
                     onClick={() => setBleeding(item.id)}
                     aria-pressed={bleeding === item.id}
-                    className={`flex flex-col items-center justify-center p-6 ${item.bgColor} rounded-xl cursor-pointer transition-all duration-300 ring-2 focus:outline-none focus:ring-offset-4 focus:ring-offset-black ${bleeding === item.id ? item.ringColor + ' scale-105 shadow-lg shadow-black/50' : 'ring-transparent opacity-60 hover:opacity-100 hover:scale-[1.02]'}`}
+                    className={`flex flex-col items-center justify-center p-6 ${item.bgColor} rounded-xl cursor-pointer transition-all duration-300 ring-2 focus:outline-none focus-visible:ring-yellow-500 focus:ring-offset-4 focus:ring-offset-black ${bleeding === item.id ? item.ringColor + ' scale-105 shadow-lg shadow-black/50' : 'ring-transparent opacity-60 hover:opacity-100 hover:scale-[1.02]'}`}
                   >
                     <span className="text-3xl mb-3" aria-hidden="true">{item.icon}</span>
                     <span className="font-black text-gray-200 uppercase tracking-wider">{item.label}</span>
@@ -172,7 +172,7 @@ const ExamSection: React.FC<ExamSectionProps> = ({ onEvaluationComplete }) => {
                 id="sacrifice-select"
                 value={sacrifice}
                 onChange={e => setSacrifice(e.target.value as CenterType)}
-                className="w-full bg-black/50 text-white p-4 rounded-xl border border-red-900 focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all appearance-none cursor-pointer font-bold"
+                className="w-full bg-black/50 text-white p-4 pr-12 rounded-xl border border-red-900 focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all appearance-none cursor-pointer font-bold bg-[url('data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20fill%3D%22none%22%20viewBox%3D%220%200%2024%2024%22%20stroke%3D%22%23facc15%22%3E%3Cpath%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20stroke-width%3D%222%22%20d%3D%22M19%209l-7%207-7-7%22%2F%3E%3C%2Fsvg%3E')] bg-[length:1.5rem_1.5rem] bg-[right_1rem_center] bg-no-repeat"
               >
                 <option value="">Choose today's sacrifice...</option>
                 <option value="head">Head: Accept chaos, stop controlling</option>
@@ -202,7 +202,7 @@ const ExamSection: React.FC<ExamSectionProps> = ({ onEvaluationComplete }) => {
                         onChange={() => handleOxygenChange(opt)}
                         className="peer w-6 h-6 opacity-0 absolute cursor-pointer"
                       />
-                      <div className="w-6 h-6 border-2 border-gray-600 rounded-md peer-checked:bg-red-500 peer-checked:border-red-500 transition-all flex items-center justify-center text-black font-bold">
+                      <div className="w-6 h-6 border-2 border-gray-600 rounded-md peer-checked:bg-red-500 peer-checked:border-red-500 transition-all flex items-center justify-center text-black font-bold peer-focus-visible:ring-2 peer-focus-visible:ring-yellow-500 peer-focus-visible:ring-offset-2 peer-focus-visible:ring-offset-gray-900">
                         {oxygen.includes(opt) && '✓'}
                       </div>
                     </div>
