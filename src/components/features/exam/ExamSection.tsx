@@ -132,13 +132,13 @@ const ExamSection: React.FC<ExamSectionProps> = ({ onEvaluationComplete }) => {
           <div className="space-y-8">
             {/* Step 1: Diagnosis */}
             <div className="bg-gray-800/50 rounded-2xl p-6 border border-gray-700/50 backdrop-blur-sm">
-              <h3 className="text-xl font-black text-red-500 mb-2 uppercase flex items-center gap-2">
+              <h3 id="diagnosis-heading" className="text-xl font-black text-red-500 mb-2 uppercase flex items-center gap-2">
                 <span className="bg-red-500 text-black px-2 py-0.5 text-sm rounded">1</span>
                 RAW DIAGNOSIS
               </h3>
               <p className="text-gray-400 mb-6 text-sm">Which of the three centers is bleeding MOST today?</p>
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4" role="group" aria-label="Center selection">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4" role="group" aria-labelledby="diagnosis-heading">
                 {[
                   { id: 'head' as CenterType, label: 'Head', icon: '🧠', ringColor: 'ring-blue-500', bgColor: 'bg-blue-900/30' },
                   { id: 'heart' as CenterType, label: 'Heart', icon: '💔', ringColor: 'ring-red-500', bgColor: 'bg-red-900/30' },
@@ -149,7 +149,8 @@ const ExamSection: React.FC<ExamSectionProps> = ({ onEvaluationComplete }) => {
                     type="button"
                     onClick={() => setBleeding(item.id)}
                     aria-pressed={bleeding === item.id}
-                    className={`flex flex-col items-center justify-center p-6 ${item.bgColor} rounded-xl cursor-pointer transition-all duration-300 ring-2 focus:outline-none focus:ring-offset-4 focus:ring-offset-black ${bleeding === item.id ? item.ringColor + ' scale-105 shadow-lg shadow-black/50' : 'ring-transparent opacity-60 hover:opacity-100 hover:scale-[1.02]'}`}
+                    aria-required="true"
+                    className={`flex flex-col items-center justify-center p-6 ${item.bgColor} rounded-xl cursor-pointer transition-all duration-300 ring-2 focus:outline-none focus:ring-offset-4 focus:ring-offset-black focus-visible:ring-yellow-400 ${bleeding === item.id ? item.ringColor + ' scale-105 shadow-lg shadow-black/50' : 'ring-transparent opacity-60 hover:opacity-100 hover:scale-[1.02]'}`}
                   >
                     <span className="text-3xl mb-3" aria-hidden="true">{item.icon}</span>
                     <span className="font-black text-gray-200 uppercase tracking-wider">{item.label}</span>
@@ -172,7 +173,8 @@ const ExamSection: React.FC<ExamSectionProps> = ({ onEvaluationComplete }) => {
                 id="sacrifice-select"
                 value={sacrifice}
                 onChange={e => setSacrifice(e.target.value as CenterType)}
-                className="w-full bg-black/50 text-white p-4 rounded-xl border border-red-900 focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all appearance-none cursor-pointer font-bold"
+                aria-required="true"
+                className="w-full bg-black/50 text-white p-4 pr-12 rounded-xl border border-red-900 focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all appearance-none cursor-pointer font-bold bg-[url('data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%23f87171%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22m6%209%206%206%206-6%22/%3E%3C/svg%3E')] bg-[position:right_1rem_center] bg-no-repeat"
               >
                 <option value="">Choose today's sacrifice...</option>
                 <option value="head">Head: Accept chaos, stop controlling</option>
@@ -183,17 +185,17 @@ const ExamSection: React.FC<ExamSectionProps> = ({ onEvaluationComplete }) => {
 
             {/* Step 3: Oxygen */}
             <div className="bg-gray-800/50 rounded-2xl p-6 border border-gray-700/50 backdrop-blur-sm">
-              <h3 className="text-xl font-black text-red-500 mb-2 uppercase flex items-center gap-2">
+              <h3 id="oxygen-heading" className="text-xl font-black text-red-500 mb-2 uppercase flex items-center gap-2">
                 <span className="bg-red-500 text-black px-2 py-0.5 text-sm rounded">3</span>
                 SURVIVAL OXYGEN
               </h3>
               <p className="text-gray-400 mb-6 text-sm">What minimal action can give oxygen to the most drowned center?</p>
 
-              <div className="space-y-3" role="group" aria-label="Oxygen actions">
+              <div className="space-y-3" role="group" aria-labelledby="oxygen-heading">
                 {OXYGEN_OPTIONS.map(opt => (
                   <label
                     key={opt}
-                    className={`flex items-center space-x-4 p-4 rounded-xl cursor-pointer transition-all border ${oxygen.includes(opt) ? 'bg-red-950/30 border-red-500 shadow-inner' : 'bg-gray-900/50 border-gray-700 hover:border-gray-600'}`}
+                    className={`flex items-center space-x-4 p-4 rounded-xl cursor-pointer transition-all border focus-within:ring-2 focus-within:ring-yellow-400 ${oxygen.includes(opt) ? 'bg-red-950/30 border-red-500 shadow-inner' : 'bg-gray-900/50 border-gray-700 hover:border-gray-600'}`}
                   >
                     <div className="relative flex items-center">
                       <input
@@ -218,7 +220,7 @@ const ExamSection: React.FC<ExamSectionProps> = ({ onEvaluationComplete }) => {
                     <span className="text-6xl font-black">SRAP</span>
                 </div>
 
-                <h3 className="text-2xl font-black text-yellow-500 mb-2 uppercase tracking-tight flex items-center gap-2">
+                <h3 id="integration-heading" className="text-2xl font-black text-yellow-500 mb-2 uppercase tracking-tight flex items-center gap-2">
                     <span className="text-3xl">💎</span> RAW INTEGRATION
                 </h3>
                 <label htmlFor="synthesis-text" className="block text-gray-400 mb-6 text-sm italic">
@@ -229,6 +231,8 @@ const ExamSection: React.FC<ExamSectionProps> = ({ onEvaluationComplete }) => {
                     id="synthesis-text"
                     value={synthesis}
                     onChange={e => setSynthesis(e.target.value)}
+                    aria-required="true"
+                    aria-labelledby="integration-heading"
                     placeholder='Example: "Today the body bleeds most. I will sacrifice mental control (head) to give 10 minutes of rest to the body. The heart will wait until tomorrow."'
                     className="w-full h-40 bg-black/60 border border-yellow-900/50 rounded-2xl p-6 text-white focus:outline-none resize-none focus:ring-2 focus:ring-yellow-500/50 transition-all font-medium placeholder:text-gray-700 leading-relaxed shadow-inner"
                 ></textarea>
