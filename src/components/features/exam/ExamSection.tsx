@@ -172,7 +172,7 @@ const ExamSection: React.FC<ExamSectionProps> = ({ onEvaluationComplete }) => {
                 id="sacrifice-select"
                 value={sacrifice}
                 onChange={e => setSacrifice(e.target.value as CenterType)}
-                className="w-full bg-black/50 text-white p-4 rounded-xl border border-red-900 focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all appearance-none cursor-pointer font-bold"
+                className={`w-full bg-black/50 text-white p-4 rounded-xl border border-red-900 focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all appearance-none cursor-pointer font-bold bg-[url('data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20fill=%22none%22%20viewBox=%220%200%2024%2024%22%20stroke=%22%23f87171%22%3E%3Cpath%20stroke-linecap=%22round%22%20stroke-linejoin=%22round%22%20stroke-width=%222%22%20d=%22M19%209l-7%207-7-7%22%3E%3C/path%3E%3C/svg%3E')] bg-[length:1.5em_1.5em] bg-[right_1rem_center] bg-no-repeat pr-12`}
               >
                 <option value="">Choose today's sacrifice...</option>
                 <option value="head">Head: Accept chaos, stop controlling</option>
@@ -202,7 +202,7 @@ const ExamSection: React.FC<ExamSectionProps> = ({ onEvaluationComplete }) => {
                         onChange={() => handleOxygenChange(opt)}
                         className="peer w-6 h-6 opacity-0 absolute cursor-pointer"
                       />
-                      <div className="w-6 h-6 border-2 border-gray-600 rounded-md peer-checked:bg-red-500 peer-checked:border-red-500 transition-all flex items-center justify-center text-black font-bold">
+                      <div className="w-6 h-6 border-2 border-gray-600 rounded-md peer-checked:bg-red-500 peer-checked:border-red-500 transition-all flex items-center justify-center text-black font-bold peer-focus-visible:ring-2 peer-focus-visible:ring-yellow-500 peer-focus-visible:ring-offset-2 peer-focus-visible:ring-offset-gray-900">
                         {oxygen.includes(opt) && '✓'}
                       </div>
                     </div>
