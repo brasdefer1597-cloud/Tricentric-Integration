@@ -37,7 +37,7 @@ const BreathingSection: React.FC = () => {
   }, [activeOxygen]);
 
   return (
-    <section className="py-20 bg-black/40 backdrop-blur-md" id="breathing">
+    <section className="py-20 bg-black/40 backdrop-blur-md" id="breathing-exercise">
       <div className="max-w-3xl mx-auto px-6 text-center">
         <h2 className="text-3xl font-black text-white mb-2 uppercase tracking-tighter">
           🌬️ ¿DOLIÓ? BIEN. AHORA RESPIRA.
@@ -53,20 +53,22 @@ const BreathingSection: React.FC = () => {
             }}
           ></div>
 
-          <div
-            className={`relative w-32 h-32 rounded-full mx-auto mb-8 flex items-center justify-center transition-all duration-[2000ms] ease-in-out border-4 ${
-              activeOxygen
-                ? (phase === 'Inhale' ? 'scale-125' : 'scale-100') + ' border-red-500 shadow-[0_0_50px_rgba(220,38,38,0.3)]'
-                : 'border-gray-800'
-            }`}
-            role="status"
-            aria-live="polite"
-          >
-            <span className="text-4xl filter drop-shadow-md" aria-hidden="true">
-                {activeOxygen ? (phase === 'Inhale' ? '🫁' : '🌬️') : '💀'}
-            </span>
+          <div className="relative mb-12">
+            <div
+              className={`w-32 h-32 rounded-full mx-auto flex items-center justify-center transition-all duration-[2000ms] ease-in-out border-4 ${
+                activeOxygen
+                  ? (phase === 'Inhale' ? 'scale-125' : 'scale-100') + ' border-red-500 shadow-[0_0_50px_rgba(220,38,38,0.3)]'
+                  : 'border-gray-800'
+              }`}
+              role="img"
+              aria-label={`Breathing exercise: ${activeOxygen ? phase : 'ready'}`}
+            >
+              <span className="text-4xl filter drop-shadow-md" aria-hidden="true">
+                  {activeOxygen ? (phase === 'Inhale' ? '🫁' : '🌬️') : '💀'}
+              </span>
+            </div>
             {activeOxygen && (
-                <div className="absolute -bottom-12 w-full text-center">
+                <div className="absolute -bottom-10 w-full text-center" role="status" aria-live="polite">
                     <span className="text-xs font-black uppercase tracking-[0.3em] text-red-500 animate-pulse">
                         {phase === 'Inhale' ? 'INHALA' : 'EXHALA'}
                     </span>

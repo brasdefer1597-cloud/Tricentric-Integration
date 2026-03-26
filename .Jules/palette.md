@@ -13,3 +13,7 @@
 ## 2025-05-16 - Accessible Dynamic Interfaces
 **Learning:** For dynamic components like breathing timers, using `role="status"` and `aria-live="polite"` ensures state changes are announced without interrupting the user. Providing clear external link disclosures in `aria-label` prevents unexpected navigation surprises.
 **Action:** Implement ARIA live regions for all timed UI elements and include '(opens in new tab)' in labels for external links.
+
+## 2025-05-17 - Rhythmic UI Synchronization & Accessibility
+**Learning:** Breathing exercise UI requires precise synchronization between CSS animation durations (e.g., `duration-[2000ms]`) and JavaScript interval timers to maintain a consistent physiological rhythm. Using `role="img"` with a dynamic `aria-label` for the visual pulse, combined with `role="status"` for the text phase, ensures the experience is both rhythmic and accessible.
+**Action:** Always match Tailwind transition durations with state-change intervals for rhythmic animations and use descriptive ARIA roles for non-textual status indicators.

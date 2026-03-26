@@ -83,7 +83,7 @@ const HomePage: React.FC = () => {
           <section id="integration">
             <TricentricIntegration kofiUrl="https://ko-fi.com/s/7b0236c681" />
           </section>
-          <section id="breathing">
+          <section id="breathing-practice">
             <BreathingSection />
           </section>
         </main>
