@@ -39,7 +39,7 @@ const CENTERS = [
 export default function TricentricIntegration({ kofiUrl }: Props) {
   const [userId, setUserId] = useState<string>();
   const [loading, setLoading] = useState(false);
-  const [breathingPhase, setBreathingPhase] = useState<'inhale' | 'hold' | 'exhale'>('inhale');
+  const [breathingPhase, setBreathingPhase] = useState<'inhale' | 'hold' | 'exhale'>('exhale');
   const [intervalId, setIntervalId] = useState<ReturnType<typeof setInterval> | null>(null);
 
   useEffect(() => {
@@ -74,7 +74,7 @@ export default function TricentricIntegration({ kofiUrl }: Props) {
 
     clearInterval(intervalId);
     setIntervalId(null);
-    setBreathingPhase('inhale');
+    setBreathingPhase('exhale');
   };
 
   const finalizePractice = async () => {
@@ -153,20 +153,24 @@ export default function TricentricIntegration({ kofiUrl }: Props) {
       <div className="bg-gray-800 rounded-2xl p-8 mb-8 text-center border border-gray-700">
         <h3 className="text-xl font-bold text-yellow-400 mb-4">🌬️ Conscious Breathing Practice</h3>
         <div
-          className={`breathing-circle w-32 h-32 bg-gradient-to-br from-blue-400 to-green-400 rounded-full mx-auto mb-6 flex items-center justify-center transition-transform duration-[4000ms] ease-in-out ${
-            breathingPhase === 'inhale' ? 'scale-100' : breathingPhase === 'hold' ? 'scale-125' : 'scale-110'
+          role="img"
+          aria-label={`Breathing exercise: ${intervalId ? breathingPhase : 'ready'}`}
+          className={`breathing-circle w-32 h-32 bg-gradient-to-br from-blue-400 to-green-400 rounded-full mx-auto mb-6 flex items-center justify-center transition-transform duration-[2000ms] ease-in-out ${
+            breathingPhase === 'exhale' ? 'scale-100' : 'scale-125'
           }`}
         >
-          <span className="text-4xl">🌊</span>
+          <span className="text-4xl" aria-hidden="true">🌊</span>
         </div>
-        <div className="mb-6 text-gray-300" role="status" aria-live="polite">
-          {breathingPhase === 'inhale' && 'Inhale deeply (2s)'}
-          {breathingPhase === 'hold' && 'Hold breath (2s)'}
-          {breathingPhase === 'exhale' && 'Exhale slowly (2s)'}
+        <div className="mb-6 text-gray-300 h-6" role="status" aria-live="polite">
+          {!intervalId && 'Ready to start'}
+          {intervalId && breathingPhase === 'inhale' && 'Inhale deeply (2s)'}
+          {intervalId && breathingPhase === 'hold' && 'Hold breath (2s)'}
+          {intervalId && breathingPhase === 'exhale' && 'Exhale slowly (2s)'}
         </div>
         <button
           onClick={toggleBreathing}
-          className="bg-yellow-500 hover:bg-yellow-600 text-black font-bold py-3 px-8 rounded-lg transition-all mb-4"
+          aria-pressed={!!intervalId}
+          className="bg-yellow-500 hover:bg-yellow-600 text-black font-bold py-3 px-8 rounded-lg transition-all mb-4 focus-visible:ring-2 focus-visible:ring-yellow-400 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-800 outline-none"
         >
           {intervalId ? 'Stop Practice' : 'Start Practice'}
         </button>
