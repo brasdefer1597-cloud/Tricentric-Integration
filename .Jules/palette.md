@@ -13,3 +13,7 @@
 ## 2025-05-16 - Accessible Dynamic Interfaces
 **Learning:** For dynamic components like breathing timers, using `role="status"` and `aria-live="polite"` ensures state changes are announced without interrupting the user. Providing clear external link disclosures in `aria-label` prevents unexpected navigation surprises.
 **Action:** Implement ARIA live regions for all timed UI elements and include '(opens in new tab)' in labels for external links.
+
+## 2026-03-27 - Synchronized Breathing UX & Accessibility
+**Learning:** Visual breathing animations (e.g., scaling circles) are confusing if they don't match the physiological phase (inhale/hold/exhale) or the timing instructions provided in text. Adding `role="img"` and dynamic `aria-label` to these animations makes them accessible to screen reader users who cannot see the scaling.
+**Action:** Synchronize transition durations (e.g., `duration-[2000ms]`) with phase intervals and use descriptive ARIA labels to communicate the current breathing state.
