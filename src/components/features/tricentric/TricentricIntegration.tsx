@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useProfile } from '@/hooks/useProfile';
 import { supabase } from '@/lib/supabase';
+import LoadingSpinner from '@/components/ui/LoadingSpinner';
 
 interface Props {
   kofiUrl: string;
@@ -153,8 +154,10 @@ export default function TricentricIntegration({ kofiUrl }: Props) {
       <div className="bg-gray-800 rounded-2xl p-8 mb-8 text-center border border-gray-700">
         <h3 className="text-xl font-bold text-yellow-400 mb-4">🌬️ Conscious Breathing Practice</h3>
         <div
-          className={`breathing-circle w-32 h-32 bg-gradient-to-br from-blue-400 to-green-400 rounded-full mx-auto mb-6 flex items-center justify-center transition-transform duration-[4000ms] ease-in-out ${
-            breathingPhase === 'inhale' ? 'scale-100' : breathingPhase === 'hold' ? 'scale-125' : 'scale-110'
+          role="img"
+          aria-label={`Breathing exercise: currently ${breathingPhase}`}
+          className={`breathing-circle w-32 h-32 bg-gradient-to-br from-blue-400 to-green-400 rounded-full mx-auto mb-6 flex items-center justify-center transition-transform duration-[2000ms] ease-in-out ${
+            breathingPhase === 'exhale' ? 'scale-100' : 'scale-125'
           }`}
         >
           <span className="text-4xl">🌊</span>
@@ -183,9 +186,13 @@ export default function TricentricIntegration({ kofiUrl }: Props) {
           onClick={finalizePractice}
           disabled={loading}
           aria-label="Claim digital version on Ko-fi (opens in new tab)"
-          className="bg-red-600 hover:bg-red-700 text-white font-black py-4 px-10 rounded-xl transition-all transform hover:scale-105 shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
+          className="bg-red-600 hover:bg-red-700 text-white font-black py-4 px-10 rounded-xl transition-all transform hover:scale-105 shadow-xl disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
         >
-          {loading ? 'SAVING...' : 'CLAIM DIGITAL VERSION ON KOFI'}
+          {loading ? (
+            <LoadingSpinner message="SAVING..." />
+          ) : (
+            'CLAIM DIGITAL VERSION ON KOFI'
+          )}
         </button>
       </div>
     </div>

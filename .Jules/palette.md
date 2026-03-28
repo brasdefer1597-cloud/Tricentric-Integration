@@ -13,3 +13,7 @@
 ## 2025-05-16 - Accessible Dynamic Interfaces
 **Learning:** For dynamic components like breathing timers, using `role="status"` and `aria-live="polite"` ensures state changes are announced without interrupting the user. Providing clear external link disclosures in `aria-label` prevents unexpected navigation surprises.
 **Action:** Implement ARIA live regions for all timed UI elements and include '(opens in new tab)' in labels for external links.
+
+## 2025-05-17 - Select Affordance and Corrective Animations
+**Learning:** Using `appearance-none` on select elements without a custom arrow removes critical visual affordance. Additionally, breathing animations must physically map to the action (expand on inhale) and have transition durations that match their state interval to avoid visual stalling.
+**Action:** Always provide custom SVG arrows for styled selects and synchronize animation durations with state update intervals.
