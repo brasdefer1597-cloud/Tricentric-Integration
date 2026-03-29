@@ -13,3 +13,7 @@
 ## 2025-05-16 - Accessible Dynamic Interfaces
 **Learning:** For dynamic components like breathing timers, using `role="status"` and `aria-live="polite"` ensures state changes are announced without interrupting the user. Providing clear external link disclosures in `aria-label` prevents unexpected navigation surprises.
 **Action:** Implement ARIA live regions for all timed UI elements and include '(opens in new tab)' in labels for external links.
+
+## 2025-05-17 - Select Affordance and Animated State Accessibility
+**Learning:** Using `appearance-none` on `<select>` elements removes critical visual cues (chevrons); restoring them via SVG background images is essential for UX. For complex animations like breathing cycles, separating the visual container (`role="img"` + dynamic `aria-label`) from the live status text (`role="status"`) ensures screen readers provide both context and real-time updates without confusion.
+**Action:** Always restore select arrows when using `appearance-none` and decouple animation descriptions from status announcements in dynamic components.
