@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAnalysis } from '@/hooks/useAnalysis';
 import { useEvaluation } from '@/hooks/useEvaluation';
 import Modal from '@/components/ui/Modal';
@@ -23,6 +23,14 @@ const ExamSection: React.FC<ExamSectionProps> = ({ onEvaluationComplete }) => {
 
   const [aiAnalysis, setAiAnalysis] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [feedback, setFeedback] = useState<{ message: string; type: 'error' | 'success' } | null>(null);
+
+  useEffect(() => {
+    if (feedback) {
+      const timer = setTimeout(() => setFeedback(null), 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [feedback]);
 
   const { analyze, loading: analyzing } = useAnalysis();
   const { saveEvaluation, saving } = useEvaluation(onEvaluationComplete);
@@ -35,7 +43,7 @@ const ExamSection: React.FC<ExamSectionProps> = ({ onEvaluationComplete }) => {
 
   const handleAcceptReality = async () => {
     if (!bleeding || !sacrifice) {
-      alert('You must diagnose the wound and choose a sacrifice.');
+      setFeedback({ message: 'You must diagnose the wound and choose a sacrifice.', type: 'error' });
       return;
     }
 
@@ -53,12 +61,12 @@ const ExamSection: React.FC<ExamSectionProps> = ({ onEvaluationComplete }) => {
   const handleAnalyzeSynthesis = async () => {
     if (!synthesis.trim()) return;
 
-    const feedback = await analyze({
+    const analysisResult = await analyze({
       type: 'synthesis',
       synthesis
     });
 
-    setAiAnalysis(feedback);
+    setAiAnalysis(analysisResult);
     setIsModalOpen(true);
   };
 
@@ -79,9 +87,9 @@ const ExamSection: React.FC<ExamSectionProps> = ({ onEvaluationComplete }) => {
       setOxygen([]);
       setSynthesis('');
       setAiAnalysis(null);
-      alert(`Reality accepted. +${result.xpGained} XP earned.`);
+      setFeedback({ message: `Reality accepted. +${result.xpGained} XP earned.`, type: 'success' });
     } else {
-      alert('The abyss rejected your sacrifice. Try again.');
+      setFeedback({ message: 'The abyss rejected your sacrifice. Try again.', type: 'error' });
     }
   };
 
@@ -232,6 +240,19 @@ const ExamSection: React.FC<ExamSectionProps> = ({ onEvaluationComplete }) => {
                     placeholder='Example: "Today the body bleeds most. I will sacrifice mental control (head) to give 10 minutes of rest to the body. The heart will wait until tomorrow."'
                     className="w-full h-40 bg-black/60 border border-yellow-900/50 rounded-2xl p-6 text-white focus:outline-none resize-none focus:ring-2 focus:ring-yellow-500/50 transition-all font-medium placeholder:text-gray-700 leading-relaxed shadow-inner"
                 ></textarea>
+
+                {feedback && (
+                  <div
+                    role="status"
+                    className={`mt-8 text-sm font-black p-4 border-l-4 rounded-r-xl animate-in fade-in slide-in-from-left-4 duration-500 ${
+                      feedback.type === 'error'
+                        ? 'bg-red-500/10 border-red-600 text-red-500'
+                        : 'bg-green-500/10 border-green-600 text-green-500'
+                    }`}
+                  >
+                    {feedback.message}
+                  </div>
+                )}
                 
                 <div className="mt-8 grid grid-cols-1 sm:grid-cols-3 gap-4">
                   <button
