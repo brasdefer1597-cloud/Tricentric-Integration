@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAnalysis } from '@/hooks/useAnalysis';
 import { useEvaluation } from '@/hooks/useEvaluation';
 import Modal from '@/components/ui/Modal';
@@ -23,8 +23,16 @@ const ExamSection: React.FC<ExamSectionProps> = ({ onEvaluationComplete }) => {
 
   const [aiAnalysis, setAiAnalysis] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [feedback, setFeedback] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
 
   const { analyze, loading: analyzing } = useAnalysis();
+
+  useEffect(() => {
+    if (feedback) {
+      const timer = setTimeout(() => setFeedback(null), 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [feedback]);
   const { saveEvaluation, saving } = useEvaluation(onEvaluationComplete);
 
   const handleOxygenChange = (option: string) => {
@@ -35,14 +43,14 @@ const ExamSection: React.FC<ExamSectionProps> = ({ onEvaluationComplete }) => {
 
   const handleAcceptReality = async () => {
     if (!bleeding || !sacrifice) {
-      alert('You must diagnose the wound and choose a sacrifice.');
+      setFeedback({ message: 'Select your bleeding and your sacrifice first.', type: 'error' });
       return;
     }
 
     const analysis = await analyze({
       type: 'misery',
-      bleeding,
-      sacrifice,
+      bleeding: bleeding as CenterType,
+      sacrifice: sacrifice as CenterType,
       oxygen
     });
 
@@ -79,9 +87,9 @@ const ExamSection: React.FC<ExamSectionProps> = ({ onEvaluationComplete }) => {
       setOxygen([]);
       setSynthesis('');
       setAiAnalysis(null);
-      alert(`Reality accepted. +${result.xpGained} XP earned.`);
+      setFeedback({ message: `Reality accepted. +${result.xpGained} XP earned.`, type: 'success' });
     } else {
-      alert('The abyss rejected your sacrifice. Try again.');
+      setFeedback({ message: 'The abyss rejected your sacrifice. Try again.', type: 'error' });
     }
   };
 
@@ -202,7 +210,7 @@ const ExamSection: React.FC<ExamSectionProps> = ({ onEvaluationComplete }) => {
                         onChange={() => handleOxygenChange(opt)}
                         className="peer w-6 h-6 opacity-0 absolute cursor-pointer"
                       />
-                      <div className="w-6 h-6 border-2 border-gray-600 rounded-md peer-checked:bg-red-500 peer-checked:border-red-500 transition-all flex items-center justify-center text-black font-bold">
+                      <div className="w-6 h-6 border-2 border-gray-600 rounded-md peer-checked:bg-red-500 peer-checked:border-red-500 peer-focus-visible:ring-2 peer-focus-visible:ring-yellow-500 transition-all flex items-center justify-center text-black font-bold">
                         {oxygen.includes(opt) && '✓'}
                       </div>
                     </div>
@@ -260,6 +268,26 @@ const ExamSection: React.FC<ExamSectionProps> = ({ onEvaluationComplete }) => {
           </div>
         </div>
       </section>
+
+      {/* Floating Feedback Notification */}
+      {feedback && (
+        <div
+          role="status"
+          aria-live="polite"
+          className={`fixed bottom-8 right-8 z-[60] p-6 rounded-2xl border-2 shadow-2xl transition-all animate-in slide-in-from-right-4 fade-in duration-300 max-w-sm ${
+            feedback.type === 'success'
+              ? 'bg-green-900/90 border-green-500 text-green-100'
+              : 'bg-red-900/90 border-red-500 text-red-100'
+          }`}
+        >
+          <div className="flex items-center gap-4">
+            <span className="text-3xl" aria-hidden="true">
+              {feedback.type === 'success' ? '✅' : '💀'}
+            </span>
+            <p className="font-bold leading-tight uppercase tracking-tight">{feedback.message}</p>
+          </div>
+        </div>
+      )}
     </>
   );
 };
