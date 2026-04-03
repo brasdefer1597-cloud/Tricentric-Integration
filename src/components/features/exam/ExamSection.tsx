@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAnalysis } from '@/hooks/useAnalysis';
 import { useEvaluation } from '@/hooks/useEvaluation';
 import Modal from '@/components/ui/Modal';
@@ -23,6 +23,14 @@ const ExamSection: React.FC<ExamSectionProps> = ({ onEvaluationComplete }) => {
 
   const [aiAnalysis, setAiAnalysis] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [feedback, setFeedback] = useState<{ message: string; type: 'success' | 'error' | 'info' } | null>(null);
+
+  useEffect(() => {
+    if (feedback) {
+      const timer = setTimeout(() => setFeedback(null), 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [feedback]);
 
   const { analyze, loading: analyzing } = useAnalysis();
   const { saveEvaluation, saving } = useEvaluation(onEvaluationComplete);
@@ -35,7 +43,7 @@ const ExamSection: React.FC<ExamSectionProps> = ({ onEvaluationComplete }) => {
 
   const handleAcceptReality = async () => {
     if (!bleeding || !sacrifice) {
-      alert('You must diagnose the wound and choose a sacrifice.');
+      setFeedback({ message: 'You must diagnose the wound and choose a sacrifice.', type: 'error' });
       return;
     }
 
@@ -79,9 +87,9 @@ const ExamSection: React.FC<ExamSectionProps> = ({ onEvaluationComplete }) => {
       setOxygen([]);
       setSynthesis('');
       setAiAnalysis(null);
-      alert(`Reality accepted. +${result.xpGained} XP earned.`);
+      setFeedback({ message: `Reality accepted. +${result.xpGained} XP earned.`, type: 'success' });
     } else {
-      alert('The abyss rejected your sacrifice. Try again.');
+      setFeedback({ message: 'The abyss rejected your sacrifice. Try again.', type: 'error' });
     }
   };
 
@@ -202,7 +210,7 @@ const ExamSection: React.FC<ExamSectionProps> = ({ onEvaluationComplete }) => {
                         onChange={() => handleOxygenChange(opt)}
                         className="peer w-6 h-6 opacity-0 absolute cursor-pointer"
                       />
-                      <div className="w-6 h-6 border-2 border-gray-600 rounded-md peer-checked:bg-red-500 peer-checked:border-red-500 transition-all flex items-center justify-center text-black font-bold">
+                      <div className="w-6 h-6 border-2 border-gray-600 rounded-md peer-checked:bg-red-500 peer-checked:border-red-500 peer-focus-visible:ring-2 peer-focus-visible:ring-red-500 peer-focus-visible:ring-offset-2 peer-focus-visible:ring-offset-black transition-all flex items-center justify-center text-black font-bold">
                         {oxygen.includes(opt) && '✓'}
                       </div>
                     </div>
@@ -233,6 +241,19 @@ const ExamSection: React.FC<ExamSectionProps> = ({ onEvaluationComplete }) => {
                     className="w-full h-40 bg-black/60 border border-yellow-900/50 rounded-2xl p-6 text-white focus:outline-none resize-none focus:ring-2 focus:ring-yellow-500/50 transition-all font-medium placeholder:text-gray-700 leading-relaxed shadow-inner"
                 ></textarea>
                 
+                {feedback && (
+                  <div
+                    role="status"
+                    className={`mb-6 p-4 rounded-xl font-bold text-center animate-in fade-in slide-in-from-left-4 duration-300 ${
+                      feedback.type === 'success' ? 'bg-green-900/50 text-green-400 border border-green-500/50' :
+                      feedback.type === 'error' ? 'bg-red-900/50 text-red-400 border border-red-500/50' :
+                      'bg-blue-900/50 text-blue-400 border border-blue-500/50'
+                    }`}
+                  >
+                    {feedback.message}
+                  </div>
+                )}
+
                 <div className="mt-8 grid grid-cols-1 sm:grid-cols-3 gap-4">
                   <button
                     onClick={handleAcceptReality}
