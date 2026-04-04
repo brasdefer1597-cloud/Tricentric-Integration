@@ -13,3 +13,7 @@
 ## 2025-05-16 - Accessible Dynamic Interfaces
 **Learning:** For dynamic components like breathing timers, using `role="status"` and `aria-live="polite"` ensures state changes are announced without interrupting the user. Providing clear external link disclosures in `aria-label` prevents unexpected navigation surprises.
 **Action:** Implement ARIA live regions for all timed UI elements and include '(opens in new tab)' in labels for external links.
+
+## 2025-05-17 - Accessible Status Feedback & Custom Input Focus
+**Learning:** Replacing native `alert()` with custom, non-blocking UI notifications using `role="status"` and `aria-live="polite"` improves the user experience while maintaining accessibility. For custom checkbox/radio UI, using Tailwind's `peer-focus-visible` ensures keyboard users have a clear visual focus indicator that is only shown when navigating with the keyboard.
+**Action:** Replace `alert()` with state-driven feedback components and use `peer-focus-visible` for all hidden-input-driven custom UI.
