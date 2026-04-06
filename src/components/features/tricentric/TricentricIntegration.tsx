@@ -156,6 +156,8 @@ export default function TricentricIntegration({ kofiUrl }: Props) {
           className={`breathing-circle w-32 h-32 bg-gradient-to-br from-blue-400 to-green-400 rounded-full mx-auto mb-6 flex items-center justify-center transition-transform duration-[4000ms] ease-in-out ${
             breathingPhase === 'inhale' ? 'scale-100' : breathingPhase === 'hold' ? 'scale-125' : 'scale-110'
           }`}
+          role="img"
+          aria-label={`Breathing exercise: currently ${breathingPhase}`}
         >
           <span className="text-4xl">🌊</span>
         </div>

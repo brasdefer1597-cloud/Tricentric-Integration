@@ -59,15 +59,19 @@ const BreathingSection: React.FC = () => {
                 ? (phase === 'Inhale' ? 'scale-125' : 'scale-100') + ' border-red-500 shadow-[0_0_50px_rgba(220,38,38,0.3)]'
                 : 'border-gray-800'
             }`}
-            role="status"
-            aria-live="polite"
+            role="img"
+            aria-label={`Breathing exercise: ${activeOxygen ? (phase === 'Inhale' ? 'currently inhale' : 'currently exhale') : 'inactive'}`}
           >
             <span className="text-4xl filter drop-shadow-md" aria-hidden="true">
                 {activeOxygen ? (phase === 'Inhale' ? '🫁' : '🌬️') : '💀'}
             </span>
             {activeOxygen && (
                 <div className="absolute -bottom-12 w-full text-center">
-                    <span className="text-xs font-black uppercase tracking-[0.3em] text-red-500 animate-pulse">
+                    <span
+                      className="text-xs font-black uppercase tracking-[0.3em] text-red-500 animate-pulse"
+                      role="status"
+                      aria-live="polite"
+                    >
                         {phase === 'Inhale' ? 'INHALA' : 'EXHALA'}
                     </span>
                 </div>
