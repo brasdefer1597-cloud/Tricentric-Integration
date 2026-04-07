@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAnalysis } from '@/hooks/useAnalysis';
 import { useEvaluation } from '@/hooks/useEvaluation';
 import Modal from '@/components/ui/Modal';
@@ -23,9 +23,17 @@ const ExamSection: React.FC<ExamSectionProps> = ({ onEvaluationComplete }) => {
 
   const [aiAnalysis, setAiAnalysis] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [feedback, setFeedback] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
 
   const { analyze, loading: analyzing } = useAnalysis();
   const { saveEvaluation, saving } = useEvaluation(onEvaluationComplete);
+
+  useEffect(() => {
+    if (feedback) {
+      const timer = setTimeout(() => setFeedback(null), 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [feedback]);
 
   const handleOxygenChange = (option: string) => {
     setOxygen(prev => 
@@ -35,7 +43,7 @@ const ExamSection: React.FC<ExamSectionProps> = ({ onEvaluationComplete }) => {
 
   const handleAcceptReality = async () => {
     if (!bleeding || !sacrifice) {
-      alert('You must diagnose the wound and choose a sacrifice.');
+      setFeedback({ message: 'You must diagnose the wound and choose a sacrifice.', type: 'error' });
       return;
     }
 
@@ -53,12 +61,12 @@ const ExamSection: React.FC<ExamSectionProps> = ({ onEvaluationComplete }) => {
   const handleAnalyzeSynthesis = async () => {
     if (!synthesis.trim()) return;
 
-    const feedback = await analyze({
+    const response = await analyze({
       type: 'synthesis',
       synthesis
     });
 
-    setAiAnalysis(feedback);
+    setAiAnalysis(response);
     setIsModalOpen(true);
   };
 
@@ -79,9 +87,9 @@ const ExamSection: React.FC<ExamSectionProps> = ({ onEvaluationComplete }) => {
       setOxygen([]);
       setSynthesis('');
       setAiAnalysis(null);
-      alert(`Reality accepted. +${result.xpGained} XP earned.`);
+      setFeedback({ message: `Reality accepted. +${result.xpGained} XP earned.`, type: 'success' });
     } else {
-      alert('The abyss rejected your sacrifice. Try again.');
+      setFeedback({ message: 'The abyss rejected your sacrifice. Try again.', type: 'error' });
     }
   };
 
@@ -109,7 +117,17 @@ const ExamSection: React.FC<ExamSectionProps> = ({ onEvaluationComplete }) => {
           🎯 SRAP EXAM - RAW REALITY
         </h2>
         
-        <div className="bg-gradient-to-br from-gray-900 to-black rounded-2xl p-8 border border-red-900 shadow-2xl shadow-red-900/10">
+        <div className="bg-gradient-to-br from-gray-900 to-black rounded-2xl p-8 border border-red-900 shadow-2xl shadow-red-900/10 relative">
+          {feedback && (
+            <div
+              role="status"
+              className={`absolute top-4 left-1/2 -translate-x-1/2 z-20 px-6 py-3 rounded-full font-black uppercase tracking-widest text-sm shadow-2xl animate-in fade-in slide-in-from-top-4 duration-300 ${
+                feedback.type === 'success' ? 'bg-green-600 text-white' : 'bg-red-600 text-white'
+              }`}
+            >
+              {feedback.message}
+            </div>
+          )}
           <div className="text-center mb-10">
             <div className="breathing-crudo w-24 h-24 rounded-full mx-auto mb-6 flex items-center justify-center border-2 border-red-500/20 shadow-inner" aria-hidden="true">
               <span className="text-3xl">💀</span>
@@ -193,7 +211,7 @@ const ExamSection: React.FC<ExamSectionProps> = ({ onEvaluationComplete }) => {
                 {OXYGEN_OPTIONS.map(opt => (
                   <label
                     key={opt}
-                    className={`flex items-center space-x-4 p-4 rounded-xl cursor-pointer transition-all border ${oxygen.includes(opt) ? 'bg-red-950/30 border-red-500 shadow-inner' : 'bg-gray-900/50 border-gray-700 hover:border-gray-600'}`}
+                    className={`flex items-center space-x-4 p-4 rounded-xl cursor-pointer transition-all border focus-within:ring-2 focus-within:ring-yellow-500 ${oxygen.includes(opt) ? 'bg-red-950/30 border-red-500 shadow-inner' : 'bg-gray-900/50 border-gray-700 hover:border-gray-600'}`}
                   >
                     <div className="relative flex items-center">
                       <input
