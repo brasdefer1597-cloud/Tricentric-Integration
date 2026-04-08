@@ -13,3 +13,7 @@
 ## 2025-05-16 - Accessible Dynamic Interfaces
 **Learning:** For dynamic components like breathing timers, using `role="status"` and `aria-live="polite"` ensures state changes are announced without interrupting the user. Providing clear external link disclosures in `aria-label` prevents unexpected navigation surprises.
 **Action:** Implement ARIA live regions for all timed UI elements and include '(opens in new tab)' in labels for external links.
+
+## 2025-05-17 - Integrated Feedback vs. Native Alerts
+**Learning:** Native `alert()` calls are disruptive and break the "Sense" aspect of SRAP by halting the UI. Implementing a themed, auto-dismissing feedback container with `role="status"` and entry animations maintains immersion while providing accessible, non-blocking status updates.
+**Action:** Replace blocking native alerts with integrated feedback components that follow the application's design system and use Tailwind's `animate-in` for polished entry.
