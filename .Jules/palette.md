@@ -13,3 +13,7 @@
 ## 2025-05-16 - Accessible Dynamic Interfaces
 **Learning:** For dynamic components like breathing timers, using `role="status"` and `aria-live="polite"` ensures state changes are announced without interrupting the user. Providing clear external link disclosures in `aria-label` prevents unexpected navigation surprises.
 **Action:** Implement ARIA live regions for all timed UI elements and include '(opens in new tab)' in labels for external links.
+
+## 2025-05-17 - Integrated Feedback vs. Native Alerts
+**Learning:** Replacing native `alert()` with an integrated feedback system (state-driven UI with `role="status"`) preserves the immersive UX and provides clearer, themed communication. Enabling "submit" buttons and providing actionable validation feedback on click is superior to disabling them, which can frustrate users without explaining the blockage.
+**Action:** Use a component-level `feedback` state with auto-dismiss logic and entry animations (`animate-in fade-in slide-in-from-top-4`) for non-blocking notifications.
