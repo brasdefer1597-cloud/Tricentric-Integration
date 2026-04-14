@@ -41,6 +41,18 @@ export default function TricentricIntegration({ kofiUrl }: Props) {
   const [loading, setLoading] = useState(false);
   const [breathingPhase, setBreathingPhase] = useState<'inhale' | 'hold' | 'exhale'>('inhale');
   const [intervalId, setIntervalId] = useState<ReturnType<typeof setInterval> | null>(null);
+  const [feedback, setFeedback] = useState<{
+    message: string;
+    type: 'success' | 'error' | 'info';
+    link?: string;
+  } | null>(null);
+
+  useEffect(() => {
+    if (feedback) {
+      const timer = setTimeout(() => setFeedback(null), 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [feedback]);
 
   useEffect(() => {
     supabase.auth.getUser().then(({ data: { user } }) => {
@@ -79,7 +91,7 @@ export default function TricentricIntegration({ kofiUrl }: Props) {
 
   const finalizePractice = async () => {
     if (!userId) {
-      alert('Please log in to save your progress.');
+      setFeedback({ message: 'Please log in to save your progress.', type: 'error' });
       return;
     }
 
@@ -110,18 +122,48 @@ export default function TricentricIntegration({ kofiUrl }: Props) {
 
       await refreshProfile();
 
-      alert('Practice finalized and progress saved! Redirecting to Kofi for the digital version.');
+      setFeedback({
+        message: 'Practice finalized and progress saved!',
+        type: 'success',
+        link: kofiUrl
+      });
+
       window.open(kofiUrl, '_blank');
     } catch (err) {
       console.error(err);
-      alert('Error saving progress. But the reality is still there.');
+      setFeedback({ message: 'Error saving progress. But the reality is still there.', type: 'error' });
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="tricentric-integration p-6 max-w-6xl mx-auto bg-gray-900 rounded-2xl border border-purple-900 my-12">
+    <div className="tricentric-integration p-6 max-w-6xl mx-auto bg-gray-900 rounded-2xl border border-purple-900 my-12 relative">
+      {/* Integrated Feedback System */}
+      {feedback && (
+        <div
+          role="status"
+          aria-live="polite"
+          className={`fixed top-8 left-1/2 -translate-x-1/2 z-50 px-6 py-3 rounded-xl font-black shadow-2xl animate-in fade-in slide-in-from-top-4 duration-300 flex items-center gap-3 ${
+            feedback.type === 'success' ? 'bg-green-600 text-white' :
+            feedback.type === 'error' ? 'bg-red-600 text-white' :
+            'bg-blue-600 text-white'
+          }`}
+        >
+          <span>{feedback.message}</span>
+          {feedback.link && (
+            <a
+              href={feedback.link}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-3 py-1 bg-white/20 hover:bg-white/30 rounded-lg text-xs uppercase transition-colors underline decoration-dotted underline-offset-4"
+            >
+              Go to Ko-fi
+            </a>
+          )}
+        </div>
+      )}
+
       <h2 className="text-3xl font-bold text-center mb-6 text-white bg-gradient-to-r from-blue-400 via-red-400 to-green-400 bg-clip-text text-transparent">
         🎯 Tricentric Integration
       </h2>
@@ -153,8 +195,10 @@ export default function TricentricIntegration({ kofiUrl }: Props) {
       <div className="bg-gray-800 rounded-2xl p-8 mb-8 text-center border border-gray-700">
         <h3 className="text-xl font-bold text-yellow-400 mb-4">🌬️ Conscious Breathing Practice</h3>
         <div
-          className={`breathing-circle w-32 h-32 bg-gradient-to-br from-blue-400 to-green-400 rounded-full mx-auto mb-6 flex items-center justify-center transition-transform duration-[4000ms] ease-in-out ${
-            breathingPhase === 'inhale' ? 'scale-100' : breathingPhase === 'hold' ? 'scale-125' : 'scale-110'
+          role="img"
+          aria-label={`Breathing exercise: currently ${breathingPhase}`}
+          className={`breathing-circle w-32 h-32 bg-gradient-to-br from-blue-400 to-green-400 rounded-full mx-auto mb-6 flex items-center justify-center transition-transform duration-[2000ms] ease-in-out ${
+            breathingPhase === 'inhale' || breathingPhase === 'hold' ? 'scale-125' : 'scale-100'
           }`}
         >
           <span className="text-4xl">🌊</span>
