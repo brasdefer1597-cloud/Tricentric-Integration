@@ -1,9 +1,9 @@
 ## 2025-05-14 - Interactive Selection Accessibility
-**Learning:** Custom selection cards implemented with \`div\` tags are not keyboard accessible and lack clear state communication for screen readers. Using semantic \`button\` tags with \`aria-pressed\` provides native focus support and clear accessibility state.
-**Action:** Always use \`button\` or \`input\` for interactive selection elements and ensure they have appropriate ARIA attributes for state.
+**Learning:** Custom selection cards implemented with `div` tags are not keyboard accessible and lack clear state communication for screen readers. Using semantic `button` tags with `aria-pressed` provides native focus support and clear accessibility state.
+**Action:** Always use `button` or `input` for interactive selection elements and ensure they have appropriate ARIA attributes for state.
 
 ## 2025-05-14 - ProgressBar ARIA Roles
-**Learning:** Progress bars need explicit ARIA roles and value attributes (\`role="progressbar"\`, \`aria-valuenow\`, etc.) to be correctly interpreted by assistive technologies.
+**Learning:** Progress bars need explicit ARIA roles and value attributes (`role="progressbar"`, `aria-valuenow`, etc.) to be correctly interpreted by assistive technologies.
 **Action:** Include ARIA progress attributes in all custom progress bar components.
 
 ## 2025-05-15 - SRAP Methodology & Chalamandra Branding Integration
@@ -13,3 +13,7 @@
 ## 2025-05-16 - Accessible Dynamic Interfaces
 **Learning:** For dynamic components like breathing timers, using `role="status"` and `aria-live="polite"` ensures state changes are announced without interrupting the user. Providing clear external link disclosures in `aria-label` prevents unexpected navigation surprises.
 **Action:** Implement ARIA live regions for all timed UI elements and include '(opens in new tab)' in labels for external links.
+
+## 2026-04-16 - Non-disruptive Feedback & Visual Affordances
+**Learning:** Replacing native `alert()` calls with a state-based feedback system (`role="status"`) improves UX flow and accessibility. When using `appearance-none` on `<select>` elements, a custom SVG background must be provided to restore the dropdown affordance. Custom-styled checkboxes require `peer-focus-visible:ring` on their UI wrappers to ensure keyboard accessibility.
+**Action:** Use integrated feedback components instead of modal alerts, and ensure all custom-styled form controls maintain standard visual cues and focus indicators.
