@@ -23,8 +23,16 @@ const ExamSection: React.FC<ExamSectionProps> = ({ onEvaluationComplete }) => {
 
   const [aiAnalysis, setAiAnalysis] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [feedback, setFeedback] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
 
   const { analyze, loading: analyzing } = useAnalysis();
+
+  React.useEffect(() => {
+    if (feedback) {
+      const timer = setTimeout(() => setFeedback(null), 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [feedback]);
   const { saveEvaluation, saving } = useEvaluation(onEvaluationComplete);
 
   const handleOxygenChange = (option: string) => {
@@ -35,7 +43,7 @@ const ExamSection: React.FC<ExamSectionProps> = ({ onEvaluationComplete }) => {
 
   const handleAcceptReality = async () => {
     if (!bleeding || !sacrifice) {
-      alert('You must diagnose the wound and choose a sacrifice.');
+      setFeedback({ message: 'You must diagnose the wound and choose a sacrifice.', type: 'error' });
       return;
     }
 
@@ -79,9 +87,9 @@ const ExamSection: React.FC<ExamSectionProps> = ({ onEvaluationComplete }) => {
       setOxygen([]);
       setSynthesis('');
       setAiAnalysis(null);
-      alert(`Reality accepted. +${result.xpGained} XP earned.`);
+      setFeedback({ message: `Reality accepted. +${result.xpGained} XP earned.`, type: 'success' });
     } else {
-      alert('The abyss rejected your sacrifice. Try again.');
+      setFeedback({ message: 'The abyss rejected your sacrifice. Try again.', type: 'error' });
     }
   };
 
@@ -105,6 +113,17 @@ const ExamSection: React.FC<ExamSectionProps> = ({ onEvaluationComplete }) => {
       )}
 
       <section className="py-12 px-6 max-w-4xl mx-auto" id="exam-form">
+        {feedback && (
+          <div
+            role="status"
+            className={`fixed top-6 left-1/2 -translate-x-1/2 z-50 px-6 py-3 rounded-xl font-black uppercase tracking-widest text-sm shadow-2xl animate-in fade-in slide-in-from-top-4 duration-300 ${
+              feedback.type === 'success' ? 'bg-green-600 text-white' : 'bg-red-600 text-white'
+            }`}
+          >
+            {feedback.message}
+          </div>
+        )}
+
         <h2 className="text-3xl font-black text-center mb-8 text-red-500 tracking-tighter uppercase">
           🎯 SRAP EXAM - RAW REALITY
         </h2>
@@ -134,7 +153,7 @@ const ExamSection: React.FC<ExamSectionProps> = ({ onEvaluationComplete }) => {
             <div className="bg-gray-800/50 rounded-2xl p-6 border border-gray-700/50 backdrop-blur-sm">
               <h3 className="text-xl font-black text-red-500 mb-2 uppercase flex items-center gap-2">
                 <span className="bg-red-500 text-black px-2 py-0.5 text-sm rounded">1</span>
-                RAW DIAGNOSIS
+                RAW DIAGNOSIS <span className="text-red-500" aria-hidden="true">*</span>
               </h3>
               <p className="text-gray-400 mb-6 text-sm">Which of the three centers is bleeding MOST today?</p>
 
@@ -162,7 +181,7 @@ const ExamSection: React.FC<ExamSectionProps> = ({ onEvaluationComplete }) => {
             <div className="bg-gray-800/50 rounded-2xl p-6 border border-gray-700/50 backdrop-blur-sm">
               <h3 className="text-xl font-black text-red-500 mb-2 uppercase flex items-center gap-2">
                 <span className="bg-red-500 text-black px-2 py-0.5 text-sm rounded">2</span>
-                CONSCIOUS SACRIFICE
+                CONSCIOUS SACRIFICE <span className="text-red-500" aria-hidden="true">*</span>
               </h3>
               <label htmlFor="sacrifice-select" className="block text-gray-400 mb-6 text-sm">
                 Which center has to give in TODAY so the other two survive?
@@ -172,7 +191,7 @@ const ExamSection: React.FC<ExamSectionProps> = ({ onEvaluationComplete }) => {
                 id="sacrifice-select"
                 value={sacrifice}
                 onChange={e => setSacrifice(e.target.value as CenterType)}
-                className="w-full bg-black/50 text-white p-4 rounded-xl border border-red-900 focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all appearance-none cursor-pointer font-bold"
+                className="w-full bg-black/50 text-white p-4 rounded-xl border border-red-900 focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all appearance-none cursor-pointer font-bold bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20fill%3D%22none%22%20viewBox%3D%220%200%2020%2020%22%3E%3Cpath%20stroke%3D%22%23facc15%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20stroke-width%3D%221.5%22%20d%3D%22m6%208%204%204%204-4%22%2F%3E%3C%2Fsvg%3E')] bg-[length:1.25rem_1.25rem] bg-[position:right_1rem_center] bg-no-repeat pr-12"
               >
                 <option value="">Choose today's sacrifice...</option>
                 <option value="head">Head: Accept chaos, stop controlling</option>
@@ -219,7 +238,7 @@ const ExamSection: React.FC<ExamSectionProps> = ({ onEvaluationComplete }) => {
                 </div>
 
                 <h3 className="text-2xl font-black text-yellow-500 mb-2 uppercase tracking-tight flex items-center gap-2">
-                    <span className="text-3xl">💎</span> RAW INTEGRATION
+                    <span className="text-3xl">💎</span> RAW INTEGRATION <span className="text-red-500" aria-hidden="true">*</span>
                 </h3>
                 <label htmlFor="synthesis-text" className="block text-gray-400 mb-6 text-sm italic">
                     Combine your truths into a single survival statement.
