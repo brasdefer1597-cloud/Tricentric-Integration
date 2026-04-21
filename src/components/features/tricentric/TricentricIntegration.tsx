@@ -39,8 +39,16 @@ const CENTERS = [
 export default function TricentricIntegration({ kofiUrl }: Props) {
   const [userId, setUserId] = useState<string>();
   const [loading, setLoading] = useState(false);
+  const [feedback, setFeedback] = useState<{ message: string; type: 'success' | 'error' | 'info' } | null>(null);
   const [breathingPhase, setBreathingPhase] = useState<'inhale' | 'hold' | 'exhale'>('inhale');
   const [intervalId, setIntervalId] = useState<ReturnType<typeof setInterval> | null>(null);
+
+  useEffect(() => {
+    if (feedback) {
+      const timer = setTimeout(() => setFeedback(null), 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [feedback]);
 
   useEffect(() => {
     supabase.auth.getUser().then(({ data: { user } }) => {
@@ -79,7 +87,7 @@ export default function TricentricIntegration({ kofiUrl }: Props) {
 
   const finalizePractice = async () => {
     if (!userId) {
-      alert('Please log in to save your progress.');
+      setFeedback({ message: 'Please log in to save your progress.', type: 'error' });
       return;
     }
 
@@ -110,18 +118,32 @@ export default function TricentricIntegration({ kofiUrl }: Props) {
 
       await refreshProfile();
 
-      alert('Practice finalized and progress saved! Redirecting to Kofi for the digital version.');
+      setFeedback({
+        message: 'Practice finalized and progress saved! Redirecting to Kofi...',
+        type: 'success',
+      });
       window.open(kofiUrl, '_blank');
     } catch (err) {
       console.error(err);
-      alert('Error saving progress. But the reality is still there.');
+      setFeedback({ message: 'Error saving progress. But the reality is still there.', type: 'error' });
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="tricentric-integration p-6 max-w-6xl mx-auto bg-gray-900 rounded-2xl border border-purple-900 my-12">
+    <div className="tricentric-integration relative p-6 max-w-6xl mx-auto bg-gray-900 rounded-2xl border border-purple-900 my-12">
+      {feedback && (
+        <div
+          role="status"
+          className={`fixed top-4 left-1/2 -translate-x-1/2 z-50 px-6 py-3 rounded-xl font-bold text-white shadow-2xl transition-all duration-300 animate-in fade-in slide-in-from-top-4 ${
+            feedback.type === 'success' ? 'bg-green-600' : feedback.type === 'error' ? 'bg-red-600' : 'bg-blue-600'
+          }`}
+        >
+          {feedback.message}
+        </div>
+      )}
+
       <h2 className="text-3xl font-bold text-center mb-6 text-white bg-gradient-to-r from-blue-400 via-red-400 to-green-400 bg-clip-text text-transparent">
         🎯 Tricentric Integration
       </h2>
@@ -153,16 +175,30 @@ export default function TricentricIntegration({ kofiUrl }: Props) {
       <div className="bg-gray-800 rounded-2xl p-8 mb-8 text-center border border-gray-700">
         <h3 className="text-xl font-bold text-yellow-400 mb-4">🌬️ Conscious Breathing Practice</h3>
         <div
-          className={`breathing-circle w-32 h-32 bg-gradient-to-br from-blue-400 to-green-400 rounded-full mx-auto mb-6 flex items-center justify-center transition-transform duration-[4000ms] ease-in-out ${
-            breathingPhase === 'inhale' ? 'scale-100' : breathingPhase === 'hold' ? 'scale-125' : 'scale-110'
+          role="img"
+          aria-label={`Breathing exercise: ${breathingPhase}`}
+          className={`breathing-circle w-32 h-32 bg-gradient-to-br from-blue-400 to-green-400 rounded-full mx-auto mb-6 flex items-center justify-center transition-all duration-[2000ms] ease-in-out ${
+            !intervalId
+              ? 'scale-100 opacity-70'
+              : breathingPhase === 'inhale'
+                ? 'scale-125 opacity-100'
+                : breathingPhase === 'hold'
+                  ? 'scale-125 opacity-100'
+                  : 'scale-100 opacity-70'
           }`}
         >
-          <span className="text-4xl">🌊</span>
+          <span className="text-4xl" aria-hidden="true">
+            {breathingPhase === 'exhale' ? '🌬️' : '🌊'}
+          </span>
         </div>
-        <div className="mb-6 text-gray-300" role="status" aria-live="polite">
-          {breathingPhase === 'inhale' && 'Inhale deeply (2s)'}
-          {breathingPhase === 'hold' && 'Hold breath (2s)'}
-          {breathingPhase === 'exhale' && 'Exhale slowly (2s)'}
+        <div className="mb-6 text-gray-300 min-h-[1.5rem]" role="status" aria-live="polite">
+          {intervalId && (
+            <>
+              {breathingPhase === 'inhale' && 'Inhale deeply (2s)'}
+              {breathingPhase === 'hold' && 'Hold breath (2s)'}
+              {breathingPhase === 'exhale' && 'Exhale slowly (2s)'}
+            </>
+          )}
         </div>
         <button
           onClick={toggleBreathing}
