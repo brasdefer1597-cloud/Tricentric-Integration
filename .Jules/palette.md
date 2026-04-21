@@ -13,3 +13,7 @@
 ## 2025-05-16 - Accessible Dynamic Interfaces
 **Learning:** For dynamic components like breathing timers, using `role="status"` and `aria-live="polite"` ensures state changes are announced without interrupting the user. Providing clear external link disclosures in `aria-label` prevents unexpected navigation surprises.
 **Action:** Implement ARIA live regions for all timed UI elements and include '(opens in new tab)' in labels for external links.
+
+## 2026-04-21 - Synchronized State-Driven Animations
+**Learning:** Redundant CSS keyframe animations can conflict with React-driven state changes in interactive components like breathing exercises. Using state-driven Tailwind classes with matching transition durations ensures visual and logical synchronization.
+**Action:** Prefer state-driven transitions over global CSS keyframes for components where timing is critical to the UX logic.
