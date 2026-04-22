@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAnalysis } from '@/hooks/useAnalysis';
 import { useEvaluation } from '@/hooks/useEvaluation';
 import Modal from '@/components/ui/Modal';
@@ -23,9 +23,17 @@ const ExamSection: React.FC<ExamSectionProps> = ({ onEvaluationComplete }) => {
 
   const [aiAnalysis, setAiAnalysis] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [feedback, setFeedback] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
 
   const { analyze, loading: analyzing } = useAnalysis();
   const { saveEvaluation, saving } = useEvaluation(onEvaluationComplete);
+
+  useEffect(() => {
+    if (feedback) {
+      const timer = setTimeout(() => setFeedback(null), 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [feedback]);
 
   const handleOxygenChange = (option: string) => {
     setOxygen(prev => 
@@ -35,7 +43,7 @@ const ExamSection: React.FC<ExamSectionProps> = ({ onEvaluationComplete }) => {
 
   const handleAcceptReality = async () => {
     if (!bleeding || !sacrifice) {
-      alert('You must diagnose the wound and choose a sacrifice.');
+      setFeedback({ message: 'You must diagnose the wound and choose a sacrifice.', type: 'error' });
       return;
     }
 
@@ -51,7 +59,10 @@ const ExamSection: React.FC<ExamSectionProps> = ({ onEvaluationComplete }) => {
   };
 
   const handleAnalyzeSynthesis = async () => {
-    if (!synthesis.trim()) return;
+    if (!synthesis.trim()) {
+      setFeedback({ message: 'The abyss requires your written synthesis before analysis.', type: 'error' });
+      return;
+    }
 
     const feedback = await analyze({
       type: 'synthesis',
@@ -63,7 +74,10 @@ const ExamSection: React.FC<ExamSectionProps> = ({ onEvaluationComplete }) => {
   };
 
   const handleSaveEvaluation = async () => {
-    if (!bleeding || !sacrifice || !synthesis.trim()) return;
+    if (!bleeding || !sacrifice || !synthesis.trim()) {
+      setFeedback({ message: 'All fields must be completed before sealing reality.', type: 'error' });
+      return;
+    }
 
     const result = await saveEvaluation({
       bleeding,
@@ -79,9 +93,9 @@ const ExamSection: React.FC<ExamSectionProps> = ({ onEvaluationComplete }) => {
       setOxygen([]);
       setSynthesis('');
       setAiAnalysis(null);
-      alert(`Reality accepted. +${result.xpGained} XP earned.`);
+      setFeedback({ message: `Reality accepted. +${result.xpGained} XP earned.`, type: 'success' });
     } else {
-      alert('The abyss rejected your sacrifice. Try again.');
+      setFeedback({ message: 'The abyss rejected your sacrifice. Try again.', type: 'error' });
     }
   };
 
@@ -172,7 +186,7 @@ const ExamSection: React.FC<ExamSectionProps> = ({ onEvaluationComplete }) => {
                 id="sacrifice-select"
                 value={sacrifice}
                 onChange={e => setSacrifice(e.target.value as CenterType)}
-                className="w-full bg-black/50 text-white p-4 rounded-xl border border-red-900 focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all appearance-none cursor-pointer font-bold"
+                className="w-full bg-black/50 text-white p-4 pr-12 rounded-xl border border-red-900 focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all appearance-none cursor-pointer font-bold bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20fill%3D%22none%22%20viewBox%3D%220%200%2020%2020%22%3E%3Cpath%20stroke%3D%22%23f87171%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20stroke-width%3D%221.5%22%20d%3D%22m6%208%204%204%204-4%22%2F%3E%3C%2Fsvg%3E')] bg-[position:right_1rem_center] bg-[size:1.5em_1.5em] bg-no-repeat"
               >
                 <option value="">Choose today's sacrifice...</option>
                 <option value="head">Head: Accept chaos, stop controlling</option>
@@ -232,25 +246,36 @@ const ExamSection: React.FC<ExamSectionProps> = ({ onEvaluationComplete }) => {
                     placeholder='Example: "Today the body bleeds most. I will sacrifice mental control (head) to give 10 minutes of rest to the body. The heart will wait until tomorrow."'
                     className="w-full h-40 bg-black/60 border border-yellow-900/50 rounded-2xl p-6 text-white focus:outline-none resize-none focus:ring-2 focus:ring-yellow-500/50 transition-all font-medium placeholder:text-gray-700 leading-relaxed shadow-inner"
                 ></textarea>
+
+                {feedback && (
+                  <div
+                    role="status"
+                    className={`mt-6 p-4 rounded-xl font-bold text-center animate-in fade-in slide-in-from-top-4 duration-300 ${
+                      feedback.type === 'success' ? 'bg-green-600 text-white' : 'bg-red-600 text-white'
+                    }`}
+                  >
+                    {feedback.message}
+                  </div>
+                )}
                 
                 <div className="mt-8 grid grid-cols-1 sm:grid-cols-3 gap-4">
                   <button
                     onClick={handleAcceptReality}
-                    disabled={loading || !bleeding || !sacrifice}
+                    disabled={loading}
                     className="flex items-center justify-center gap-2 bg-red-600 hover:bg-red-700 text-white font-black py-4 px-6 rounded-xl transition-all shadow-lg shadow-red-900/20 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed uppercase tracking-tighter"
                   >
                     💀 DECODE WOUND
                   </button>
                   <button
                     onClick={handleAnalyzeSynthesis}
-                    disabled={loading || !synthesis.trim()}
+                    disabled={loading}
                     className="flex items-center justify-center gap-2 bg-yellow-500 hover:bg-yellow-600 text-black font-black py-4 px-6 rounded-xl transition-all shadow-lg shadow-yellow-900/20 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed uppercase tracking-tighter"
                   >
                     🔬 ANALYZE TRUTH
                   </button>
                   <button
                     onClick={handleSaveEvaluation}
-                    disabled={loading || !bleeding || !sacrifice || !synthesis.trim()}
+                    disabled={loading}
                     className="flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 text-white font-black py-4 px-6 rounded-xl transition-all shadow-lg shadow-green-900/20 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed uppercase tracking-tighter"
                   >
                     💾 SEAL REALITY
