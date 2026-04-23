@@ -39,8 +39,16 @@ const CENTERS = [
 export default function TricentricIntegration({ kofiUrl }: Props) {
   const [userId, setUserId] = useState<string>();
   const [loading, setLoading] = useState(false);
+  const [feedback, setFeedback] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
   const [breathingPhase, setBreathingPhase] = useState<'inhale' | 'hold' | 'exhale'>('inhale');
   const [intervalId, setIntervalId] = useState<ReturnType<typeof setInterval> | null>(null);
+
+  useEffect(() => {
+    if (feedback) {
+      const timer = setTimeout(() => setFeedback(null), 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [feedback]);
 
   useEffect(() => {
     supabase.auth.getUser().then(({ data: { user } }) => {
@@ -79,7 +87,7 @@ export default function TricentricIntegration({ kofiUrl }: Props) {
 
   const finalizePractice = async () => {
     if (!userId) {
-      alert('Please log in to save your progress.');
+      setFeedback({ message: 'Please log in to save your progress.', type: 'error' });
       return;
     }
 
@@ -110,18 +118,33 @@ export default function TricentricIntegration({ kofiUrl }: Props) {
 
       await refreshProfile();
 
-      alert('Practice finalized and progress saved! Redirecting to Kofi for the digital version.');
+      setFeedback({
+        message: 'Practice finalized and progress saved! Redirecting to Kofi for the digital version.',
+        type: 'success',
+      });
       window.open(kofiUrl, '_blank');
     } catch (err) {
       console.error(err);
-      alert('Error saving progress. But the reality is still there.');
+      setFeedback({ message: 'Error saving progress. But the reality is still there.', type: 'error' });
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="tricentric-integration p-6 max-w-6xl mx-auto bg-gray-900 rounded-2xl border border-purple-900 my-12">
+    <div className="tricentric-integration p-6 max-w-6xl mx-auto bg-gray-900 rounded-2xl border border-purple-900 my-12 relative">
+      {feedback && (
+        <div
+          role="status"
+          className={`fixed top-4 right-4 z-50 p-4 rounded-xl shadow-2xl border animate-in fade-in slide-in-from-top-4 duration-300 ${
+            feedback.type === 'success' ? 'bg-green-600 border-green-400 text-white' : 'bg-red-600 border-red-400 text-white'
+          }`}
+        >
+          <p className="font-bold flex items-center gap-2">
+            {feedback.type === 'success' ? '✅' : '💀'} {feedback.message}
+          </p>
+        </div>
+      )}
       <h2 className="text-3xl font-bold text-center mb-6 text-white bg-gradient-to-r from-blue-400 via-red-400 to-green-400 bg-clip-text text-transparent">
         🎯 Tricentric Integration
       </h2>
@@ -153,8 +176,10 @@ export default function TricentricIntegration({ kofiUrl }: Props) {
       <div className="bg-gray-800 rounded-2xl p-8 mb-8 text-center border border-gray-700">
         <h3 className="text-xl font-bold text-yellow-400 mb-4">🌬️ Conscious Breathing Practice</h3>
         <div
-          className={`breathing-circle w-32 h-32 bg-gradient-to-br from-blue-400 to-green-400 rounded-full mx-auto mb-6 flex items-center justify-center transition-transform duration-[4000ms] ease-in-out ${
-            breathingPhase === 'inhale' ? 'scale-100' : breathingPhase === 'hold' ? 'scale-125' : 'scale-110'
+          role="img"
+          aria-label={`Breathing exercise: currently ${breathingPhase}`}
+          className={`breathing-circle w-32 h-32 bg-gradient-to-br from-blue-400 to-green-400 rounded-full mx-auto mb-6 flex items-center justify-center transition-transform duration-[2000ms] ease-in-out ${
+            breathingPhase === 'exhale' ? 'scale-100' : 'scale-125'
           }`}
         >
           <span className="text-4xl">🌊</span>
