@@ -39,6 +39,10 @@ const CENTERS = [
 export default function TricentricIntegration({ kofiUrl }: Props) {
   const [userId, setUserId] = useState<string>();
   const [loading, setLoading] = useState(false);
+  const [statusFeedback, setStatusFeedback] = useState<{
+    message: string;
+    type: 'success' | 'error';
+  } | null>(null);
   const [breathingPhase, setBreathingPhase] = useState<'inhale' | 'hold' | 'exhale'>('inhale');
   const [intervalId, setIntervalId] = useState<ReturnType<typeof setInterval> | null>(null);
 
@@ -49,6 +53,13 @@ export default function TricentricIntegration({ kofiUrl }: Props) {
   }, []);
 
   const { refreshProfile } = useProfile(userId);
+
+  useEffect(() => {
+    if (statusFeedback) {
+      const timer = setTimeout(() => setStatusFeedback(null), 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [statusFeedback]);
 
   useEffect(
     () => () => {
@@ -79,7 +90,10 @@ export default function TricentricIntegration({ kofiUrl }: Props) {
 
   const finalizePractice = async () => {
     if (!userId) {
-      alert('Please log in to save your progress.');
+      setStatusFeedback({
+        message: 'Please log in to save your progress.',
+        type: 'error',
+      });
       return;
     }
 
@@ -110,11 +124,17 @@ export default function TricentricIntegration({ kofiUrl }: Props) {
 
       await refreshProfile();
 
-      alert('Practice finalized and progress saved! Redirecting to Kofi for the digital version.');
+      setStatusFeedback({
+        message: 'Practice finalized and progress saved! Redirecting to Ko-fi...',
+        type: 'success',
+      });
       window.open(kofiUrl, '_blank');
     } catch (err) {
       console.error(err);
-      alert('Error saving progress. But the reality is still there.');
+      setStatusFeedback({
+        message: 'Error saving progress. But the reality is still there.',
+        type: 'error',
+      });
     } finally {
       setLoading(false);
     }
@@ -150,14 +170,16 @@ export default function TricentricIntegration({ kofiUrl }: Props) {
         ))}
       </div>
 
-      <div className="bg-gray-800 rounded-2xl p-8 mb-8 text-center border border-gray-700">
+      <div className="bg-gray-800 rounded-2xl p-8 mb-8 text-center border border-gray-700 relative">
         <h3 className="text-xl font-bold text-yellow-400 mb-4">🌬️ Conscious Breathing Practice</h3>
         <div
-          className={`breathing-circle w-32 h-32 bg-gradient-to-br from-blue-400 to-green-400 rounded-full mx-auto mb-6 flex items-center justify-center transition-transform duration-[4000ms] ease-in-out ${
-            breathingPhase === 'inhale' ? 'scale-100' : breathingPhase === 'hold' ? 'scale-125' : 'scale-110'
+          role="img"
+          aria-label={`Breathing exercise: currently ${breathingPhase}`}
+          className={`breathing-circle w-32 h-32 bg-gradient-to-br from-blue-400 to-green-400 rounded-full mx-auto mb-6 flex items-center justify-center transition-transform duration-[2000ms] ease-in-out ${
+            breathingPhase === 'inhale' || breathingPhase === 'hold' ? 'scale-125' : 'scale-100'
           }`}
         >
-          <span className="text-4xl">🌊</span>
+          <span className="text-4xl" aria-hidden="true">🌊</span>
         </div>
         <div className="mb-6 text-gray-300" role="status" aria-live="polite">
           {breathingPhase === 'inhale' && 'Inhale deeply (2s)'}
@@ -179,14 +201,40 @@ export default function TricentricIntegration({ kofiUrl }: Props) {
           className="w-full h-24 bg-black bg-opacity-50 border border-yellow-500 rounded-lg p-4 text-white focus:outline-none mb-6 resize-none"
           placeholder="Integrate the three voices here..."
         />
-        <button
-          onClick={finalizePractice}
-          disabled={loading}
-          aria-label="Claim digital version on Ko-fi (opens in new tab)"
-          className="bg-red-600 hover:bg-red-700 text-white font-black py-4 px-10 rounded-xl transition-all transform hover:scale-105 shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          {loading ? 'SAVING...' : 'CLAIM DIGITAL VERSION ON KOFI'}
-        </button>
+        <div className="relative">
+          <button
+            onClick={finalizePractice}
+            disabled={loading}
+            aria-label="Claim digital version on Ko-fi (opens in new tab)"
+            className="bg-red-600 hover:bg-red-700 text-white font-black py-4 px-10 rounded-xl transition-all transform hover:scale-105 shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {loading ? 'SAVING...' : 'CLAIM DIGITAL VERSION ON KOFI'}
+          </button>
+
+          {statusFeedback && (
+            <div
+              role="status"
+              className={`absolute -top-20 left-1/2 -translate-x-1/2 w-full max-w-sm p-4 rounded-xl text-white font-bold shadow-2xl animate-in fade-in slide-in-from-bottom-4 duration-300 ${
+                statusFeedback.type === 'success' ? 'bg-green-600' : 'bg-red-600'
+              }`}
+            >
+              {statusFeedback.message}
+              {statusFeedback.type === 'success' && (
+                <div className="text-xs mt-1 font-normal">
+                  If not redirected,{' '}
+                  <a
+                    href={kofiUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="underline hover:text-yellow-200"
+                  >
+                    click here to open Ko-fi manually
+                  </a>.
+                </div>
+              )}
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
