@@ -39,6 +39,16 @@ const CENTERS = [
 export default function TricentricIntegration({ kofiUrl }: Props) {
   const [userId, setUserId] = useState<string>();
   const [loading, setLoading] = useState(false);
+  const [centerInputs, setCenterInputs] = useState<Record<string, string>>({
+    head: '',
+    heart: '',
+    body: '',
+  });
+  const [synthesis, setSynthesis] = useState('');
+  const [statusFeedback, setStatusFeedback] = useState<{
+    type: 'success' | 'error' | 'info';
+    message: string;
+  } | null>(null);
   const [breathingPhase, setBreathingPhase] = useState<'inhale' | 'hold' | 'exhale'>('inhale');
   const [intervalId, setIntervalId] = useState<ReturnType<typeof setInterval> | null>(null);
 
@@ -58,6 +68,15 @@ export default function TricentricIntegration({ kofiUrl }: Props) {
     },
     [intervalId],
   );
+
+  useEffect(() => {
+    if (statusFeedback) {
+      const timer = setTimeout(() => {
+        setStatusFeedback(null);
+      }, 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [statusFeedback]);
 
   const toggleBreathing = () => {
     if (!intervalId) {
@@ -79,7 +98,16 @@ export default function TricentricIntegration({ kofiUrl }: Props) {
 
   const finalizePractice = async () => {
     if (!userId) {
-      alert('Please log in to save your progress.');
+      setStatusFeedback({ type: 'error', message: 'Please log in to save your progress.' });
+      return;
+    }
+
+    const missingCenters = CENTERS.filter((c) => !centerInputs[c.id].trim());
+    if (missingCenters.length > 0 || !synthesis.trim()) {
+      setStatusFeedback({
+        type: 'error',
+        message: 'All three centers and the synthesis must be filled before proceeding.',
+      });
       return;
     }
 
@@ -110,18 +138,49 @@ export default function TricentricIntegration({ kofiUrl }: Props) {
 
       await refreshProfile();
 
-      alert('Practice finalized and progress saved! Redirecting to Kofi for the digital version.');
+      setStatusFeedback({
+        type: 'success',
+        message: 'Practice finalized! Redirecting to Ko-fi... (Click here if not redirected)',
+      });
       window.open(kofiUrl, '_blank');
     } catch (err) {
       console.error(err);
-      alert('Error saving progress. But the reality is still there.');
+      setStatusFeedback({ type: 'error', message: 'Error saving progress. But the reality is still there.' });
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="tricentric-integration p-6 max-w-6xl mx-auto bg-gray-900 rounded-2xl border border-purple-900 my-12">
+    <div className="tricentric-integration p-6 max-w-6xl mx-auto bg-gray-900 rounded-2xl border border-purple-900 my-12 relative">
+      {statusFeedback && (
+        <div
+          role="status"
+          className={`fixed top-4 right-4 z-50 p-4 rounded-xl shadow-2xl animate-in fade-in slide-in-from-top-4 duration-300 border ${
+            statusFeedback.type === 'success'
+              ? 'bg-green-600 border-green-400 text-white'
+              : statusFeedback.type === 'error'
+              ? 'bg-red-600 border-red-400 text-white'
+              : 'bg-blue-600 border-blue-400 text-white'
+          }`}
+        >
+          <div className="flex items-center gap-3">
+            <span className="text-xl">
+              {statusFeedback.type === 'success' ? '✅' : statusFeedback.type === 'error' ? '❌' : 'ℹ️'}
+            </span>
+            <p className="font-bold">
+              {statusFeedback.type === 'success' ? (
+                <a href={kofiUrl} target="_blank" rel="noopener noreferrer" className="hover:underline">
+                  {statusFeedback.message}
+                </a>
+              ) : (
+                statusFeedback.message
+              )}
+            </p>
+          </div>
+        </div>
+      )}
+
       <h2 className="text-3xl font-bold text-center mb-6 text-white bg-gradient-to-r from-blue-400 via-red-400 to-green-400 bg-clip-text text-transparent">
         🎯 Tricentric Integration
       </h2>
@@ -143,6 +202,10 @@ export default function TricentricIntegration({ kofiUrl }: Props) {
             </div>
             <textarea
               aria-labelledby={`title-${center.id}`}
+              value={centerInputs[center.id]}
+              onChange={(e) =>
+                setCenterInputs((prev) => ({ ...prev, [center.id]: e.target.value }))
+              }
               className={`w-full h-32 p-3 rounded-lg bg-black bg-opacity-40 text-white border outline-none resize-none ${center.textareaClasses}`}
               placeholder={`What does your ${center.name.toLowerCase()} think / feel / sense?...`}
             />
@@ -153,8 +216,10 @@ export default function TricentricIntegration({ kofiUrl }: Props) {
       <div className="bg-gray-800 rounded-2xl p-8 mb-8 text-center border border-gray-700">
         <h3 className="text-xl font-bold text-yellow-400 mb-4">🌬️ Conscious Breathing Practice</h3>
         <div
-          className={`breathing-circle w-32 h-32 bg-gradient-to-br from-blue-400 to-green-400 rounded-full mx-auto mb-6 flex items-center justify-center transition-transform duration-[4000ms] ease-in-out ${
-            breathingPhase === 'inhale' ? 'scale-100' : breathingPhase === 'hold' ? 'scale-125' : 'scale-110'
+          role="img"
+          aria-label={`Breathing exercise: currently ${breathingPhase}`}
+          className={`breathing-circle w-32 h-32 bg-gradient-to-br from-blue-400 to-green-400 rounded-full mx-auto mb-6 flex items-center justify-center transition-transform duration-[2000ms] ease-in-out ${
+            breathingPhase === 'inhale' || breathingPhase === 'hold' ? 'scale-125' : 'scale-100'
           }`}
         >
           <span className="text-4xl">🌊</span>
@@ -176,6 +241,8 @@ export default function TricentricIntegration({ kofiUrl }: Props) {
         <h3 id="synthesis-title" className="text-2xl font-bold mb-4 text-white">🔄 Integrative Synthesis</h3>
         <textarea
           aria-labelledby="synthesis-title"
+          value={synthesis}
+          onChange={(e) => setSynthesis(e.target.value)}
           className="w-full h-24 bg-black bg-opacity-50 border border-yellow-500 rounded-lg p-4 text-white focus:outline-none mb-6 resize-none"
           placeholder="Integrate the three voices here..."
         />

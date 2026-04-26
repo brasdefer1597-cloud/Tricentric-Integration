@@ -13,3 +13,7 @@
 ## 2025-05-16 - Accessible Dynamic Interfaces
 **Learning:** For dynamic components like breathing timers, using `role="status"` and `aria-live="polite"` ensures state changes are announced without interrupting the user. Providing clear external link disclosures in `aria-label` prevents unexpected navigation surprises.
 **Action:** Implement ARIA live regions for all timed UI elements and include '(opens in new tab)' in labels for external links.
+
+## 2026-04-26 - Modern Feedback & Accessibility in Tricentric Integration
+**Learning:** Native `alert()` calls are disruptive in immersive gamified apps. Replacing them with non-blocking, theme-consistent toast notifications improves flow. Additionally, synchronizing animation durations with state intervals (e.g., 2000ms) prevents visual jitter and improves the "sensory atmosphere" required by the SRAP methodology.
+**Action:** Use component-level `statusFeedback` states for all interactive validation and provide accessible ARIA roles/labels for synchronized animations.
