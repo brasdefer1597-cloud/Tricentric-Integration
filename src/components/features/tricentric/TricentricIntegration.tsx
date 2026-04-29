@@ -41,6 +41,23 @@ export default function TricentricIntegration({ kofiUrl }: Props) {
   const [loading, setLoading] = useState(false);
   const [breathingPhase, setBreathingPhase] = useState<'inhale' | 'hold' | 'exhale'>('inhale');
   const [intervalId, setIntervalId] = useState<ReturnType<typeof setInterval> | null>(null);
+  const [statusFeedback, setStatusFeedback] = useState<{ message: string; type: 'success' | 'error' | 'info' } | null>(
+    null,
+  );
+
+  const [responses, setResponses] = useState({
+    head: '',
+    heart: '',
+    body: '',
+    synthesis: '',
+  });
+
+  useEffect(() => {
+    if (statusFeedback) {
+      const timer = setTimeout(() => setStatusFeedback(null), 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [statusFeedback]);
 
   useEffect(() => {
     supabase.auth.getUser().then(({ data: { user } }) => {
@@ -79,7 +96,12 @@ export default function TricentricIntegration({ kofiUrl }: Props) {
 
   const finalizePractice = async () => {
     if (!userId) {
-      alert('Please log in to save your progress.');
+      setStatusFeedback({ message: 'Please log in to save your progress.', type: 'error' });
+      return;
+    }
+
+    if (!responses.head || !responses.heart || !responses.body || !responses.synthesis) {
+      setStatusFeedback({ message: 'All centers and synthesis must be filled to finalize.', type: 'error' });
       return;
     }
 
@@ -110,18 +132,47 @@ export default function TricentricIntegration({ kofiUrl }: Props) {
 
       await refreshProfile();
 
-      alert('Practice finalized and progress saved! Redirecting to Kofi for the digital version.');
+      setStatusFeedback({
+        message: 'Practice finalized and progress saved! Redirecting to Ko-fi...',
+        type: 'success',
+      });
       window.open(kofiUrl, '_blank');
     } catch (err) {
       console.error(err);
-      alert('Error saving progress. But the reality is still there.');
+      setStatusFeedback({ message: 'Error saving progress. But the reality is still there.', type: 'error' });
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="tricentric-integration p-6 max-w-6xl mx-auto bg-gray-900 rounded-2xl border border-purple-900 my-12">
+    <div className="tricentric-integration p-6 max-w-6xl mx-auto bg-gray-900 rounded-2xl border border-purple-900 my-12 relative">
+      {statusFeedback && (
+        <div
+          role="status"
+          className={`fixed top-4 right-4 z-50 p-4 rounded-xl shadow-2xl animate-in fade-in slide-in-from-top-4 duration-300 max-w-md ${
+            statusFeedback.type === 'success' ? 'bg-green-600' : statusFeedback.type === 'error' ? 'bg-red-600' : 'bg-blue-600'
+          } text-white`}
+        >
+          <div className="font-bold mb-1">
+            {statusFeedback.type === 'success' ? '✓ SUCCESS' : statusFeedback.type === 'error' ? '✕ ERROR' : 'ℹ INFO'}
+          </div>
+          <p className="text-sm">
+            {statusFeedback.message}
+            {statusFeedback.type === 'success' && (
+              <a
+                href={kofiUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block mt-2 underline font-bold"
+              >
+                Click here if not redirected
+              </a>
+            )}
+          </p>
+        </div>
+      )}
+
       <h2 className="text-3xl font-bold text-center mb-6 text-white bg-gradient-to-r from-blue-400 via-red-400 to-green-400 bg-clip-text text-transparent">
         🎯 Tricentric Integration
       </h2>
@@ -138,11 +189,15 @@ export default function TricentricIntegration({ kofiUrl }: Props) {
           >
             <div className="text-center mb-4">
               <div className="text-5xl mb-2">{center.icon}</div>
-              <h3 id={`title-${center.id}`} className={`font-bold text-xl ${center.titleClasses}`}>{center.name}</h3>
+              <h3 id={`title-${center.id}`} className={`font-bold text-xl ${center.titleClasses}`}>
+                {center.name}
+              </h3>
               <p className="text-xs text-gray-500 uppercase">{center.desc}</p>
             </div>
             <textarea
               aria-labelledby={`title-${center.id}`}
+              value={responses[center.id]}
+              onChange={(e) => setResponses((prev) => ({ ...prev, [center.id]: e.target.value }))}
               className={`w-full h-32 p-3 rounded-lg bg-black bg-opacity-40 text-white border outline-none resize-none ${center.textareaClasses}`}
               placeholder={`What does your ${center.name.toLowerCase()} think / feel / sense?...`}
             />
@@ -153,8 +208,10 @@ export default function TricentricIntegration({ kofiUrl }: Props) {
       <div className="bg-gray-800 rounded-2xl p-8 mb-8 text-center border border-gray-700">
         <h3 className="text-xl font-bold text-yellow-400 mb-4">🌬️ Conscious Breathing Practice</h3>
         <div
-          className={`breathing-circle w-32 h-32 bg-gradient-to-br from-blue-400 to-green-400 rounded-full mx-auto mb-6 flex items-center justify-center transition-transform duration-[4000ms] ease-in-out ${
-            breathingPhase === 'inhale' ? 'scale-100' : breathingPhase === 'hold' ? 'scale-125' : 'scale-110'
+          role="img"
+          aria-label={`Breathing exercise: currently ${breathingPhase}`}
+          className={`breathing-circle w-32 h-32 bg-gradient-to-br from-blue-400 to-green-400 rounded-full mx-auto mb-6 flex items-center justify-center transition-transform duration-[2000ms] ease-in-out ${
+            breathingPhase === 'inhale' || breathingPhase === 'hold' ? 'scale-125' : 'scale-100'
           }`}
         >
           <span className="text-4xl">🌊</span>
@@ -173,9 +230,13 @@ export default function TricentricIntegration({ kofiUrl }: Props) {
       </div>
 
       <div className="bg-gradient-to-r from-blue-900 via-red-900 to-green-900 rounded-2xl p-8 text-center border border-yellow-600">
-        <h3 id="synthesis-title" className="text-2xl font-bold mb-4 text-white">🔄 Integrative Synthesis</h3>
+        <h3 id="synthesis-title" className="text-2xl font-bold mb-4 text-white">
+          🔄 Integrative Synthesis
+        </h3>
         <textarea
           aria-labelledby="synthesis-title"
+          value={responses.synthesis}
+          onChange={(e) => setResponses((prev) => ({ ...prev, synthesis: e.target.value }))}
           className="w-full h-24 bg-black bg-opacity-50 border border-yellow-500 rounded-lg p-4 text-white focus:outline-none mb-6 resize-none"
           placeholder="Integrate the three voices here..."
         />

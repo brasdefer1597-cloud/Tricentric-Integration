@@ -13,3 +13,7 @@
 ## 2025-05-16 - Accessible Dynamic Interfaces
 **Learning:** For dynamic components like breathing timers, using `role="status"` and `aria-live="polite"` ensures state changes are announced without interrupting the user. Providing clear external link disclosures in `aria-label` prevents unexpected navigation surprises.
 **Action:** Implement ARIA live regions for all timed UI elements and include '(opens in new tab)' in labels for external links.
+
+## 2026-04-29 - Synchronized Practice & Integrated Feedback
+**Learning:** When implementing complex asynchronous practices (like the Tricentric Integration), synchronizing visual animations (breathing) with logical validation (form fields) and non-blocking feedback (toasts) creates a significantly more reliable and accessible user experience than using native `alert()` calls or uncontrolled inputs.
+**Action:** Replace `alert()` with a state-driven `statusFeedback` system with auto-dismissal, and ensure all practice fields are controlled and validated before allowing finalization.
