@@ -13,3 +13,7 @@
 ## 2025-05-16 - Accessible Dynamic Interfaces
 **Learning:** For dynamic components like breathing timers, using `role="status"` and `aria-live="polite"` ensures state changes are announced without interrupting the user. Providing clear external link disclosures in `aria-label` prevents unexpected navigation surprises.
 **Action:** Implement ARIA live regions for all timed UI elements and include '(opens in new tab)' in labels for external links.
+
+## 2025-05-18 - Actionable Validation & Visual Affordance
+**Learning:** Disabling submit buttons for incomplete forms without explanation causes user frustration. Keeping buttons enabled and providing a non-blocking, actionable status message (role="status") on click improves guidance. Additionally, using `appearance-none` on selects requires a custom SVG background to restore the visual dropdown affordance.
+**Action:** Use inline status feedback instead of disabling buttons for validation, and always restore select arrows with SVGs when using `appearance-none`.
