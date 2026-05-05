@@ -13,3 +13,7 @@
 ## 2025-05-16 - Accessible Dynamic Interfaces
 **Learning:** For dynamic components like breathing timers, using `role="status"` and `aria-live="polite"` ensures state changes are announced without interrupting the user. Providing clear external link disclosures in `aria-label` prevents unexpected navigation surprises.
 **Action:** Implement ARIA live regions for all timed UI elements and include '(opens in new tab)' in labels for external links.
+
+## 2025-05-18 - Immersive Feedback & Physiological Sync
+**Learning:** Native `alert()` calls break the immersive experience of a gamified platform. Replacing them with integrated, auto-dismissing `StatusFeedback` components preserves focus. Additionally, synchronizing interactive animations (like breathing cycles) with physiological timing and ARIA descriptions creates a more intuitive and accessible somatic experience.
+**Action:** Prioritize non-blocking notifications over native popups and ensure animations representing physical actions are synchronized with their descriptive ARIA labels.
