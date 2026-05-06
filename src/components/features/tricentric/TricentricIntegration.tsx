@@ -1,6 +1,7 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useProfile } from '@/hooks/useProfile';
 import { supabase } from '@/lib/supabase';
+import StatusFeedback, { FeedbackType } from '@/components/ui/StatusFeedback';
 
 interface Props {
   kofiUrl: string;
@@ -39,6 +40,10 @@ const CENTERS = [
 export default function TricentricIntegration({ kofiUrl }: Props) {
   const [userId, setUserId] = useState<string>();
   const [loading, setLoading] = useState(false);
+  const [statusFeedback, setStatusFeedback] = useState<{
+    message: React.ReactNode;
+    type: FeedbackType;
+  } | null>(null);
   const [breathingPhase, setBreathingPhase] = useState<'inhale' | 'hold' | 'exhale'>('inhale');
   const [intervalId, setIntervalId] = useState<ReturnType<typeof setInterval> | null>(null);
 
@@ -79,7 +84,10 @@ export default function TricentricIntegration({ kofiUrl }: Props) {
 
   const finalizePractice = async () => {
     if (!userId) {
-      alert('Please log in to save your progress.');
+      setStatusFeedback({
+        message: 'You are invisible to the system. Log in to save your progress.',
+        type: 'error'
+      });
       return;
     }
 
@@ -110,18 +118,41 @@ export default function TricentricIntegration({ kofiUrl }: Props) {
 
       await refreshProfile();
 
-      alert('Practice finalized and progress saved! Redirecting to Kofi for the digital version.');
+      setStatusFeedback({
+        message: (
+          <span>
+            Practice finalized. +50 XP. Redirecting to Kofi.
+            <a href={kofiUrl} target="_blank" rel="noopener noreferrer" className="ml-2 underline font-bold">
+              Click here if not redirected.
+            </a>
+          </span>
+        ),
+        type: 'success'
+      });
+
       window.open(kofiUrl, '_blank');
     } catch (err) {
       console.error(err);
-      alert('Error saving progress. But the reality is still there.');
+      setStatusFeedback({
+        message: 'The abyss swallowed your progress. Error saving.',
+        type: 'error'
+      });
     } finally {
       setLoading(false);
     }
   };
 
+  const closeFeedback = useCallback(() => setStatusFeedback(null), []);
+
   return (
     <div className="tricentric-integration p-6 max-w-6xl mx-auto bg-gray-900 rounded-2xl border border-purple-900 my-12">
+      {statusFeedback && (
+        <StatusFeedback
+          message={statusFeedback.message}
+          type={statusFeedback.type}
+          onClose={closeFeedback}
+        />
+      )}
       <h2 className="text-3xl font-bold text-center mb-6 text-white bg-gradient-to-r from-blue-400 via-red-400 to-green-400 bg-clip-text text-transparent">
         🎯 Tricentric Integration
       </h2>
