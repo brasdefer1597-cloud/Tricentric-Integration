@@ -13,3 +13,7 @@
 ## 2025-05-16 - Accessible Dynamic Interfaces
 **Learning:** For dynamic components like breathing timers, using `role="status"` and `aria-live="polite"` ensures state changes are announced without interrupting the user. Providing clear external link disclosures in `aria-label` prevents unexpected navigation surprises.
 **Action:** Implement ARIA live regions for all timed UI elements and include '(opens in new tab)' in labels for external links.
+
+## 2026-05-08 - Integrated Status Feedback & Physiological Animation
+**Learning:** Replacing native `alert()` with a themed `StatusFeedback` component improves immersion and allows for rich content like fallback links for popups. Synchronizing breathing animations with physiological states (expanding on inhale/hold) makes the interaction significantly more intuitive for users.
+**Action:** Use `StatusFeedback` for all user notifications and ensure animations mirror expected physical or psychological metaphors.
