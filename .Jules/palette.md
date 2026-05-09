@@ -13,3 +13,7 @@
 ## 2025-05-16 - Accessible Dynamic Interfaces
 **Learning:** For dynamic components like breathing timers, using `role="status"` and `aria-live="polite"` ensures state changes are announced without interrupting the user. Providing clear external link disclosures in `aria-label` prevents unexpected navigation surprises.
 **Action:** Implement ARIA live regions for all timed UI elements and include '(opens in new tab)' in labels for external links.
+
+## 2025-05-17 - Consistent Feedback & Stabilization
+**Learning:** Integrated feedback components like toasts or status messages must maintain stable callback references (e.g., via `useCallback`) to avoid resetting internal timers on parent re-renders. Additionally, accessibility labels must strictly follow the project's primary language (English) to ensure a consistent experience for screen reader users.
+**Action:** Always memoize `onClose` handlers passed to feedback components and verify ARIA labels against the project's language standard during development.
