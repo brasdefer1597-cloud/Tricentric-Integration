@@ -13,3 +13,7 @@
 ## 2025-05-16 - Accessible Dynamic Interfaces
 **Learning:** For dynamic components like breathing timers, using `role="status"` and `aria-live="polite"` ensures state changes are announced without interrupting the user. Providing clear external link disclosures in `aria-label` prevents unexpected navigation surprises.
 **Action:** Implement ARIA live regions for all timed UI elements and include '(opens in new tab)' in labels for external links.
+
+## 2025-05-17 - Integrated Status Feedback Pattern
+**Learning:** Replacing blocking native \`alert()\` calls with a non-blocking, themed \`StatusFeedback\` (Toast) component significantly improves immersion and accessibility. Keeping action buttons enabled and providing validation feedback via these toasts is more user-friendly than disabling buttons without explanation.
+**Action:** Use the \`StatusFeedback\` component for all transient notifications and validation errors to maintain the SRAP "Chalamandra" aesthetic and ensure non-disruptive feedback.
