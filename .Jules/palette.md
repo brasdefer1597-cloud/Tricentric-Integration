@@ -13,3 +13,7 @@
 ## 2025-05-16 - Accessible Dynamic Interfaces
 **Learning:** For dynamic components like breathing timers, using `role="status"` and `aria-live="polite"` ensures state changes are announced without interrupting the user. Providing clear external link disclosures in `aria-label` prevents unexpected navigation surprises.
 **Action:** Implement ARIA live regions for all timed UI elements and include '(opens in new tab)' in labels for external links.
+
+## 2025-05-17 - Integrated Feedback & Focus Management
+**Learning:** Native `alert()` calls break the immersive "brutal" aesthetic of SRAP. Replacing them with a state-driven `StatusFeedback` component (using `role="status"` and auto-dismiss) provides non-blocking, themed feedback. Additionally, implementing focus trapping/restoration in custom modals is critical for WCAG 2.1 compliance in specialized interfaces.
+**Action:** Use the `StatusFeedback` component for all transient notifications and ensure any new modal-like overlays include focus management logic.
