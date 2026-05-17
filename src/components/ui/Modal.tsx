@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 
 interface ModalProps {
   isOpen: boolean;
@@ -9,17 +9,58 @@ interface ModalProps {
 }
 
 const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, icon = '🎯', children }) => {
+  const modalRef = useRef<HTMLDivElement>(null);
+  const previousFocusRef = useRef<HTMLElement | null>(null);
+
   useEffect(() => {
     if (!isOpen) return;
 
-    const handleEscape = (event: KeyboardEvent) => {
+    // Save previous focus
+    previousFocusRef.current = document.activeElement as HTMLElement;
+
+    const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
         onClose();
       }
+
+      if (event.key === 'Tab' && modalRef.current) {
+        const focusableElements = modalRef.current.querySelectorAll(
+          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+        );
+        const firstElement = focusableElements[0] as HTMLElement;
+        const lastElement = focusableElements[focusableElements.length - 1] as HTMLElement;
+
+        if (event.shiftKey) {
+          if (document.activeElement === firstElement) {
+            event.preventDefault();
+            lastElement.focus();
+          }
+        } else {
+          if (document.activeElement === lastElement) {
+            event.preventDefault();
+            firstElement.focus();
+          }
+        }
+      }
     };
 
-    window.addEventListener('keydown', handleEscape);
-    return () => window.removeEventListener('keydown', handleEscape);
+    window.addEventListener('keydown', handleKeyDown);
+
+    // Set focus to the modal or the first focusable element
+    if (modalRef.current) {
+        const firstFocusable = modalRef.current.querySelector('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])') as HTMLElement;
+        if (firstFocusable) {
+            firstFocusable.focus();
+        }
+    }
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      // Restore previous focus
+      if (previousFocusRef.current) {
+        previousFocusRef.current.focus();
+      }
+    };
   }, [isOpen, onClose]);
 
   if (!isOpen) return null;
@@ -33,6 +74,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, icon = '🎯', ch
       onClick={onClose}
     >
       <div
+        ref={modalRef}
         className="bg-gray-900 rounded-3xl p-8 max-w-lg w-full border-2 border-red-600 shadow-[0_0_50px_rgba(220,38,38,0.2)] animate-in zoom-in-95 duration-300"
         onClick={(event) => event.stopPropagation()}
       >
@@ -53,10 +95,10 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, icon = '🎯', ch
         <div className="text-center">
           <button
             onClick={onClose}
-            aria-label="Cerrar diagnóstico"
-            className="w-full bg-red-600 hover:bg-red-700 text-white font-black py-4 px-8 rounded-2xl transition-all shadow-lg active:scale-95 uppercase tracking-widest text-sm"
+            aria-label="Close diagnosis"
+            className="w-full bg-red-600 hover:bg-red-700 text-white font-black py-4 px-8 rounded-2xl transition-all shadow-lg active:scale-95 uppercase tracking-widest text-sm focus-visible:ring-2 focus-visible:ring-red-400 focus:outline-none"
           >
-            ENTENDIDO
+            UNDERSTOOD
           </button>
         </div>
       </div>
