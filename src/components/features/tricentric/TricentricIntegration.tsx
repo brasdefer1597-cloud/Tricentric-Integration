@@ -1,6 +1,7 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useProfile } from '@/hooks/useProfile';
 import { supabase } from '@/lib/supabase';
+import StatusFeedback, { type FeedbackType } from '@/components/ui/StatusFeedback';
 
 interface Props {
   kofiUrl: string;
@@ -39,6 +40,7 @@ const CENTERS = [
 export default function TricentricIntegration({ kofiUrl }: Props) {
   const [userId, setUserId] = useState<string>();
   const [loading, setLoading] = useState(false);
+  const [statusFeedback, setStatusFeedback] = useState<{ type: FeedbackType; message: React.ReactNode } | null>(null);
   const [breathingPhase, setBreathingPhase] = useState<'inhale' | 'hold' | 'exhale'>('inhale');
   const [intervalId, setIntervalId] = useState<ReturnType<typeof setInterval> | null>(null);
 
@@ -49,6 +51,7 @@ export default function TricentricIntegration({ kofiUrl }: Props) {
   }, []);
 
   const { refreshProfile } = useProfile(userId);
+  const closeFeedback = useCallback(() => setStatusFeedback(null), []);
 
   useEffect(
     () => () => {
@@ -79,7 +82,10 @@ export default function TricentricIntegration({ kofiUrl }: Props) {
 
   const finalizePractice = async () => {
     if (!userId) {
-      alert('Please log in to save your progress.');
+      setStatusFeedback({
+        type: 'error',
+        message: 'Please log in to save your progress.'
+      });
       return;
     }
 
@@ -110,11 +116,24 @@ export default function TricentricIntegration({ kofiUrl }: Props) {
 
       await refreshProfile();
 
-      alert('Practice finalized and progress saved! Redirecting to Kofi for the digital version.');
+      setStatusFeedback({
+        type: 'success',
+        message: (
+          <span>
+            Practice finalized and progress saved! Redirecting to Kofi.
+            <a href={kofiUrl} target="_blank" rel="noopener noreferrer" className="ml-2 underline">
+              Click here if not redirected.
+            </a>
+          </span>
+        )
+      });
       window.open(kofiUrl, '_blank');
     } catch (err) {
       console.error(err);
-      alert('Error saving progress. But the reality is still there.');
+      setStatusFeedback({
+        type: 'error',
+        message: 'Error saving progress. But the reality is still there.'
+      });
     } finally {
       setLoading(false);
     }
@@ -122,6 +141,13 @@ export default function TricentricIntegration({ kofiUrl }: Props) {
 
   return (
     <div className="tricentric-integration p-6 max-w-6xl mx-auto bg-gray-900 rounded-2xl border border-purple-900 my-12">
+      {statusFeedback && (
+        <StatusFeedback
+          type={statusFeedback.type}
+          message={statusFeedback.message}
+          onClose={closeFeedback}
+        />
+      )}
       <h2 className="text-3xl font-bold text-center mb-6 text-white bg-gradient-to-r from-blue-400 via-red-400 to-green-400 bg-clip-text text-transparent">
         🎯 Tricentric Integration
       </h2>
@@ -153,6 +179,8 @@ export default function TricentricIntegration({ kofiUrl }: Props) {
       <div className="bg-gray-800 rounded-2xl p-8 mb-8 text-center border border-gray-700">
         <h3 className="text-xl font-bold text-yellow-400 mb-4">🌬️ Conscious Breathing Practice</h3>
         <div
+          role="img"
+          aria-label={`Breathing exercise: currently ${breathingPhase}`}
           className={`breathing-circle w-32 h-32 bg-gradient-to-br from-blue-400 to-green-400 rounded-full mx-auto mb-6 flex items-center justify-center transition-transform duration-[4000ms] ease-in-out ${
             breathingPhase === 'inhale' ? 'scale-100' : breathingPhase === 'hold' ? 'scale-125' : 'scale-110'
           }`}
