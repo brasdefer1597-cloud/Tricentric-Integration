@@ -13,3 +13,7 @@
 ## 2025-05-16 - Accessible Dynamic Interfaces
 **Learning:** For dynamic components like breathing timers, using `role="status"` and `aria-live="polite"` ensures state changes are announced without interrupting the user. Providing clear external link disclosures in `aria-label` prevents unexpected navigation surprises.
 **Action:** Implement ARIA live regions for all timed UI elements and include '(opens in new tab)' in labels for external links.
+
+## 2025-05-17 - Non-Blocking Feedback & Consistency
+**Learning:** Replacing native `alert()` calls with a custom `StatusFeedback` component improves immersion and accessibility. Using `role="status"` and `fixed` positioning ensures non-disruptive but visible feedback. Also, keeping utility navigation (like skip links) in the primary application language (English) maintains accessibility standards across the platform.
+**Action:** Prefer integrated feedback components over browser natives; ensure global accessibility hooks (skip links, ARIA labels) are consistent with the UI language.
