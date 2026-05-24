@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { useAnalysis } from '@/hooks/useAnalysis';
 import { useEvaluation } from '@/hooks/useEvaluation';
 import Modal from '@/components/ui/Modal';
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
+import StatusFeedback from '@/components/ui/StatusFeedback';
 import type { CenterType } from '@/types';
 
 interface ExamSectionProps {
@@ -23,6 +24,12 @@ const ExamSection: React.FC<ExamSectionProps> = ({ onEvaluationComplete }) => {
 
   const [aiAnalysis, setAiAnalysis] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [statusFeedback, setStatusFeedback] = useState<{
+    message: string;
+    type: 'success' | 'error' | 'info';
+  } | null>(null);
+
+  const closeFeedback = useCallback(() => setStatusFeedback(null), []);
 
   const { analyze, loading: analyzing } = useAnalysis();
   const { saveEvaluation, saving } = useEvaluation(onEvaluationComplete);
@@ -35,7 +42,10 @@ const ExamSection: React.FC<ExamSectionProps> = ({ onEvaluationComplete }) => {
 
   const handleAcceptReality = async () => {
     if (!bleeding || !sacrifice) {
-      alert('You must diagnose the wound and choose a sacrifice.');
+      setStatusFeedback({
+        message: 'You must diagnose the wound and choose a sacrifice.',
+        type: 'info',
+      });
       return;
     }
 
@@ -51,7 +61,13 @@ const ExamSection: React.FC<ExamSectionProps> = ({ onEvaluationComplete }) => {
   };
 
   const handleAnalyzeSynthesis = async () => {
-    if (!synthesis.trim()) return;
+    if (!synthesis.trim()) {
+      setStatusFeedback({
+        message: 'The integration needs your words. Synthesis is required.',
+        type: 'info',
+      });
+      return;
+    }
 
     const feedback = await analyze({
       type: 'synthesis',
@@ -63,7 +79,13 @@ const ExamSection: React.FC<ExamSectionProps> = ({ onEvaluationComplete }) => {
   };
 
   const handleSaveEvaluation = async () => {
-    if (!bleeding || !sacrifice || !synthesis.trim()) return;
+    if (!bleeding || !sacrifice || !synthesis.trim()) {
+      setStatusFeedback({
+        message: 'Incomplete reality. Ensure diagnosis, sacrifice, and synthesis are present.',
+        type: 'info',
+      });
+      return;
+    }
 
     const result = await saveEvaluation({
       bleeding,
@@ -79,9 +101,15 @@ const ExamSection: React.FC<ExamSectionProps> = ({ onEvaluationComplete }) => {
       setOxygen([]);
       setSynthesis('');
       setAiAnalysis(null);
-      alert(`Reality accepted. +${result.xpGained} XP earned.`);
+      setStatusFeedback({
+        message: `Reality accepted. +${result.xpGained} XP earned.`,
+        type: 'success',
+      });
     } else {
-      alert('The abyss rejected your sacrifice. Try again.');
+      setStatusFeedback({
+        message: 'The abyss rejected your sacrifice. Try again.',
+        type: 'error',
+      });
     }
   };
 
@@ -89,6 +117,14 @@ const ExamSection: React.FC<ExamSectionProps> = ({ onEvaluationComplete }) => {
 
   return (
     <>
+      {statusFeedback && (
+        <StatusFeedback
+          message={statusFeedback.message}
+          type={statusFeedback.type}
+          onClose={closeFeedback}
+        />
+      )}
+
       {isModalOpen && aiAnalysis && (
         <Modal
           isOpen={isModalOpen}
@@ -202,7 +238,7 @@ const ExamSection: React.FC<ExamSectionProps> = ({ onEvaluationComplete }) => {
                         onChange={() => handleOxygenChange(opt)}
                         className="peer w-6 h-6 opacity-0 absolute cursor-pointer"
                       />
-                      <div className="w-6 h-6 border-2 border-gray-600 rounded-md peer-checked:bg-red-500 peer-checked:border-red-500 transition-all flex items-center justify-center text-black font-bold">
+                      <div className="w-6 h-6 border-2 border-gray-600 rounded-md peer-checked:bg-red-500 peer-checked:border-red-500 peer-focus-visible:ring-2 peer-focus-visible:ring-yellow-400 transition-all flex items-center justify-center text-black font-bold">
                         {oxygen.includes(opt) && '✓'}
                       </div>
                     </div>
@@ -236,21 +272,21 @@ const ExamSection: React.FC<ExamSectionProps> = ({ onEvaluationComplete }) => {
                 <div className="mt-8 grid grid-cols-1 sm:grid-cols-3 gap-4">
                   <button
                     onClick={handleAcceptReality}
-                    disabled={loading || !bleeding || !sacrifice}
+                    disabled={loading}
                     className="flex items-center justify-center gap-2 bg-red-600 hover:bg-red-700 text-white font-black py-4 px-6 rounded-xl transition-all shadow-lg shadow-red-900/20 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed uppercase tracking-tighter"
                   >
                     💀 DECODE WOUND
                   </button>
                   <button
                     onClick={handleAnalyzeSynthesis}
-                    disabled={loading || !synthesis.trim()}
+                    disabled={loading}
                     className="flex items-center justify-center gap-2 bg-yellow-500 hover:bg-yellow-600 text-black font-black py-4 px-6 rounded-xl transition-all shadow-lg shadow-yellow-900/20 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed uppercase tracking-tighter"
                   >
                     🔬 ANALYZE TRUTH
                   </button>
                   <button
                     onClick={handleSaveEvaluation}
-                    disabled={loading || !bleeding || !sacrifice || !synthesis.trim()}
+                    disabled={loading}
                     className="flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 text-white font-black py-4 px-6 rounded-xl transition-all shadow-lg shadow-green-900/20 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed uppercase tracking-tighter"
                   >
                     💾 SEAL REALITY
