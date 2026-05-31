@@ -55,7 +55,7 @@ const HomePage: React.FC = () => {
       />
 
       <a href="#main-content" className="skip-link">
-        Saltar al contenido principal
+        Skip to main content
       </a>
 
       <div className="min-h-screen selection:bg-red-500 selection:text-white">

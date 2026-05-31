@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { useAnalysis } from '@/hooks/useAnalysis';
 import { useEvaluation } from '@/hooks/useEvaluation';
 import Modal from '@/components/ui/Modal';
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
+import StatusFeedback, { FeedbackType } from '@/components/ui/StatusFeedback';
 import type { CenterType } from '@/types';
 
 interface ExamSectionProps {
@@ -23,6 +24,9 @@ const ExamSection: React.FC<ExamSectionProps> = ({ onEvaluationComplete }) => {
 
   const [aiAnalysis, setAiAnalysis] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [statusFeedback, setStatusFeedback] = useState<{ message: string; type: FeedbackType } | null>(null);
+
+  const closeFeedback = useCallback(() => setStatusFeedback(null), []);
 
   const { analyze, loading: analyzing } = useAnalysis();
   const { saveEvaluation, saving } = useEvaluation(onEvaluationComplete);
@@ -35,7 +39,7 @@ const ExamSection: React.FC<ExamSectionProps> = ({ onEvaluationComplete }) => {
 
   const handleAcceptReality = async () => {
     if (!bleeding || !sacrifice) {
-      alert('You must diagnose the wound and choose a sacrifice.');
+      setStatusFeedback({ message: 'You must diagnose the wound and choose a sacrifice.', type: 'error' });
       return;
     }
 
@@ -79,9 +83,9 @@ const ExamSection: React.FC<ExamSectionProps> = ({ onEvaluationComplete }) => {
       setOxygen([]);
       setSynthesis('');
       setAiAnalysis(null);
-      alert(`Reality accepted. +${result.xpGained} XP earned.`);
+      setStatusFeedback({ message: `Reality accepted. +${result.xpGained} XP earned.`, type: 'success' });
     } else {
-      alert('The abyss rejected your sacrifice. Try again.');
+      setStatusFeedback({ message: 'The abyss rejected your sacrifice. Try again.', type: 'error' });
     }
   };
 
@@ -89,6 +93,14 @@ const ExamSection: React.FC<ExamSectionProps> = ({ onEvaluationComplete }) => {
 
   return (
     <>
+      {statusFeedback && (
+        <StatusFeedback
+          message={statusFeedback.message}
+          type={statusFeedback.type}
+          onClose={closeFeedback}
+        />
+      )}
+
       {isModalOpen && aiAnalysis && (
         <Modal
           isOpen={isModalOpen}
