@@ -13,3 +13,11 @@
 ## 2025-05-16 - Accessible Dynamic Interfaces
 **Learning:** For dynamic components like breathing timers, using `role="status"` and `aria-live="polite"` ensures state changes are announced without interrupting the user. Providing clear external link disclosures in `aria-label` prevents unexpected navigation surprises.
 **Action:** Implement ARIA live regions for all timed UI elements and include '(opens in new tab)' in labels for external links.
+
+## 2025-05-18 - Non-blocking Validation Feedback
+**Learning:** In a gamified, high-stakes atmosphere like SRAP, native browser alerts break immersion. Furthermore, disabling buttons for incomplete forms provides no guidance to the user.
+**Action:** Keep action buttons enabled but trigger a themed, non-blocking `StatusFeedback` (toast) system to provide immediate, actionable guidance on missing requirements.
+
+## 2025-05-18 - Linguistic Consistency in A11y
+**Learning:** Inconsistent language in accessibility elements (like skip links or ARIA labels) can confuse screen reader users in multi-lingual contexts.
+**Action:** Standardize all core accessibility controls and labels to English to maintain a predictable interface for assistive technologies.
