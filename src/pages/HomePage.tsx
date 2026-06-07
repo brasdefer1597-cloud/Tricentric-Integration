@@ -50,12 +50,12 @@ const HomePage: React.FC = () => {
   return (
     <>
       <SeoHead
-        title="SRAP | Diagnóstico Tricéntrico, Hábitos y Progreso Real"
-        description="SRAP te ayuda a evaluar cabeza, corazón y cuerpo con diagnósticos accionables, síntesis guiada y progreso gamificado en un solo flujo diario."
+        title="SRAP | Tricentric Diagnosis, Habits and Real Progress"
+        description="SRAP helps you evaluate head, heart and body with actionable diagnoses, guided synthesis and gamified progress in a single daily flow."
       />
 
       <a href="#main-content" className="skip-link">
-        Saltar al contenido principal
+        Skip to main content
       </a>
 
       <div className="min-h-screen selection:bg-red-500 selection:text-white">
@@ -63,7 +63,7 @@ const HomePage: React.FC = () => {
 
         <main id="main-content">
           {userId && profile && (
-            <section aria-label="Tu progreso" className="max-w-6xl mx-auto px-6 -mt-8">
+            <section aria-label="Your progress" className="max-w-6xl mx-auto px-6 -mt-8">
               <GamificationDashboard state={gamificationState} />
             </section>
           )}

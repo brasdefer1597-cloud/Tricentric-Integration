@@ -1,9 +1,9 @@
 ## 2025-05-14 - Interactive Selection Accessibility
-**Learning:** Custom selection cards implemented with \`div\` tags are not keyboard accessible and lack clear state communication for screen readers. Using semantic \`button\` tags with \`aria-pressed\` provides native focus support and clear accessibility state.
-**Action:** Always use \`button\` or \`input\` for interactive selection elements and ensure they have appropriate ARIA attributes for state.
+**Learning:** Custom selection cards implemented with `div` tags are not keyboard accessible and lack clear state communication for screen readers. Using semantic `button` tags with `aria-pressed` provides native focus support and clear accessibility state.
+**Action:** Always use `button` or `input` for interactive selection elements and ensure they have appropriate ARIA attributes for state.
 
 ## 2025-05-14 - ProgressBar ARIA Roles
-**Learning:** Progress bars need explicit ARIA roles and value attributes (\`role="progressbar"\`, \`aria-valuenow\`, etc.) to be correctly interpreted by assistive technologies.
+**Learning:** Progress bars need explicit ARIA roles and value attributes (`role="progressbar"`, `aria-valuenow`, etc.) to be correctly interpreted by assistive technologies.
 **Action:** Include ARIA progress attributes in all custom progress bar components.
 
 ## 2025-05-15 - SRAP Methodology & Chalamandra Branding Integration
@@ -13,3 +13,7 @@
 ## 2025-05-16 - Accessible Dynamic Interfaces
 **Learning:** For dynamic components like breathing timers, using `role="status"` and `aria-live="polite"` ensures state changes are announced without interrupting the user. Providing clear external link disclosures in `aria-label` prevents unexpected navigation surprises.
 **Action:** Implement ARIA live regions for all timed UI elements and include '(opens in new tab)' in labels for external links.
+
+## 2025-06-07 - Integrated Feedback vs. Native Alerts
+**Learning:** Native `alert()` calls disrupt the brutalist sensory atmosphere of the SRAP interface and are inaccessible. Replacing them with a themed, non-blocking `StatusFeedback` component (with `role="status"`, auto-dismiss, and high contrast) maintains immersion while providing actionable validation feedback.
+**Action:** Use the `StatusFeedback` component for all user notifications and ensure validation errors are announced immediately via `aria-live`.
