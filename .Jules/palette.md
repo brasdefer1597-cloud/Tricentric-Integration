@@ -13,3 +13,7 @@
 ## 2025-05-16 - Accessible Dynamic Interfaces
 **Learning:** For dynamic components like breathing timers, using `role="status"` and `aria-live="polite"` ensures state changes are announced without interrupting the user. Providing clear external link disclosures in `aria-label` prevents unexpected navigation surprises.
 **Action:** Implement ARIA live regions for all timed UI elements and include '(opens in new tab)' in labels for external links.
+
+## 2026-06-18 - Actionable Feedback vs. Disabled Buttons
+**Learning:** Disabling action buttons for incomplete forms can be frustrating as it provides no guidance. Keeping them enabled and showing a themed 'StatusFeedback' notification (toast) on click allows for immediate, actionable guidance (e.g., "Your reality is incomplete. Complete all steps.") which aligns with the SRAP 'survival interface' tone.
+**Action:** Favor keeping action buttons enabled and use non-blocking status notifications to guide users through missing requirements.
