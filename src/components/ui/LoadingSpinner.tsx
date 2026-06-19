@@ -4,7 +4,7 @@ interface LoadingSpinnerProps {
   message?: string;
 }
 
-const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({ message = 'ANALIZANDO...' }) => {
+const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({ message = 'ANALYZING...' }) => {
   return (
     <div className="flex flex-col items-center justify-center gap-4" role="status" aria-live="polite">
       <div className="relative w-16 h-16" aria-hidden="true">
