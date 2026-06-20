@@ -13,3 +13,7 @@
 ## 2025-05-16 - Accessible Dynamic Interfaces
 **Learning:** For dynamic components like breathing timers, using `role="status"` and `aria-live="polite"` ensures state changes are announced without interrupting the user. Providing clear external link disclosures in `aria-label` prevents unexpected navigation surprises.
 **Action:** Implement ARIA live regions for all timed UI elements and include '(opens in new tab)' in labels for external links.
+
+## 2025-05-17 - Actionable Feedback vs. Disabled States
+**Learning:** Disabling action buttons for incomplete forms prevents users from understanding why they cannot proceed. Keeping buttons enabled and providing immediate, themed feedback (via StatusFeedback) with specific guidance ("Incomplete reality. Check X...") significantly improves the UX "survival" loop and guides the user effectively.
+**Action:** Prioritize active button feedback over silent disabled states for form validation.
