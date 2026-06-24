@@ -1,6 +1,7 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useProfile } from '@/hooks/useProfile';
 import { supabase } from '@/lib/supabase';
+import StatusFeedback, { FeedbackType } from '@/components/ui/StatusFeedback';
 
 interface Props {
   kofiUrl: string;
@@ -39,6 +40,7 @@ const CENTERS = [
 export default function TricentricIntegration({ kofiUrl }: Props) {
   const [userId, setUserId] = useState<string>();
   const [loading, setLoading] = useState(false);
+  const [feedback, setFeedback] = useState<{ type: FeedbackType; message: React.ReactNode } | null>(null);
   const [breathingPhase, setBreathingPhase] = useState<'inhale' | 'hold' | 'exhale'>('inhale');
   const [intervalId, setIntervalId] = useState<ReturnType<typeof setInterval> | null>(null);
 
@@ -49,6 +51,8 @@ export default function TricentricIntegration({ kofiUrl }: Props) {
   }, []);
 
   const { refreshProfile } = useProfile(userId);
+
+  const closeFeedback = useCallback(() => setFeedback(null), []);
 
   useEffect(
     () => () => {
@@ -79,7 +83,10 @@ export default function TricentricIntegration({ kofiUrl }: Props) {
 
   const finalizePractice = async () => {
     if (!userId) {
-      alert('Please log in to save your progress.');
+      setFeedback({
+        type: 'error',
+        message: 'Please log in to save your progress.'
+      });
       return;
     }
 
@@ -110,11 +117,29 @@ export default function TricentricIntegration({ kofiUrl }: Props) {
 
       await refreshProfile();
 
-      alert('Practice finalized and progress saved! Redirecting to Kofi for the digital version.');
+      setFeedback({
+        type: 'success',
+        message: (
+          <span>
+            Practice finalized and progress saved! Redirecting to Kofi...{' '}
+            <a
+              href={kofiUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline hover:text-white"
+            >
+              Click here if the popup was blocked.
+            </a>
+          </span>
+        )
+      });
       window.open(kofiUrl, '_blank');
     } catch (err) {
       console.error(err);
-      alert('Error saving progress. But the reality is still there.');
+      setFeedback({
+        type: 'error',
+        message: 'Error saving progress. But the reality is still there.'
+      });
     } finally {
       setLoading(false);
     }
@@ -122,6 +147,14 @@ export default function TricentricIntegration({ kofiUrl }: Props) {
 
   return (
     <div className="tricentric-integration p-6 max-w-6xl mx-auto bg-gray-900 rounded-2xl border border-purple-900 my-12">
+      {feedback && (
+        <StatusFeedback
+          type={feedback.type}
+          message={feedback.message}
+          onClose={closeFeedback}
+        />
+      )}
+
       <h2 className="text-3xl font-bold text-center mb-6 text-white bg-gradient-to-r from-blue-400 via-red-400 to-green-400 bg-clip-text text-transparent">
         🎯 Tricentric Integration
       </h2>
