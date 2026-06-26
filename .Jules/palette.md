@@ -13,3 +13,7 @@
 ## 2025-05-16 - Accessible Dynamic Interfaces
 **Learning:** For dynamic components like breathing timers, using `role="status"` and `aria-live="polite"` ensures state changes are announced without interrupting the user. Providing clear external link disclosures in `aria-label` prevents unexpected navigation surprises.
 **Action:** Implement ARIA live regions for all timed UI elements and include '(opens in new tab)' in labels for external links.
+
+## 2025-05-17 - Accessible Form Affordance and Focus States
+**Learning:** Using `appearance-none` on `select` elements removes default browser chevrons, which can hide the element's purpose. Similarly, hiding native checkboxes for custom styling removes focus indicators. Restoring these via custom SVG chevrons and `focus-visible` rings is essential for visual affordance and keyboard accessibility.
+**Action:** Always provide custom visual indicators (like chevrons) when using `appearance-none` and ensure all interactive elements, especially custom-styled ones, have clear `focus-visible` states.
