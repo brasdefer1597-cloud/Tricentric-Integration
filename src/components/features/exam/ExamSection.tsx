@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { useAnalysis } from '@/hooks/useAnalysis';
 import { useEvaluation } from '@/hooks/useEvaluation';
 import Modal from '@/components/ui/Modal';
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
+import StatusFeedback, { type FeedbackType } from '@/components/ui/StatusFeedback';
 import type { CenterType } from '@/types';
 
 interface ExamSectionProps {
@@ -23,6 +24,9 @@ const ExamSection: React.FC<ExamSectionProps> = ({ onEvaluationComplete }) => {
 
   const [aiAnalysis, setAiAnalysis] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [feedback, setFeedback] = useState<{ message: React.ReactNode; type: FeedbackType } | null>(null);
+
+  const closeFeedback = useCallback(() => setFeedback(null), []);
 
   const { analyze, loading: analyzing } = useAnalysis();
   const { saveEvaluation, saving } = useEvaluation(onEvaluationComplete);
@@ -35,7 +39,10 @@ const ExamSection: React.FC<ExamSectionProps> = ({ onEvaluationComplete }) => {
 
   const handleAcceptReality = async () => {
     if (!bleeding || !sacrifice) {
-      alert('You must diagnose the wound and choose a sacrifice.');
+      setFeedback({
+        message: 'You must diagnose the wound and choose a sacrifice.',
+        type: 'error'
+      });
       return;
     }
 
@@ -51,14 +58,20 @@ const ExamSection: React.FC<ExamSectionProps> = ({ onEvaluationComplete }) => {
   };
 
   const handleAnalyzeSynthesis = async () => {
-    if (!synthesis.trim()) return;
+    if (!synthesis.trim()) {
+      setFeedback({
+        message: 'Write your synthesis before analyzing.',
+        type: 'error'
+      });
+      return;
+    }
 
-    const feedback = await analyze({
+    const result = await analyze({
       type: 'synthesis',
       synthesis
     });
 
-    setAiAnalysis(feedback);
+    setAiAnalysis(result);
     setIsModalOpen(true);
   };
 
@@ -79,9 +92,15 @@ const ExamSection: React.FC<ExamSectionProps> = ({ onEvaluationComplete }) => {
       setOxygen([]);
       setSynthesis('');
       setAiAnalysis(null);
-      alert(`Reality accepted. +${result.xpGained} XP earned.`);
+      setFeedback({
+        message: `Reality accepted. +${result.xpGained} XP earned.`,
+        type: 'success'
+      });
     } else {
-      alert('The abyss rejected your sacrifice. Try again.');
+      setFeedback({
+        message: 'The abyss rejected your sacrifice. Try again.',
+        type: 'error'
+      });
     }
   };
 
@@ -89,6 +108,14 @@ const ExamSection: React.FC<ExamSectionProps> = ({ onEvaluationComplete }) => {
 
   return (
     <>
+      {feedback && (
+        <StatusFeedback
+          message={feedback.message}
+          type={feedback.type}
+          onClose={closeFeedback}
+        />
+      )}
+
       {isModalOpen && aiAnalysis && (
         <Modal
           isOpen={isModalOpen}
@@ -168,17 +195,24 @@ const ExamSection: React.FC<ExamSectionProps> = ({ onEvaluationComplete }) => {
                 Which center has to give in TODAY so the other two survive?
               </label>
 
-              <select
-                id="sacrifice-select"
-                value={sacrifice}
-                onChange={e => setSacrifice(e.target.value as CenterType)}
-                className="w-full bg-black/50 text-white p-4 rounded-xl border border-red-900 focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all appearance-none cursor-pointer font-bold"
-              >
-                <option value="">Choose today's sacrifice...</option>
-                <option value="head">Head: Accept chaos, stop controlling</option>
-                <option value="heart">Heart: Postpone dreams, accept reality</option>
-                <option value="body">Body: Ignore fatigue, keep moving</option>
-              </select>
+              <div className="relative">
+                <select
+                  id="sacrifice-select"
+                  value={sacrifice}
+                  onChange={e => setSacrifice(e.target.value as CenterType)}
+                  className="w-full bg-black/50 text-white p-4 pr-10 rounded-xl border border-red-900 focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all appearance-none cursor-pointer font-bold"
+                >
+                  <option value="">Choose today's sacrifice...</option>
+                  <option value="head">Head: Accept chaos, stop controlling</option>
+                  <option value="heart">Heart: Postpone dreams, accept reality</option>
+                  <option value="body">Body: Ignore fatigue, keep moving</option>
+                </select>
+                <div className="absolute inset-y-0 right-0 flex items-center px-3 pointer-events-none text-red-500">
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M19 9l-7 7-7-7" />
+                  </svg>
+                </div>
+              </div>
             </div>
 
             {/* Step 3: Oxygen */}
@@ -202,7 +236,7 @@ const ExamSection: React.FC<ExamSectionProps> = ({ onEvaluationComplete }) => {
                         onChange={() => handleOxygenChange(opt)}
                         className="peer w-6 h-6 opacity-0 absolute cursor-pointer"
                       />
-                      <div className="w-6 h-6 border-2 border-gray-600 rounded-md peer-checked:bg-red-500 peer-checked:border-red-500 transition-all flex items-center justify-center text-black font-bold">
+                      <div className="w-6 h-6 border-2 border-gray-600 rounded-md peer-checked:bg-red-500 peer-checked:border-red-500 peer-focus-visible:ring-2 peer-focus-visible:ring-yellow-400 peer-focus-visible:ring-offset-2 peer-focus-visible:ring-offset-black transition-all flex items-center justify-center text-black font-bold">
                         {oxygen.includes(opt) && '✓'}
                       </div>
                     </div>
