@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useProfile } from '@/hooks/useProfile';
 import { supabase } from '@/lib/supabase';
+import type { FeedbackType } from '@/components/ui/StatusFeedback';
 
 interface Props {
   kofiUrl: string;
+  showFeedback?: (type: FeedbackType, message: string) => void;
 }
 
 const CENTERS = [
@@ -36,7 +38,7 @@ const CENTERS = [
   },
 ] as const;
 
-export default function TricentricIntegration({ kofiUrl }: Props) {
+export default function TricentricIntegration({ kofiUrl, showFeedback }: Props) {
   const [userId, setUserId] = useState<string>();
   const [loading, setLoading] = useState(false);
   const [breathingPhase, setBreathingPhase] = useState<'inhale' | 'hold' | 'exhale'>('inhale');
@@ -79,7 +81,11 @@ export default function TricentricIntegration({ kofiUrl }: Props) {
 
   const finalizePractice = async () => {
     if (!userId) {
-      alert('Please log in to save your progress.');
+      if (showFeedback) {
+        showFeedback('info', 'Please log in to save your progress.');
+      } else {
+        alert('Please log in to save your progress.');
+      }
       return;
     }
 
@@ -110,11 +116,19 @@ export default function TricentricIntegration({ kofiUrl }: Props) {
 
       await refreshProfile();
 
-      alert('Practice finalized and progress saved! Redirecting to Kofi for the digital version.');
+      if (showFeedback) {
+        showFeedback('success', 'Practice finalized and progress saved! Redirecting to Ko-fi...');
+      } else {
+        alert('Practice finalized and progress saved! Redirecting to Kofi for the digital version.');
+      }
       window.open(kofiUrl, '_blank');
     } catch (err) {
       console.error(err);
-      alert('Error saving progress. But the reality is still there.');
+      if (showFeedback) {
+        showFeedback('error', 'Error saving progress. But the reality is still there.');
+      } else {
+        alert('Error saving progress. But the reality is still there.');
+      }
     } finally {
       setLoading(false);
     }
