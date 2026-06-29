@@ -8,6 +8,7 @@ import TricentricIntegration from '@/components/features/tricentric/TricentricIn
 import BreathingSection from '@/components/sections/BreathingSection';
 import GamificationDashboard from '@/components/features/gamification/GamificationDashboard';
 import SeoHead from '@/components/seo/SeoHead';
+import StatusFeedback, { FeedbackType } from '@/components/ui/StatusFeedback';
 import { supabase } from '@/lib/supabase';
 import { useProfile } from '@/hooks/useProfile';
 import { useGamification } from '@/hooks/useGamification';
@@ -15,6 +16,7 @@ import { useGamification } from '@/hooks/useGamification';
 const HomePage: React.FC = () => {
   const [userId, setUserId] = useState<string>();
   const [authChecked, setAuthChecked] = useState(false);
+  const [feedback, setFeedback] = useState<{ type: FeedbackType; message: string } | null>(null);
 
   const { profile, refreshProfile } = useProfile(userId);
   const gamificationState = useGamification(profile);
@@ -47,6 +49,10 @@ const HomePage: React.FC = () => {
     );
   }
 
+  const showFeedback = (type: FeedbackType, message: string) => {
+    setFeedback({ type, message });
+  };
+
   return (
     <>
       <SeoHead
@@ -55,8 +61,16 @@ const HomePage: React.FC = () => {
       />
 
       <a href="#main-content" className="skip-link">
-        Saltar al contenido principal
+        Skip to main content
       </a>
+
+      {feedback && (
+        <StatusFeedback
+          type={feedback.type}
+          message={feedback.message}
+          onClose={() => setFeedback(null)}
+        />
+      )}
 
       <div className="min-h-screen selection:bg-red-500 selection:text-white">
         <HeaderSection />
@@ -78,10 +92,16 @@ const HomePage: React.FC = () => {
             <SacrificesSection />
           </section>
           <section id="exam">
-            <ExamSection onEvaluationComplete={refreshProfile} />
+            <ExamSection
+              onEvaluationComplete={refreshProfile}
+              showFeedback={showFeedback}
+            />
           </section>
           <section id="integration">
-            <TricentricIntegration kofiUrl="https://ko-fi.com/s/7b0236c681" />
+            <TricentricIntegration
+              kofiUrl="https://ko-fi.com/s/7b0236c681"
+              showFeedback={showFeedback}
+            />
           </section>
           <section id="breathing">
             <BreathingSection />
