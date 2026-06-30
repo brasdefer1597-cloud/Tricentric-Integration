@@ -168,17 +168,24 @@ const ExamSection: React.FC<ExamSectionProps> = ({ onEvaluationComplete }) => {
                 Which center has to give in TODAY so the other two survive?
               </label>
 
-              <select
-                id="sacrifice-select"
-                value={sacrifice}
-                onChange={e => setSacrifice(e.target.value as CenterType)}
-                className="w-full bg-black/50 text-white p-4 rounded-xl border border-red-900 focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all appearance-none cursor-pointer font-bold"
-              >
-                <option value="">Choose today's sacrifice...</option>
-                <option value="head">Head: Accept chaos, stop controlling</option>
-                <option value="heart">Heart: Postpone dreams, accept reality</option>
-                <option value="body">Body: Ignore fatigue, keep moving</option>
-              </select>
+              <div className="relative">
+                <select
+                  id="sacrifice-select"
+                  value={sacrifice}
+                  onChange={e => setSacrifice(e.target.value as CenterType)}
+                  className="w-full bg-black/50 text-white p-4 pr-10 rounded-xl border border-red-900 focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all appearance-none cursor-pointer font-bold"
+                >
+                  <option value="">Choose today's sacrifice...</option>
+                  <option value="head">Head: Accept chaos, stop controlling</option>
+                  <option value="heart">Heart: Postpone dreams, accept reality</option>
+                  <option value="body">Body: Ignore fatigue, keep moving</option>
+                </select>
+                <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-red-500">
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M19 9l-7 7-7-7" />
+                  </svg>
+                </div>
+              </div>
             </div>
 
             {/* Step 3: Oxygen */}
@@ -202,7 +209,7 @@ const ExamSection: React.FC<ExamSectionProps> = ({ onEvaluationComplete }) => {
                         onChange={() => handleOxygenChange(opt)}
                         className="peer w-6 h-6 opacity-0 absolute cursor-pointer"
                       />
-                      <div className="w-6 h-6 border-2 border-gray-600 rounded-md peer-checked:bg-red-500 peer-checked:border-red-500 transition-all flex items-center justify-center text-black font-bold">
+                      <div className="w-6 h-6 border-2 border-gray-600 rounded-md peer-checked:bg-red-500 peer-checked:border-red-500 peer-focus-visible:ring-2 peer-focus-visible:ring-yellow-400 peer-focus-visible:ring-offset-2 peer-focus-visible:ring-offset-black transition-all flex items-center justify-center text-black font-bold">
                         {oxygen.includes(opt) && '✓'}
                       </div>
                     </div>
