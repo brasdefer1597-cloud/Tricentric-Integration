@@ -1,9 +1,9 @@
 ## 2025-05-14 - Interactive Selection Accessibility
-**Learning:** Custom selection cards implemented with \`div\` tags are not keyboard accessible and lack clear state communication for screen readers. Using semantic \`button\` tags with \`aria-pressed\` provides native focus support and clear accessibility state.
-**Action:** Always use \`button\` or \`input\` for interactive selection elements and ensure they have appropriate ARIA attributes for state.
+**Learning:** Custom selection cards implemented with `div` tags are not keyboard accessible and lack clear state communication for screen readers. Using semantic `button` tags with `aria-pressed` provides native focus support and clear accessibility state.
+**Action:** Always use `button` or `input` for interactive selection elements and ensure they have appropriate ARIA attributes for state.
 
 ## 2025-05-14 - ProgressBar ARIA Roles
-**Learning:** Progress bars need explicit ARIA roles and value attributes (\`role="progressbar"\`, \`aria-valuenow\`, etc.) to be correctly interpreted by assistive technologies.
+**Learning:** Progress bars need explicit ARIA roles and value attributes (`role="progressbar"`, `aria-valuenow`, etc.) to be correctly interpreted by assistive technologies.
 **Action:** Include ARIA progress attributes in all custom progress bar components.
 
 ## 2025-05-15 - SRAP Methodology & Chalamandra Branding Integration
@@ -13,3 +13,7 @@
 ## 2025-05-16 - Accessible Dynamic Interfaces
 **Learning:** For dynamic components like breathing timers, using `role="status"` and `aria-live="polite"` ensures state changes are announced without interrupting the user. Providing clear external link disclosures in `aria-label` prevents unexpected navigation surprises.
 **Action:** Implement ARIA live regions for all timed UI elements and include '(opens in new tab)' in labels for external links.
+
+## 2025-05-17 - Restoring Affordance and Focus for Custom Controls
+**Learning:** Overriding native browser styling (e.g., using `appearance-none` on selects or custom `div` wrappers for checkboxes) often strips away critical UX cues like focus rings and dropdown arrows. Users rely on these "invisible" standard cues for navigation and interaction confidence.
+**Action:** When using `appearance-none`, always provide a custom visual indicator (like an SVG chevron). Use `peer-focus-visible` on hidden inputs to project focus states onto visual decorator elements for keyboard accessibility.
