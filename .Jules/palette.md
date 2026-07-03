@@ -13,3 +13,7 @@
 ## 2025-05-16 - Accessible Dynamic Interfaces
 **Learning:** For dynamic components like breathing timers, using `role="status"` and `aria-live="polite"` ensures state changes are announced without interrupting the user. Providing clear external link disclosures in `aria-label` prevents unexpected navigation surprises.
 **Action:** Implement ARIA live regions for all timed UI elements and include '(opens in new tab)' in labels for external links.
+
+## 2025-05-17 - Affordance Restoration and Dark Mode Focus
+**Learning:** In dark, high-contrast themes, using `appearance-none` on standard form elements like `select` removes critical visual affordance (the chevron). Furthermore, default browser focus rings often lack sufficient contrast against black backgrounds.
+**Action:** Always restore visual indicators (like custom SVG chevrons) when overriding native element styles, and implement custom `focus-visible:ring` styles using theme-compliant high-contrast colors (e.g., `ring-yellow-400`) to ensure keyboard accessibility.
