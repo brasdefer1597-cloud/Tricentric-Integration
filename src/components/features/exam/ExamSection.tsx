@@ -168,17 +168,24 @@ const ExamSection: React.FC<ExamSectionProps> = ({ onEvaluationComplete }) => {
                 Which center has to give in TODAY so the other two survive?
               </label>
 
-              <select
-                id="sacrifice-select"
-                value={sacrifice}
-                onChange={e => setSacrifice(e.target.value as CenterType)}
-                className="w-full bg-black/50 text-white p-4 rounded-xl border border-red-900 focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all appearance-none cursor-pointer font-bold"
-              >
-                <option value="">Choose today's sacrifice...</option>
-                <option value="head">Head: Accept chaos, stop controlling</option>
-                <option value="heart">Heart: Postpone dreams, accept reality</option>
-                <option value="body">Body: Ignore fatigue, keep moving</option>
-              </select>
+              <div className="relative">
+                <select
+                  id="sacrifice-select"
+                  value={sacrifice}
+                  onChange={e => setSacrifice(e.target.value as CenterType)}
+                  className="w-full bg-black/50 text-white p-4 pr-10 rounded-xl border border-red-900 focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all appearance-none cursor-pointer font-bold"
+                >
+                  <option value="">Choose today's sacrifice...</option>
+                  <option value="head">Head: Accept chaos, stop controlling</option>
+                  <option value="heart">Heart: Postpone dreams, accept reality</option>
+                  <option value="body">Body: Ignore fatigue, keep moving</option>
+                </select>
+                <div className="absolute inset-y-0 right-0 flex items-center px-4 pointer-events-none text-red-500" aria-hidden="true">
+                  <svg className="w-4 h-4 fill-current" viewBox="0 0 20 20">
+                    <path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" />
+                  </svg>
+                </div>
+              </div>
             </div>
 
             {/* Step 3: Oxygen */}
