@@ -53,7 +53,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, icon = '🎯', ch
         <div className="text-center">
           <button
             onClick={onClose}
-            aria-label="Cerrar diagnóstico"
+            aria-label="Close diagnosis"
             className="w-full bg-red-600 hover:bg-red-700 text-white font-black py-4 px-8 rounded-2xl transition-all shadow-lg active:scale-95 uppercase tracking-widest text-sm"
           >
             ENTENDIDO
