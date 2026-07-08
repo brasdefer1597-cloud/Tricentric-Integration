@@ -149,7 +149,7 @@ const ExamSection: React.FC<ExamSectionProps> = ({ onEvaluationComplete }) => {
                     type="button"
                     onClick={() => setBleeding(item.id)}
                     aria-pressed={bleeding === item.id}
-                    className={`flex flex-col items-center justify-center p-6 ${item.bgColor} rounded-xl cursor-pointer transition-all duration-300 ring-2 focus:outline-none focus:ring-offset-4 focus:ring-offset-black ${bleeding === item.id ? item.ringColor + ' scale-105 shadow-lg shadow-black/50' : 'ring-transparent opacity-60 hover:opacity-100 hover:scale-[1.02]'}`}
+                    className={`flex flex-col items-center justify-center p-6 ${item.bgColor} rounded-xl cursor-pointer transition-all duration-300 ring-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400 focus-visible:ring-offset-2 focus-visible:ring-offset-black ${bleeding === item.id ? item.ringColor + ' scale-105 shadow-lg shadow-black/50' : 'ring-transparent opacity-60 hover:opacity-100 hover:scale-[1.02]'}`}
                   >
                     <span className="text-3xl mb-3" aria-hidden="true">{item.icon}</span>
                     <span className="font-black text-gray-200 uppercase tracking-wider">{item.label}</span>
@@ -168,17 +168,24 @@ const ExamSection: React.FC<ExamSectionProps> = ({ onEvaluationComplete }) => {
                 Which center has to give in TODAY so the other two survive?
               </label>
 
-              <select
-                id="sacrifice-select"
-                value={sacrifice}
-                onChange={e => setSacrifice(e.target.value as CenterType)}
-                className="w-full bg-black/50 text-white p-4 rounded-xl border border-red-900 focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all appearance-none cursor-pointer font-bold"
-              >
-                <option value="">Choose today's sacrifice...</option>
-                <option value="head">Head: Accept chaos, stop controlling</option>
-                <option value="heart">Heart: Postpone dreams, accept reality</option>
-                <option value="body">Body: Ignore fatigue, keep moving</option>
-              </select>
+              <div className="relative">
+                <select
+                  id="sacrifice-select"
+                  value={sacrifice}
+                  onChange={e => setSacrifice(e.target.value as CenterType)}
+                  className="w-full bg-black/50 text-white p-4 pr-10 rounded-xl border border-red-900 focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all appearance-none cursor-pointer font-bold"
+                >
+                  <option value="">Choose today's sacrifice...</option>
+                  <option value="head">Head: Accept chaos, stop controlling</option>
+                  <option value="heart">Heart: Postpone dreams, accept reality</option>
+                  <option value="body">Body: Ignore fatigue, keep moving</option>
+                </select>
+                <div className="absolute inset-y-0 right-0 flex items-center px-4 pointer-events-none text-red-500">
+                  <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </div>
+              </div>
             </div>
 
             {/* Step 3: Oxygen */}
@@ -202,7 +209,7 @@ const ExamSection: React.FC<ExamSectionProps> = ({ onEvaluationComplete }) => {
                         onChange={() => handleOxygenChange(opt)}
                         className="peer w-6 h-6 opacity-0 absolute cursor-pointer"
                       />
-                      <div className="w-6 h-6 border-2 border-gray-600 rounded-md peer-checked:bg-red-500 peer-checked:border-red-500 transition-all flex items-center justify-center text-black font-bold">
+                      <div className="w-6 h-6 border-2 border-gray-600 rounded-md peer-checked:bg-red-500 peer-checked:border-red-500 peer-focus-visible:ring-2 peer-focus-visible:ring-yellow-400 peer-focus-visible:ring-offset-2 peer-focus-visible:ring-offset-black transition-all flex items-center justify-center text-black font-bold">
                         {oxygen.includes(opt) && '✓'}
                       </div>
                     </div>
