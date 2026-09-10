@@ -82,9 +82,9 @@ const BreathingSection: React.FC = () => {
             {OXYGEN_TYPES.map((type) => (
               <button
                 key={type.id}
-                onClick={() => setActiveOxygen(type.id)}
+                onClick={() => setActiveOxygen(prev => (prev === type.id ? null : type.id))}
                 aria-pressed={activeOxygen === type.id}
-                className={`py-4 rounded-xl transition-all duration-300 flex flex-col items-center justify-center gap-2 font-black uppercase tracking-widest text-xs border-2 ${type.classes} ${activeOxygen === type.id ? 'border-yellow-500 scale-105 shadow-lg bg-opacity-60' : 'border-transparent'}`}
+                className={`py-4 rounded-xl transition-all duration-300 flex flex-col items-center justify-center gap-2 font-black uppercase tracking-widest text-xs border-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400 focus-visible:ring-offset-2 focus-visible:ring-offset-black ${type.classes} ${activeOxygen === type.id ? 'border-yellow-500 scale-105 shadow-lg bg-opacity-60' : 'border-transparent'}`}
               >
                 <span className="text-2xl" aria-hidden="true">{type.icon}</span>
                 {type.label}
