@@ -1,9 +1,9 @@
 ## 2025-05-14 - Interactive Selection Accessibility
-**Learning:** Custom selection cards implemented with \`div\` tags are not keyboard accessible and lack clear state communication for screen readers. Using semantic \`button\` tags with \`aria-pressed\` provides native focus support and clear accessibility state.
-**Action:** Always use \`button\` or \`input\` for interactive selection elements and ensure they have appropriate ARIA attributes for state.
+**Learning:** Custom selection cards implemented with `div` tags are not keyboard accessible and lack clear state communication for screen readers. Using semantic `button` tags with `aria-pressed` provides native focus support and clear accessibility state.
+**Action:** Always use `button` or `input` for interactive selection elements and ensure they have appropriate ARIA attributes for state.
 
 ## 2025-05-14 - ProgressBar ARIA Roles
-**Learning:** Progress bars need explicit ARIA roles and value attributes (\`role="progressbar"\`, \`aria-valuenow\`, etc.) to be correctly interpreted by assistive technologies.
+**Learning:** Progress bars need explicit ARIA roles and value attributes (`role="progressbar"`, `aria-valuenow`, etc.) to be correctly interpreted by assistive technologies.
 **Action:** Include ARIA progress attributes in all custom progress bar components.
 
 ## 2025-05-15 - SRAP Methodology & Chalamandra Branding Integration
@@ -13,3 +13,7 @@
 ## 2025-05-16 - Accessible Dynamic Interfaces
 **Learning:** For dynamic components like breathing timers, using `role="status"` and `aria-live="polite"` ensures state changes are announced without interrupting the user. Providing clear external link disclosures in `aria-label` prevents unexpected navigation surprises.
 **Action:** Implement ARIA live regions for all timed UI elements and include '(opens in new tab)' in labels for external links.
+
+## 2025-05-17 - Custom Control Affordances and Focus States
+**Learning:** Removing browser default input styling (`appearance-none` / `opacity-0`) without supplying custom visual affordances (like chevron icons or `peer-focus-visible` rings) degrades usability and keyboard navigation.
+**Action:** When overriding native form control styles, always include relative position containers with pointer-events-none icons and `peer-focus-visible` ring indicators.
