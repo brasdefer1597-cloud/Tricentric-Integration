@@ -13,3 +13,7 @@
 ## 2025-05-16 - Accessible Dynamic Interfaces
 **Learning:** For dynamic components like breathing timers, using `role="status"` and `aria-live="polite"` ensures state changes are announced without interrupting the user. Providing clear external link disclosures in `aria-label` prevents unexpected navigation surprises.
 **Action:** Implement ARIA live regions for all timed UI elements and include '(opens in new tab)' in labels for external links.
+
+## 2025-05-17 - Custom Form Controls Visual Affordance & Focus Indicators
+**Learning:** Hiding native form controls with `appearance-none` or `opacity-0` without restoring visual cues leaves users unable to identify select menus or keyboard focus rings on checkboxes. Adding absolute SVG chevron icons for select affordance and `peer-focus-visible` ring utilities ensures full accessibility and clarity.
+**Action:** Always complement custom form controls with clear visual affordances (chevrons/icons) and explicit `peer-focus-visible` focus rings for keyboard navigation.
