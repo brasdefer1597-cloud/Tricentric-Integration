@@ -168,17 +168,24 @@ const ExamSection: React.FC<ExamSectionProps> = ({ onEvaluationComplete }) => {
                 Which center has to give in TODAY so the other two survive?
               </label>
 
-              <select
-                id="sacrifice-select"
-                value={sacrifice}
-                onChange={e => setSacrifice(e.target.value as CenterType)}
-                className="w-full bg-black/50 text-white p-4 rounded-xl border border-red-900 focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all appearance-none cursor-pointer font-bold"
-              >
-                <option value="">Choose today's sacrifice...</option>
-                <option value="head">Head: Accept chaos, stop controlling</option>
-                <option value="heart">Heart: Postpone dreams, accept reality</option>
-                <option value="body">Body: Ignore fatigue, keep moving</option>
-              </select>
+              <div className="relative">
+                <select
+                  id="sacrifice-select"
+                  value={sacrifice}
+                  onChange={e => setSacrifice(e.target.value as CenterType)}
+                  className="w-full bg-black/50 text-white p-4 pr-10 rounded-xl border border-red-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900 transition-all appearance-none cursor-pointer font-bold"
+                >
+                  <option value="">Choose today's sacrifice...</option>
+                  <option value="head">Head: Accept chaos, stop controlling</option>
+                  <option value="heart">Heart: Postpone dreams, accept reality</option>
+                  <option value="body">Body: Ignore fatigue, keep moving</option>
+                </select>
+                <div className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-gray-400" aria-hidden="true">
+                  <svg className="w-5 h-5 fill-current" viewBox="0 0 20 20">
+                    <path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" />
+                  </svg>
+                </div>
+              </div>
             </div>
 
             {/* Step 3: Oxygen */}
