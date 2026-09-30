@@ -166,7 +166,8 @@ export default function TricentricIntegration({ kofiUrl }: Props) {
         </div>
         <button
           onClick={toggleBreathing}
-          className="bg-yellow-500 hover:bg-yellow-600 text-black font-bold py-3 px-8 rounded-lg transition-all mb-4"
+          aria-pressed={Boolean(intervalId)}
+          className="bg-yellow-500 hover:bg-yellow-600 text-black font-bold py-3 px-8 rounded-lg transition-all mb-4 outline-none focus-visible:ring-2 focus-visible:ring-yellow-400 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900"
         >
           {intervalId ? 'Stop Practice' : 'Start Practice'}
         </button>
@@ -176,14 +177,14 @@ export default function TricentricIntegration({ kofiUrl }: Props) {
         <h3 id="synthesis-title" className="text-2xl font-bold mb-4 text-white">🔄 Integrative Synthesis</h3>
         <textarea
           aria-labelledby="synthesis-title"
-          className="w-full h-24 bg-black bg-opacity-50 border border-yellow-500 rounded-lg p-4 text-white focus:outline-none mb-6 resize-none"
+          className="w-full h-24 bg-black bg-opacity-50 border border-yellow-500 rounded-lg p-4 text-white outline-none focus-visible:ring-2 focus-visible:ring-yellow-400 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900 mb-6 resize-none"
           placeholder="Integrate the three voices here..."
         />
         <button
           onClick={finalizePractice}
           disabled={loading}
           aria-label="Claim digital version on Ko-fi (opens in new tab)"
-          className="bg-red-600 hover:bg-red-700 text-white font-black py-4 px-10 rounded-xl transition-all transform hover:scale-105 shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
+          className="bg-red-600 hover:bg-red-700 text-white font-black py-4 px-10 rounded-xl transition-all transform hover:scale-105 shadow-xl disabled:opacity-50 disabled:cursor-not-allowed outline-none focus-visible:ring-2 focus-visible:ring-yellow-400 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900"
         >
           {loading ? 'SAVING...' : 'CLAIM DIGITAL VERSION ON KOFI'}
         </button>
