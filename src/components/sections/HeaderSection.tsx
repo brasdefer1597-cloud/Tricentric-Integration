@@ -28,7 +28,7 @@ const HeaderSection: React.FC = () => {
         <nav aria-label="Acceso rápido" className="flex items-center justify-center gap-4 flex-wrap">
           <a
             href="#exam"
-            className="group relative px-8 py-4 bg-red-600 overflow-hidden rounded-2xl transition-all hover:scale-105 active:scale-95 shadow-xl shadow-red-900/20"
+            className="group relative px-8 py-4 bg-red-600 overflow-hidden rounded-2xl transition-all hover:scale-105 active:scale-95 shadow-xl shadow-red-900/20 focus-visible:ring-2 focus-visible:ring-yellow-400 focus-visible:ring-offset-2 focus-visible:ring-offset-black outline-none"
           >
             <div className="absolute inset-0 w-3 bg-white/20 -skew-x-12 -translate-x-10 group-hover:translate-x-20 transition-transform duration-700"></div>
             <span className="relative font-black text-white uppercase tracking-widest text-sm">Ir al Examen</span>
@@ -36,7 +36,7 @@ const HeaderSection: React.FC = () => {
 
           <a
             href="#integration"
-            className="px-8 py-4 bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl hover:bg-white/10 transition-all font-black text-white uppercase tracking-widest text-sm"
+            className="px-8 py-4 bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl hover:bg-white/10 transition-all font-black text-white uppercase tracking-widest text-sm focus-visible:ring-2 focus-visible:ring-yellow-400 focus-visible:ring-offset-2 focus-visible:ring-offset-black outline-none"
           >
             Integración
           </a>
