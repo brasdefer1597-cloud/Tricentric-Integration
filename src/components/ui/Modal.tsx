@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 
 interface ModalProps {
   isOpen: boolean;
@@ -9,8 +9,12 @@ interface ModalProps {
 }
 
 const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, icon = '🎯', children }) => {
+  const buttonRef = useRef<HTMLButtonElement>(null);
+
   useEffect(() => {
     if (!isOpen) return;
+
+    buttonRef.current?.focus();
 
     const handleEscape = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
@@ -33,9 +37,17 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, icon = '🎯', ch
       onClick={onClose}
     >
       <div
-        className="bg-gray-900 rounded-3xl p-8 max-w-lg w-full border-2 border-red-600 shadow-[0_0_50px_rgba(220,38,38,0.2)] animate-in zoom-in-95 duration-300"
+        className="bg-gray-900 rounded-3xl p-8 max-w-lg w-full border-2 border-red-600 shadow-[0_0_50px_rgba(220,38,38,0.2)] animate-in zoom-in-95 duration-300 relative"
         onClick={(event) => event.stopPropagation()}
       >
+        <button
+          onClick={onClose}
+          aria-label="Cerrar diagnóstico"
+          className="absolute top-4 right-4 text-gray-400 hover:text-white p-2 rounded-lg transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900"
+        >
+          ✕
+        </button>
+
         <div className="text-center mb-8">
           <span className="text-6xl block mb-4 filter drop-shadow-lg" aria-hidden="true">
             {icon}
@@ -52,9 +64,10 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, icon = '🎯', ch
 
         <div className="text-center">
           <button
+            ref={buttonRef}
             onClick={onClose}
             aria-label="Cerrar diagnóstico"
-            className="w-full bg-red-600 hover:bg-red-700 text-white font-black py-4 px-8 rounded-2xl transition-all shadow-lg active:scale-95 uppercase tracking-widest text-sm"
+            className="w-full bg-red-600 hover:bg-red-700 text-white font-black py-4 px-8 rounded-2xl transition-all shadow-lg active:scale-95 uppercase tracking-widest text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900"
           >
             ENTENDIDO
           </button>
